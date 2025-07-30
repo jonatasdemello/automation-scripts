@@ -1,0 +1,776 @@
+https://stackoverflow.com/questions/13483430/how-to-make-rounded-percentages-add-up-to-100
+https://en.wikipedia.org/wiki/Largest_remainder_method
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+DO NOT sum the rounded numbers. You're going to have inaccurate results. The total could be off significantly depending on the number of terms and the distribution of fractional parts.
+
+Display the rounded numbers but sum the actual values. Depending on how you're presenting the numbers, the actual way to do that would vary. That way you get
+
+     14
+     48
+     10
+     29
+     __
+    100
+
+Any way you go you're going to have discrepancy. There's no way in your example to show numbers that add up to 100 without "rounding" one value the wrong way (least error would be changing 9.596 to 9)
+
+EDIT
+
+You need to choose between one of the following:
+
+    Accuracy of the items
+    Accuracy of the sum (if you're summing rounded values)
+    Consistency between the rounded items and the rounded sum)
+
+Most of the time when dealing with percentages #3 is the best option because it's more obvious when the total equals 101% than when the individual items don't total to 100, and you keep the individual items accurate. "Rounding" 9.596 to 9 is inaccurate in my opinion.
+
+To explain this I sometimes add a footnote that explains that the individual values are rounded and may not total 100% - anyone that understands rounding should be able to understand that explanation.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+Consider the four percentages below, represented as float numbers:
+
+    13.626332%
+    47.989636%
+     9.596008%
+    28.788024%
+   -----------
+   100.000000%
+
+I need to represent these percentages as whole numbers. If I simply use Math.round(), I end up with a total of 101%.
+
+14 + 48 + 10 + 29 = 101
+
+If I use parseInt(), I end up with a total of 97%.
+
+13 + 47 + 9 + 28 = 97
+
+In my mind, to remain true to the numbers, the "right" result is the one that minimizes the overall error, defined by how much error rounding would introduce relative to the actual value:
+
+        value  rounded     error               decision
+   ----------------------------------------------------
+    13.626332       14      2.7%          round up (14)
+    47.989636       48      0.0%          round up (48)
+     9.596008       10      4.0%    don't round up  (9)
+    28.788024       29      2.7%          round up (29)
+   100.0           101                             100
+
+13.626332
+47.989636
+9.596008
+28.788024
+100
+
+In case of a tie (3.33, 3.33, 3.33) an arbitrary decision can be made (e.g. 3, 4, 3).
+
+
+The first and perhaps most popular method would be the "Largest Remainder Method"
+
+Which is basically:
+
+    Rounding everything down
+    Getting the difference in sum and 100
+    Distributing the difference by adding 1 to items in decreasing order of their decimal parts
+
+In your case, it would go like this:
+
+13.626332%
+47.989636%
+ 9.596008%
+28.788024%
+
+If you take the integer parts, you get
+
+13
+47
+ 9
+28
+
+which adds up to 97, and you want to add three more. Now, you look at the decimal parts, which are
+
+.626332%
+.989636%
+.596008%
+.788024%
+
+and take the largest ones until the total reaches 100. So you would get:
+
+14
+48
+ 9
+29
+
+Alternatively, you can simply choose to show one decimal place instead of integer values.
+So the numbers would be 48.3 and 23.9 etc. This would drop the variance from 100 by a lot.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+Probably the "best" way to do this (quoted since "best" is a subjective term) is to keep a running (non-integral) tally of where you are, and round that value.
+
+Then use that along with the history to work out what value should be used. For example, using the values you gave:
+
+Value      CumulValue  CumulRounded  PrevBaseline  Need
+---------  ----------  ------------  ------------  ----
+                                  0
+13.626332   13.626332            14             0    14 ( 14 -  0)
+47.989636   61.615968            62            14    48 ( 62 - 14)
+ 9.596008   71.211976            71            62     9 ( 71 - 62)
+28.788024  100.000000           100            71    29 (100 - 71)
+                                                    ---
+                                                    100
+
+At each stage, you don't round the number itself. Instead, you round the accumulated value and work out the best integer that reaches that value from the previous baseline - that baseline is the cumulative value (rounded) of the previous row.
+
+This works because you're not losing information at each stage but rather using the information more intelligently. The 'correct' rounded values are in the final column and you can see that they sum to 100.
+
+You can see the difference between this and blindly rounding each value, in the third value above. While 9.596008 would normally round up to 10, the accumulated 71.211976 correctly rounds down to 71 - this means that only 9 is needed to add to the previous baseline of 62.
+
+This also works for "problematic" sequence like three roughly-1/3 values, where one of them should be rounded up:
+
+Value      CumulValue  CumulRounded  PrevBaseline  Need
+---------  ----------  ------------  ------------  ----
+                                  0
+33.333333   33.333333            33             0    33 ( 33 -  0)
+33.333333   66.666666            67            33    34 ( 67 - 33)
+33.333333   99.999999           100            67    33 (100 - 67)
+                                                    ---
+                                                    100
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+The goal of rounding is to generate the least amount of error. When you're rounding a single value, that process is simple and straightforward and most people understand it easily. When you're rounding multiple numbers at the same time, the process gets trickier - you must define how the errors are going to combine, i.e. what must be minimized.
+
+The well-voted answer by Varun Vohra minimizes the sum of the absolute errors, and it's very simple to implement. However there are edge cases it does not handle - what should be the result of rounding 24.25, 23.25, 27.25, 25.25? One of those needs to be rounded up instead of down. You would probably just arbitrarily pick the first or last one in the list.
+
+Perhaps it's better to use the relative error instead of the absolute error. Rounding 23.25 up to 24 changes it by 3.2% while rounding 27.25 up to 28 only changes it by 2.8%. Now there's a clear winner.
+
+It's possible to tweak this even further. One common technique is to square each error, so that large errors count disproportionately more than small ones. I'd also use a non-linear divisor to get the relative error - it doesn't seem right that an error at 1% is 99 times more important than an error at 99%. In the code below I've used the square root.
+
+The complete algorithm is as follows:
+
+    Sum the percentages after rounding them all down, and subtract from 100. This tells you how many of those percentages must be rounded up instead.
+    Generate two error scores for each percentage, one when when rounded down and one when rounded up. Take the difference between the two.
+    Sort the error differences produced above.
+    For the number of percentages that need to be rounded up, take an item from the sorted list and increment the rounded down percentage by 1.
+
+You may still have more than one combination with the same error sum, for example 33.3333333, 33.3333333, 33.3333333. This is unavoidable, and the result will be completely arbitrary. The code I give below prefers to round up the values on the left.
+
+Putting it all together in Python looks like this.
+
+
+from math import isclose, sqrt
+
+def error_gen(actual, rounded):
+    divisor = sqrt(1.0 if actual < 1.0 else actual)
+    return abs(rounded - actual) ** 2 / divisor
+
+def round_to_100(percents):
+    if not isclose(sum(percents), 100):
+        raise ValueError
+    n = len(percents)
+    rounded = [int(x) for x in percents]
+    up_count = 100 - sum(rounded)
+    errors = [(error_gen(percents[i], rounded[i] + 1) - error_gen(percents[i], rounded[i]), i) for i in range(n)]
+    rank = sorted(errors)
+    for i in range(up_count):
+        rounded[rank[i][1]] += 1
+    return rounded
+
+>>> round_to_100([13.626332, 47.989636, 9.596008, 28.788024])
+[14, 48, 9, 29]
+>>> round_to_100([33.3333333, 33.3333333, 33.3333333])
+[34, 33, 33]
+>>> round_to_100([24.25, 23.25, 27.25, 25.25])
+[24, 23, 28, 25]
+>>> round_to_100([1.25, 2.25, 3.25, 4.25, 89.0])
+[1, 2, 3, 4, 90]
+
+
+As you can see with that last example, this algorithm is still capable of delivering non-intuitive results. Even though 89.0 needs no rounding whatsoever, one of the values in that list needed to be rounded up; the lowest relative error results from rounding up that large value rather than the much smaller alternatives.
+
+This answer originally advocated going through every possible combination of round up/round down, but as pointed out in the comments a simpler method works better. The algorithm and code reflect that simplification.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+10
+
+I wrote a C# version rounding helper, the algorithm is same as Varun Vohra's answer, hope it helps.
+
+public static List<decimal> GetPerfectRounding(List<decimal> original,
+    decimal forceSum, int decimals)
+{
+    var rounded = original.Select(x => Math.Round(x, decimals)).ToList();
+    Debug.Assert(Math.Round(forceSum, decimals) == forceSum);
+    var delta = forceSum - rounded.Sum();
+    if (delta == 0) return rounded;
+    var deltaUnit = Convert.ToDecimal(Math.Pow(0.1, decimals)) * Math.Sign(delta);
+
+    List<int> applyDeltaSequence;
+    if (delta < 0)
+    {
+        applyDeltaSequence = original
+            .Zip(Enumerable.Range(0, int.MaxValue), (x, index) => new { x, index })
+            .OrderBy(a => original[a.index] - rounded[a.index])
+            .ThenByDescending(a => a.index)
+            .Select(a => a.index).ToList();
+    }
+    else
+    {
+        applyDeltaSequence = original
+            .Zip(Enumerable.Range(0, int.MaxValue), (x, index) => new { x, index })
+            .OrderByDescending(a => original[a.index] - rounded[a.index])
+            .Select(a => a.index).ToList();
+    }
+
+    Enumerable.Repeat(applyDeltaSequence, int.MaxValue)
+        .SelectMany(x => x)
+        .Take(Convert.ToInt32(delta/deltaUnit))
+        .ForEach(index => rounded[index] += deltaUnit);
+
+    return rounded;
+}
+
+It pass the following Unit test:
+
+[TestMethod]
+public void TestPerfectRounding()
+{
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> {3.333m, 3.334m, 3.333m}, 10, 2),
+        new List<decimal> {3.33m, 3.34m, 3.33m});
+
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> {3.33m, 3.34m, 3.33m}, 10, 1),
+        new List<decimal> {3.3m, 3.4m, 3.3m});
+
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> {3.333m, 3.334m, 3.333m}, 10, 1),
+        new List<decimal> {3.3m, 3.4m, 3.3m});
+
+
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> { 13.626332m, 47.989636m, 9.596008m, 28.788024m }, 100, 0),
+        new List<decimal> {14, 48, 9, 29});
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> { 16.666m, 16.666m, 16.666m, 16.666m, 16.666m, 16.666m }, 100, 0),
+        new List<decimal> { 17, 17, 17, 17, 16, 16 });
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> { 33.333m, 33.333m, 33.333m }, 100, 0),
+        new List<decimal> { 34, 33, 33 });
+    CollectionAssert.AreEqual(Utils.GetPerfectRounding(
+        new List<decimal> { 33.3m, 33.3m, 33.3m, 0.1m }, 100, 0),
+        new List<decimal> { 34, 33, 33, 0 });
+}
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+function foo(l, target) {
+    var off = target - _.reduce(l, function(acc, x) { return acc + Math.round(x) }, 0);
+    return _.chain(l).
+            sortBy(function(x) { return Math.round(x) - x }).
+            map(function(x, i) { return Math.round(x) + (off > i) - (i >= (l.length + off)) }).
+            value();
+}
+
+foo([13.626332, 47.989636, 9.596008, 28.788024], 100) // => [48, 29, 14, 9]
+foo([16.666, 16.666, 16.666, 16.666, 16.666, 16.666], 100) // => [17, 17, 17, 17, 16, 16]
+foo([33.333, 33.333, 33.333], 100) // => [34, 33, 33]
+foo([33.3, 33.3, 33.3, 0.1], 100) // => [34, 33, 33, 0]
+
+-------------------------------------------------------------------------------------------------------------------------------
+function roundPercentages(l, target) {
+    var off = target - _.reduce(l, function(acc, x) { return acc + Math.round(x) }, 0);
+    let alreadySubstracted = false;
+    let substraction = false;
+    return _.chain(l).
+            map(function(x, i) {
+                lastSubstraction =  (i >= (l.length + off)) && !lastButOneSubstraction;
+                lastButOneSubstraction = (l[i+1] == 0 && i+1 >= (l.length + off) && !(i >= (l.length + off)));
+
+                return Math.round(x) + (off > i) - (lastSubstraction || lastButOneSubstraction)
+            }).
+            value();
+}
+
+document.getElementById("result").innerHTML = roundPercentages([52.6813880126183, 5.941114616193481, 24.55310199789695, 8.780231335436383, 8.04416403785489,0], 100);
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+const indexes = [];
+const decimalPercentages = [
+  0,
+  6.501707128047701,
+  80.72721472499585,
+  10.985525877598509,
+  1.7855522693579489
+];
+const sum = decimalPercentages.map(d => d).reduce((a, b) => a + b, 0);
+let percentages = decimalPercentages.map(d => Math.floor(d));
+const percentagesTotal = percentages.reduce((a, b) => a + b, 0);
+
+// Use the largest Remainder Method to get percentages total at 100
+
+if (100 - percentagesTotal) {
+  const decimalValues = decimalPercentages.map((d) => {
+    if (!d.toString().split('.')[1]) {
+      return 0;
+    }
+    return d.toString().split('.')[1];
+  });
+  const targetIndexes = [...decimalValues].sort().splice(percentages.length -
+    (100 - percentagesTotal));
+  targetIndexes.forEach((element) => {
+    indexes.push(decimalValues.indexOf(element));
+  });
+  percentages = percentages.map((element, key) => {
+    if (indexes.includes(key)) {
+      return element + 1;
+    }
+    return element;
+  });
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+I'm not sure what level of accuracy you need, but what I would do is simply add 1 the first n numbers, n being the ceil of the total sum of decimals. In this case that is 3, so I would add 1 to the first 3 items and floor the rest. Of course this is not super accurate, some numbers might be rounded up or down when it shouldn't but it works okay and will always result in 100%.
+
+So [ 13.626332, 47.989636, 9.596008, 28.788024 ] would be [14, 48, 10, 28] because Math.ceil(.626332+.989636+.596008+.788024) == 3
+
+function evenRound( arr ) {
+  var decimal = -~arr.map(function( a ){ return a % 1 })
+    .reduce(function( a,b ){ return a + b }); // Ceil of total sum of decimals
+  for ( var i = 0; i < decimal; ++i ) {
+    arr[ i ] = ++arr[ i ]; // compensate error by adding 1 the the first n items
+  }
+  return arr.map(function( a ){ return ~~a }); // floor all other numbers
+}
+
+var nums = evenRound( [ 13.626332, 47.989636, 9.596008, 28.788024 ] );
+var total = nums.reduce(function( a,b ){ return a + b }); //=> 100
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+function func( orig, target ) {
+
+    var i = orig.length, j = 0, total = 0, change, newVals = [], next, factor1, factor2, len = orig.length, marginOfErrors = [];
+
+    // map original values to new array
+    while( i-- ) {
+        total += newVals[i] = Math.round( orig[i] );
+    }
+
+    change = total < target ? 1 : -1;
+
+    while( total !== target ) {
+
+        // select number that will be less affected by change determined
+        // in terms of itself e.g. Incrementing 10 by 1 would mean
+        // an error of 10% in relation to itself.
+        for( i = 0; i < len; i++ ) {
+
+            next = i === len - 1 ? 0 : i + 1;
+
+            factor2 = errorFactor( orig[next], newVals[next] + change );
+            factor1 = errorFactor( orig[i], newVals[i] + change );
+
+            if(  factor1 > factor2 ) {
+                j = next;
+            }
+        }
+
+        newVals[j] += change;
+        total += change;
+    }
+
+
+    for( i = 0; i < len; i++ ) { marginOfErrors[i] = newVals[i] && Math.abs( orig[i] - newVals[i] ) / orig[i]; }
+
+    for( i = 0; i < len; i++ ) {
+        for( j = 0; j < len; j++ ) {
+            if( j === i ) continue;
+
+            var roundUpFactor = errorFactor( orig[i], newVals[i] + 1)  + errorFactor( orig[j], newVals[j] - 1 );
+            var roundDownFactor = errorFactor( orig[i], newVals[i] - 1) + errorFactor( orig[j], newVals[j] + 1 );
+            var sumMargin = marginOfErrors[i] + marginOfErrors[j];
+
+            if( roundUpFactor < sumMargin) {
+                newVals[i] = newVals[i] + 1;
+                newVals[j] = newVals[j] - 1;
+                marginOfErrors[i] = newVals[i] && Math.abs( orig[i] - newVals[i] ) / orig[i];
+                marginOfErrors[j] = newVals[j] && Math.abs( orig[j] - newVals[j] ) / orig[j];
+            }
+
+            if( roundDownFactor < sumMargin ) {
+                newVals[i] = newVals[i] - 1;
+                newVals[j] = newVals[j] + 1;
+                marginOfErrors[i] = newVals[i] && Math.abs( orig[i] - newVals[i] ) / orig[i];
+                marginOfErrors[j] = newVals[j] && Math.abs( orig[j] - newVals[j] ) / orig[j];
+            }
+
+        }
+    }
+
+
+    function errorFactor( oldNum, newNum ) {
+        return Math.abs( oldNum - newNum ) / oldNum;
+    }
+
+    console.log( newVals );
+    return newVals;
+}
+
+
+func([16.666, 16.666, 16.666, 16.666, 16.666, 16.666], 100); // => [16, 16, 17, 17, 17, 17]
+func([33.333, 33.333, 33.333], 100); // => [34, 33, 33]
+func([33.3, 33.3, 33.3, 0.1], 100); // [34, 33, 33, 0]
+func([13.25, 47.25, 11.25, 28.25], 100 ); // [13, 48, 11, 28]
+func([13.626332, 47.989636, 9.596008, 28.788024], 100); // => [48, 29, 13, 10]
+
+One last thing, I ran the function using the numbers originally given in the question to compare to the desired output
+
+func([13.626332, 47.989636, 9.596008, 28.788024], 100); // => [48, 29, 13, 10]
+
+This was different to what the question wanted => [ 48, 29, 14, 9]. I couldn't understand this until I looked at the total margin of error
+
+-------------------------------------------------
+| original  | question | % diff | mine | % diff |
+-------------------------------------------------
+| 13.626332 | 14       | 2.74%  | 13   | 4.5%   |
+| 47.989636 | 48       | 0.02%  | 48   | 0.02%  |
+| 9.596008  | 9        | 6.2%   | 10   | 4.2%   |
+| 28.788024 | 29       | 0.7%   | 29   | 0.7%   |
+-------------------------------------------------
+| Totals    | 100      | 9.66%  | 100  | 9.43%  |
+
+
+http://jsfiddle.net/bruno/4DU2H/1/
+-------------------------------------------------------------------------------------------------------------------------------
+
+//# My JS implementation for the well-voted answer by Varun Vohra
+
+const set1 = [13.626332, 47.989636, 9.596008, 28.788024];
+// const set2 = [24.25, 23.25, 27.25, 25.25];
+
+const values = set1;
+
+console.log('Total: ', values.reduce((accum, each) => accum + each));
+console.log('Incorrectly Rounded: ',
+  values.reduce((accum, each) => accum + Math.round(each), 0));
+
+const adjustValues = (values) => {
+  // 1. Separate integer and decimal part
+  // 2. Store both in a new array of objects sorted by decimal part descending
+  // 3. Add in original position to "put back" at the end
+  const flooredAndSortedByDecimal = values.map((value, position) => (
+    {
+        floored: Math.floor(value),
+        decimal: value - Number.parseInt(value),
+        position
+    }
+  )).sort(({decimal}, {decimal: otherDecimal}) => otherDecimal - decimal);
+
+  const roundedTotal = values.reduce((total, value) => total + Math.floor(value), 0);
+  let availableForDistribution = 100 - roundedTotal;
+
+  // Add 1 to each value from what's available
+  const adjustedValues = flooredAndSortedByDecimal.map(value => {
+    const { floored, ...rest } = value;
+    let finalPercentage = floored;
+    if(availableForDistribution > 0){
+        finalPercentage = floored + 1;
+        availableForDistribution--;
+    }
+
+    return {
+        finalPercentage,
+        ...rest
+    }
+  });
+
+  // Put back and return the new values
+  return adjustedValues
+    .sort(({position}, {position: otherPosition}) => position - otherPosition)
+    .map(({finalPercentage}) => finalPercentage);
+}
+
+const finalPercentages = adjustValues(values);
+console.log({finalPercentages})
+
+// { finalPercentage: [14, 48, 9, 29]}
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Discussion
+
+given [98.88, .56, .56] how do you want to round it? you have four option
+
+1- round things up and subtract what is added from the rest of the numbers, so the result becomes [98, 1, 1]
+
+this could be a good answer, but what if we have [97.5, .5, .5, .5, .5, .5]? then you need to round it up to [95, 1, 1, 1, 1, 1]
+
+do you see how it goes? if you add more 0-like numbers, you will lose more value from the rest of your numbers. this could be very troublesome when you have a big array of zero-like number like [40, .5, .5 , ... , .5]. when you round up this, you could end up with an array of ones: [1, 1, .... , 1]
+
+so round-up isn't a good option.
+
+2- you round down the numbers. so [98.88, .56, .56] becomes [98, 0, 0], then you are 2 less than 100. you ignore anything that is already 0, then add up the difference to the biggest numbers. so bigger numbers will get more.
+
+3- same as previous, round down numbers, but you sort descending based on the decimals, divide up the diff based on the decimal, so biggest decimal will get the diff.
+
+4- you round up, but you add what you added to the next number. so like a wave what you have added will be redirected to the end of your array. so [98.88, .56, .56] becomes [99, 0, 1]
+
+none of these are ideal, so be mindful that your data is going to lose its shape.
+
+here I provide a code for cases 2 and 3 (as case No.1 is not practical when you have a lot of zero-like numbers). it's modern Js and doesn't need any library to use
+2nd case
+
+const v1 = [13.626332, 47.989636, 9.596008, 28.788024];// => [ 14, 48, 9, 29 ]
+const v2 = [16.666, 16.666, 16.666, 16.666, 16.666, 16.666] // => [ 17, 17, 17, 17, 16, 16 ] 
+const v3 = [33.333, 33.333, 33.333] // => [ 34, 33, 33 ]
+const v4 = [33.3, 33.3, 33.3, 0.1] // => [ 34, 33, 33, 0 ]
+const v5 = [98.88, .56, .56] // =>[ 100, 0, 0 ]
+const v6 = [97.5, .5, .5, .5, .5, .5] // => [ 100, 0, 0, 0, 0, 0 ]
+
+const normalizePercentageByNumber = (input) => {
+    const rounded: number[] = input.map(x => Math.floor(x));
+    const afterRoundSum = rounded.reduce((pre, curr) => pre + curr, 0);
+    const countMutableItems = rounded.filter(x => x >=1).length;
+    const errorRate = 100 - afterRoundSum;
+
+    const deductPortion = Math.ceil(errorRate / countMutableItems);
+
+    const biggest = [...rounded].sort((a, b) => b - a).slice(0, Math.min(Math.abs(errorRate), countMutableItems));
+    const result = rounded.map(x => {
+        const indexOfX = biggest.indexOf(x);
+        if (indexOfX >= 0) {
+            x += deductPortion;
+            console.log(biggest)
+            biggest.splice(indexOfX, 1);
+            return x;
+        }
+        return x;
+    });
+    return result;
+}
+
+3rd case
+
+const normalizePercentageByDecimal = (input: number[]) => {
+
+    const rounded= input.map((x, i) => ({number: Math.floor(x), decimal: x%1, index: i }));
+
+    const decimalSorted= [...rounded].sort((a,b)=> b.decimal-a.decimal);
+
+    const sum = rounded.reduce((pre, curr)=> pre + curr.number, 0) ;
+    const error= 100-sum;
+
+    for (let i = 0; i < error; i++) {
+        const element = decimalSorted[i];
+        element.number++;
+    }
+
+    const result= [...decimalSorted].sort((a,b)=> a.index-b.index);
+
+    return result.map(x=> x.number);
+}
+
+4th case
+
+you just need to calculate how much extra air added or deducted to your numbers on each roundup and, add or subtract it again in the next item.
+
+const v1 = [13.626332, 47.989636, 9.596008, 28.788024];// => [14, 48, 10, 28 ]
+const v2 = [16.666, 16.666, 16.666, 16.666, 16.666, 16.666] // => [17, 16, 17, 16, 17, 17]
+const v3 = [33.333, 33.333, 33.333] // => [33, 34, 33]
+const v4 = [33.3, 33.3, 33.3, 0.1] // => [33, 34, 33, 0]
+
+const normalizePercentageByWave= v4.reduce((pre, curr, i, arr) => {
+
+    let number = Math.round(curr + pre.decimal);
+    let total = pre.total + number;
+
+    const decimal = curr - number;
+
+    if (i == arr.length - 1 && total < 100) {
+        const diff = 100 - total;
+        total += diff;
+        number += diff;
+    }
+
+    return { total, numbers: [...pre.numbers, number], decimal };
+
+}, { total: 0, numbers: [], decimal: 0 });
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+# Python
+
+I have implemented the method from Varun Vohra's answer here for both lists and dicts.
+
+import math
+import numbers
+import operator
+import itertools
+
+
+def round_list_percentages(number_list):
+    """
+    Takes a list where all values are numbers that add up to 100,
+    and rounds them off to integers while still retaining a sum of 100.
+
+    A total value sum that rounds to 100.00 with two decimals is acceptable.
+    This ensures that all input where the values are calculated with [fraction]/[total]
+    and the sum of all fractions equal the total, should pass.
+    """
+    # Check input
+    if not all(isinstance(i, numbers.Number) for i in number_list):
+        raise ValueError('All values of the list must be a number')
+
+    # Generate a key for each value
+    key_generator = itertools.count()
+    value_dict = {next(key_generator): value for value in number_list}
+    return round_dictionary_percentages(value_dict).values()
+
+
+def round_dictionary_percentages(dictionary):
+    """
+    Takes a dictionary where all values are numbers that add up to 100,
+    and rounds them off to integers while still retaining a sum of 100.
+
+    A total value sum that rounds to 100.00 with two decimals is acceptable.
+    This ensures that all input where the values are calculated with [fraction]/[total]
+    and the sum of all fractions equal the total, should pass.
+    """
+    # Check input
+    # Only allow numbers
+    if not all(isinstance(i, numbers.Number) for i in dictionary.values()):
+        raise ValueError('All values of the dictionary must be a number')
+    # Make sure the sum is close enough to 100
+    # Round value_sum to 2 decimals to avoid floating point representation errors
+    value_sum = round(sum(dictionary.values()), 2)
+    if not value_sum == 100:
+        raise ValueError('The sum of the values must be 100')
+
+    # Initial floored results
+    # Does not add up to 100, so we need to add something
+    result = {key: int(math.floor(value)) for key, value in dictionary.items()}
+
+    # Remainders for each key
+    result_remainders = {key: value % 1 for key, value in dictionary.items()}
+    # Keys sorted by remainder (biggest first)
+    sorted_keys = [key for key, value in sorted(result_remainders.items(), key=operator.itemgetter(1), reverse=True)]
+
+    # Otherwise add missing values up to 100
+    # One cycle is enough, since flooring removes a max value of < 1 per item,
+    # i.e. this loop should always break before going through the whole list
+    for key in sorted_keys:
+        if sum(result.values()) == 100:
+            break
+        result[key] += 1
+
+    # Return
+    return result
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+def apportion_pcts(pcts, total):
+    proportions = [total * (pct / 100) for pct in pcts]
+    apportions = [math.floor(p) for p in proportions]
+    remainder = total - sum(apportions)
+    remainders = [(i, p - math.floor(p)) for (i, p) in enumerate(proportions)]
+    remainders.sort(key=operator.itemgetter(1), reverse=True)
+    for (i, _) in itertools.cycle(remainders):
+        if remainder == 0:
+            break
+        else:
+            apportions[i] += 1
+            remainder -= 1
+    return apportions
+
+You need math, itertools, operator.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+import numpy as np
+
+def largestRemainderMethod(pd_series, decimals=1):
+
+    floor_series = ((10**decimals * pd_series).astype(np.int)).apply(np.floor)
+    diff = 100 * (10**decimals) - floor_series.sum().astype(np.int)
+    series_decimals = pd_series - floor_series / (10**decimals)
+    series_sorted_by_decimals = series_decimals.sort_values(ascending=False)
+
+    for i in range(0, len(series_sorted_by_decimals)):
+        if i < diff:
+            series_sorted_by_decimals.iloc[[i]] = 1
+        else:
+            series_sorted_by_decimals.iloc[[i]] = 0
+
+    out_series = ((floor_series + series_sorted_by_decimals) / (10**decimals)).sort_values(ascending=False)
+
+    return out_series
+-------------------------------------------------------------------------------------------------------------------------------
+// SchoolId 3152
+
+73
+13.6
+7.1
+4.8
+1.6
+
+
+63.16
+44.87
+
+"totalMale": 3563,
+"totalFemale": 6166,
+"totalOther": 0
+
+male	3563	0.366224689	36.62246891
+female	6166	0.633775311	63.37753109
+total	9729	1	100
+
+
+"percentMale": 142.0,
+"percentFemale": 246.0,
+
+"gender": {
+  "percentMale": 142.41,
+  "percentFemale": 246.44,
+  "percentOther": 0.0,
+  "percentUGMale": 111.55,
+  "percentGradMale": 30.86,
+  "percentUGFemale": 175.62,
+  "percentGradFemale": 70.82,
+
+  "totalUGMale": 2791,
+  "totalGradMale": 772,
+  "totalUGFemale": 4394,
+  "totalGradFemale": 1772,
+  "totalMale": 3563,
+  "totalFemale": 6166,
+  "totalOther": 0
+},
+"ethnicity": [
+{"ethnicId": "White"          ,"ethnicity" : "White"                           , "enrollment" : 3692, "percent": 51.38}
+{"ethnicId": "Hispanic"       ,"ethnicity" : "Hispanic"                        , "enrollment" : 1829, "percent": 25.46}
+{"ethnicId": "Asian"          ,"ethnicity" : "Asian"                           , "enrollment" : 355 , "percent": 4.94}
+{"ethnicId": "Black"          ,"ethnicity" : "Black/African American"          , "enrollment" : 754 , "percent": 10.49}
+{"ethnicId": "Other"          ,"ethnicity" : "Other"                           , "enrollment" : 244 , "percent": 3.4}
+{"ethnicId": "NativeAmerican" ,"ethnicity" : "American Indian/Alaska Native"   , "enrollment" : 32  , "percent": 0.45}
+{"ethnicId": "PacificIslander","ethnicity" : "Native Hawaiian/Pacific Islander", "enrollment" : 2   , "percent": 0.03}
+{"ethnicId": "Multirace"      ,"ethnicity" : "Two or more races"               , "enrollment" : 277 , "percent": 3.86}
+

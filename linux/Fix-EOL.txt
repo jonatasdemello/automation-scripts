@@ -1,0 +1,26 @@
+Fix EOL
+
+	Use replace all with regular expression
+
+	(\r?\n)|(\r\n?)
+
+	to
+
+	\r\n
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+In the 'Find what' box, use this pattern:
+
+(?<!\r)\n
+
+Replace with:
+
+\r\n
+
+
+Explanation:
+	the (?<! ) is a negative lookbehind.
+	It means match if prefix is absent.
+	In this case it's checking for \r and will only match if \n doesnt have an \r before it.
+

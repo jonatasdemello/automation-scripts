@@ -1,0 +1,39 @@
+CMD
+You can press Alt + F7 key to wipe the Windows Command Prompt history from the current session.
+
+In the Command Prompt window, press and hold the F7 key to view the history of Command Prompt.
+
+
+Pwsh
+
+Press
+Ctrl+R    And then start typing, to search backward in history interactively.
+          This matches the text from anywhere in the command line.
+		  Press Ctrl+R again to find next match.
+Ctrl+S    Works like above, but searches forward in history.
+          You can use Ctrl+R/Ctrl+S to go back and forth in search results.
+
+
+Type a text and then press F8.
+This searches for the previous item in the history that starts with the current input.
+Shift+F8 works like F8, but searches forward.
+
+
+Get-Content (Get-PSReadlineOption).HistorySavePath | ? { $_ -like '*docker cp*' }
+
+Get-PSReadlineKeyHandler | ? {$_.function -like '*hist*'}
+
+
+
+History functions
+=================
+Key           Function                 Description
+---           --------                 -----------
+Alt+F7        ClearHistory             Remove all items from the command line history (not PowerShell history)
+Ctrl+s        ForwardSearchHistory     Search history forward interactively
+F8            HistorySearchBackward    Search for the previous item in the history that starts with the current input - like PreviousHistory if the input is empty
+Shift+F8      HistorySearchForward     Search for the next item in the history that starts with the current input - like NextHistory if the input is empty
+DownArrow     NextHistory              Replace the input with the next item in the history
+UpArrow       PreviousHistory          Replace the input with the previous item in the history
+Ctrl+r        ReverseSearchHistory     Search history backwards interactively
+

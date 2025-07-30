@@ -1,0 +1,22 @@
+CMD append to path if not exists
+
+https://superuser.com/questions/480238/cmd-append-to-path-without-duplicating-it
+
+Similar to MaddHackers answer, just more compact.
+echo %path%|find /i "%np%">nul  || set path=%path%;%np%
+
+%np% is your new path, of course you can use literals instead. What it does: echo %path%|find /i "%np%">nul searches existing path for a string, discarding output. || means execute on failure, so it means: Search path for string to be added, and if not found, add it.
+
+Edit: Generally it's not required to quote paths, even those containig spaces, but if you do want to quote them, this version will work with double quoted paths:
+echo %path%|find /i "%np:"=%">nul  || set path=%path%;%np%
+
+Edit: changed findstr /i /c: to find /i as findstr may misinterpret some sequences as noted by KubaOber in comments
+
+
+
+set np=C:\Program Files\Microsoft JDBC DRIVER 9.2 for SQL Server\
+
+echo %PATH%|find /i "%np%">nul  || set PATH=%PATH%;%np%
+
+SET CLASSPATH =.;C:\Program Files\Microsoft JDBC DRIVER 9.2 for SQL Server\mssql-jdbc-9.2.1.jre11.jar
+

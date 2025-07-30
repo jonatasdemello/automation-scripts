@@ -1,0 +1,124 @@
+From TortoiseGit help
+
+-------------------------------------------------------------------------------------------------------------------------------
+2.37.4.1. Diff Viewer
+
+The Settings Dialog, Diff Viewer Page
+
+An external diff program may be used for comparing different revisions of files.
+The external program will need to obtain the filenames from the command line, along with any other command line options.
+TortoiseGit uses substitution parameters prefixed with %. When it encounters one of these it will substitute the appropriate value.
+The order of the parameters will depend on the Diff program you use.
+
+%base		The original file without your changes
+%bname		The window title for the base file
+%mine		Your own file, with your changes
+%yname		The window title for your file
+%bpath		Full path to the original file
+%ypath		Full path to your file
+%brev		The revision of the original file, if available
+%yrev		The revision of the second file, if available
+%wtroot		Path to the working tree
+
+
+The window titles are not pure filenames. TortoiseGit treats that as a name to display and creates the names accordingly.
+So e.g. if you're doing a diff from a file in revision 123 with a file in your working tree,
+the names will be filename: revision 123 and filename: working tree
+
+For example, with ExamDiff Pro:
+
+	C:\Path-To\ExamDiff.exe %base %mine --left_display_name:%bname --right_display_name:%yname
+
+or with KDiff3:
+
+	C:\Path-To\kdiff3.exe %base %mine --L1 %bname --L2 %yname
+
+or with WinMerge:
+
+	C:\Path-To\WinMerge.exe -e -ub -dl %bname -dr %yname %base %mine
+
+or with Araxis:
+
+	C:\Path-To\compare.exe /max /wait /title1:%bname /title2:%yname %base %mine
+
+
+If you have configured an alternate diff tool, you can access TortoiseGitMerge and the third party tool from the context menus.
+Context menu → Diff uses the primary diff tool, and Shift+ Context menu → Diff uses the secondary diff tool.
+
+2.37.4.1.1. Unified-Diff/GNU Diff/Patch File Viewer
+
+Instead of TortoiseGitUDiff an external viewer program for unified-diff files (GNU diff or patch files) may be used.
+Basically, there is no parameter required - the file name if the unified diff file to be opened will be appended automatically.
+If you need to pass it as a different parameter the substitution %1 can be used.
+There also is the parameter substitution %title available for passing the title to be shown in the title bar (i.e., meta data of the diff).
+
+For example, with Notepad2 (shipped with TortoiseGit):
+
+Notepad2.exe /s "Diff Files" /t %title
+
+or (equivalent)
+
+Notepad2.exe /s "Diff Files" /t %title %1
+
+
+If you have configured an alternate unified diff tool, you can access TortoiseGitUDiff and the third party tool from the context menus.
+When you hold the Shift-key while opening the context menu the secondary unified diff tool is started.
+
+-------------------------------------------------------------------------------------------------------------------------------
+2.37.4.2. Merge Tool
+
+An external merge program used to resolve conflicted files.
+Parameter substitution is used in the same way as with the Diff Program.
+
+%base		the original file without your or the others changes
+%bname		The window title for the base file
+%mine		your own file, with your changes
+%yname		The window title for your file
+%theirs		the file as it is in the repository
+%tname		The window title for the file in the repository
+%merged		the conflicted file, the result of the merge operation
+%mname		The window title for the merged file
+%wtroot		Path to the working tree
+
+For example, with Perforce Merge:
+
+	C:\Path-To\P4Merge.exe %base %theirs %mine %merged
+
+or with KDiff3:
+
+	C:\Path-To\kdiff3.exe %base %mine %theirs -o %merged --L1 %bname --L2 %yname --L3 %tname
+
+or with Araxis:
+
+	C:\Path-To\compare.exe /max /wait /3 /title1:%tname /title2:%bname /title3:%yname %theirs %base %mine %merged /a2
+
+or with WinMerge (2.12 or later):
+
+	C:\Path-To\WinMergeU.exe /e /ub /fr /wl /wm /dl %bname /dm %tname /dr %yname %base %theirs %mine /o %merged /ar
+
+
+TortoiseGit creates temporary files with similar file names as the conflicted file
+(CONFLICTED.BASE.EXT, CONFLICTED.LOCAL.EXT and CONFLICTED.REMOTE.EXT).
+These files are automatically removed when the conflict is marked as resolved using TortoiseGit, TortoiseGitMerge, or TortoiseGitIDiff.
+
+When using an external tool, a conflicted file needs to be marked as revolved in TortoiseGit manually
+(doing so also removes the temporary files).
+This can be simplified and might also be automated: TortoiseGit can be configured to synchronously executing the merge tool
+(Block TortoiseGit while executing the external merge tool).
+Then TortoiseGit waits until the external merge tool is closed and asks whether to resolve the conflict
+(the temporary files are removed in any case).
+If the external merge tool provides a proper exit code (0 for success) you can trust the exit code to automatically mark the conflicted file as resolved
+(as Git does, cf. Section G.3.87, “git-mergetool(1)”).
+
+2.37.4.3. Diff/Merge Advanced Settings
+
+Figure 2.89. The Settings Dialog, Diff/Merge Advanced Dialog
+
+The Settings Dialog, Diff/Merge Advanced Dialog
+
+In the advanced settings, you can define a different diff and merge program for every file extension.
+For instance you could associate Photoshop as the “Diff” Program for .jpg files :-)
+
+To associate using a file extension, you need to specify the extension. Use .bmp to describe Windows bitmap files.
+
+-------------------------------------------------------------------------------------------------------------------------------

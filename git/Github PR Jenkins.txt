@@ -1,0 +1,15 @@
+Github PR Jenkins
+
+ghprb-plugin
+
+https://github.com/jenkinsci/ghprb-plugin/issues/746
+
+Working around currently by encouraging "[skip ci]" in draft PR titles.
+
+adding [skip ci] in PR title works.
+
+
+f.entry(field: "skipBuildPhrase", title: _("Skip build phrase")) {
+      f.textbox(default: ".*\\[skip\\W+ci\\].*")
+    }
+

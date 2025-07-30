@@ -1,0 +1,72 @@
+wsl -l -v
+
+wsl --set-version <distro> 2
+
+sudo apt-get update
+sudo apt-get upgrade
+
+-------------------------------------------------------------------------------------------------------------------------------
+docker info
+
+docker <COMMAND> --help
+
+docker --version
+
+docker build -t temp-ubuntu .
+
+docker images
+
+docker run -d -p 8080:3000 tmp-ubuntu
+
+docker ps -a
+
+http://172.17.0.2:3000/
+
+
+docker image ls --all
+docker container ls --all
+docker ps -a
+
+
+# How to list images
+
+docker images
+
+# How to remove an image
+
+docker rmi temp-ubuntu:version-1.0
+
+# How to view available containers
+
+docker ps -a
+
+# How to run a container
+
+docker run -d tmp-ubuntu --publish 8080:80
+
+# How to pause a container
+
+docker pause happy_wilbur
+
+# How to restart a container
+
+docker stop happy_wilbur
+
+# How to remove a container
+
+docker rm happy_wilbur
+
+# volumes
+docker volume create
+
+# publish
+
+docker tag getting-started YOUR-USER-NAME/getting-started
+
+docker push YOUR-USER-NAME/getting-started
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+Sharing:
+	vnc://jonatasVM.local
+	ssh jonatasVM.local
+
+
+Ubuntu 20.04 Remote Desktop from Windows 10 step by step instructions
+
+    First step is to install Remote Desktop Protocol (RDP) server xrdp on the Ubuntu 20.04 desktop. To do so execute the following command:
+
+    $ sudo apt install xrdp
+
+    Enable to start after reboot and run the remote desktop sharing server xrdp:
+
+    $ sudo systemctl enable --now xrdp
+
+    Still on the Ubuntu 20.04 desktop, open a firewall port 3389 for an incoming traffic:
+
+    $ sudo ufw allow from any to any port 3389 proto tcp
+
+
+
+sudo ufw allow from any to any port 53 proto tcp
+
+
+How to Open/Allow incoming firewall port on Ubuntu 20.04 examples
+
+    Open incoming TCP port 53 to any source IP address:
+
+    $ sudo ufw allow from any to any port 53 proto tcp
+
+    Open incoming TCP port 443 to only specific source IP address eg. 10.1.1.222:
+
+    $ sudo ufw allow from 10.1.1.222 to any port 443 proto tcp
+
+    Open incoming UDP port 53 to source subnet eg. 10.1.1.0/8:
+
+    $ sudo ufw allow from 10.1.1.0/8 to any port 53 proto udp
+
+    Open incoming TCP ports 20 and 21 from any source, such as when running FTP server:
+
+    $ sudo ufw allow from any to any port 20,21 proto tcp
+
+    Open port for a specific webserver such as Apache or Nginx execute the bellow Linux command:
+
+    $ sudo ufw allow in "Apache Full"
+    $ sudo ufw allow in "Nginx Full"
+
+    Open port for a specific service such as SSH:
+
+    $ sudo ufw allow in ssh
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Enabling SSH on Ubuntu
+By default, when Ubuntu is first installed, remote access via SSH is not allowed. Enabling SSH on Ubuntu is fairly straightforward.
+
+Perform the following steps as root or user with sudo privileges to install and enable SSH on your Ubuntu system:
+
+
+Open the terminal with Ctrl+Alt+T and install the openssh-server package:
+
+sudo apt update
+sudo apt install openssh-server
+CopyCopy
+When prompted, enter your password and press Enter to continue with the installation.
+
+ubuntu install ssh
+Once the installation is complete, the SSH service will start automatically. You can verify that SSH is running by typing:
+
+sudo systemctl status ssh
+Copy
+The output should tell you that the service is running and enabled to start on system boot:
+
+● ssh.service - OpenBSD Secure Shell server
+    Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enabled)
+    Active: active (running) since Mon 2020-06-01 12:34:00 CEST; 9h ago
+...
+Copy
+Press q to get back to the command line prompt.
+
+Ubuntu ships with a firewall configuration tool called UFW. If the firewall is enabled on your system, make sure to open the SSH port:
+
+sudo ufw allow ssh
+Copy
+That’s it! You can now connect to your Ubuntu system via SSH from any remote machine. Linux and macOS systems have SSH clients installed by default. To connect from a Windows machine, use an SSH client such as PuTTY .
+
+Connecting to the SSH Server

@@ -1,0 +1,15 @@
+Knowledge of Jenkins File System:
+You must have all the knowledge of the Jenkins file system,
+like the location of job directories and key files like “build.xml” and “nextBuildNumber.”
+
+Now click on the script console after that run this command:
+
+Jenkins.instance.getItemByFullName("test-job").updateNextBuildNumber(42)
+
+Now to reset the build number in Jenkins, again go the script console and then run this command:
+
+item = Jenkins.instance.getItemByFullName("test-job")
+Item.builds.each() { build -> build.delete() }
+item.updateNextBuildNumber(1)
+item.getNextBuildNumber()
+

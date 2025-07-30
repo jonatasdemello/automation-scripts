@@ -1,0 +1,103 @@
+wslbridge error: failed to start backend process
+note: backend error output: -v: -c: line 0: unexpected EOF while looking for matching `''
+-v: -c: line 1: syntax error: unexpected end of file
+
+
+Updating the command to set "PATH=%ConEmuBaseDirShort%\wsl;%PATH%" & wsl.exe worked for me.
+
+
+
+set "PATH=%ConEmuBaseDirShort%\wsl;%PATH%" & %ConEmuBaseDirShort%\conemu-cyg-64.exe --wsl -cur_console:pm:/mnt -new_console:d:C:\Users\jonatas
+
+
+%ConEmuBaseDirShort%\conemu-cyg-64.exe --wsl
+-cur_console:pm:/mnt
+-new_console:d:C:\Users\jonatas
+
+
+%ConEmuBaseDirShort%\conemu-cyg-64.exe --wsl   -new_console:d:C:\Users\jonatas
+
+$ %ConEmuBaseDirShort%\conemu-cyg-64.exe --help
+ConEmu cygwin/msys connector version 1.2.9
+Windows drive mount root: `/cygdrive`
+Usage: conemu-cyg-64 [switches] [- | shell [shell switches]]
+  -?, -h, --help   this help
+  -d, --dir <dir>  chdir to `dir` before starting shell
+                   forces `set CHERE_INVOKING=1`
+  -l, --log <dir>  write console IN and OUT to files in `dir` folder
+                   use current folder if <dir> is not specified`
+  -t <new-term>    forces `set TERM=new-term`
+      --debug      wait for debugger for 60 seconds
+      --environ    print environment on startup
+      --isatty     do isatty checks and print pts names
+      --keys       read conin and print bare input
+      --shlvl      forces `set SHLVL=1` to avoid terminal reset on exit
+      --verbose    additional information during startup
+      --version    print version of this tool
+      --wsl        run wslbridge to start Bash on Ubuntu on Windows 10
+
+# wslbridge
+
+wslbridge is a Cygwin program that allows connecting to the WSL command-line
+environment over TCP sockets, as with ssh, but without the overhead of
+configuring an SSH server.
+
+## Usage
+
+Usage is similar to that of `ssh`.  Run `wslbridge` with no arguments to start
+a bash session in a WSL pty.  Append a command-line to run that command in WSL
+without a pty (i.e. using 3 pipes for stdio).
+
+`wslbridge` runs its WSL command with either a pty or using pipes.  Pass `-t`
+to enable pty mode or `-T` to enable pipe mode.  Pass `-t -t` to force pty mode
+even if stdin is not a terminal.
+
+Pass `-eVAR=VAL` to set an environment variable within WSL.  Pass just `-eVAR`
+to copy the value from the Cygwin environment.
+
+## Copyright
+
+wslbridge is distributed under the MIT license:
+<https://github.com/rprichard/wslbridge/blob/master/LICENSE.txt>
+
+cygwin library is distributed under the LGPL license:
+<https://github.com/Maximus5/Cygwin-origin/blob/master/winsup/COPYING.LIB>
+<https://github.com/Maximus5/Cygwin-origin/blob/master/winsup/CYGWIN_LICENSE>
+
+
+
+{PID:8916} declaring TERM: `xterm-256color` (was: `cygwin`)
+{PID:8916} current $HOME is `/home/jonatas`
+{PID:8916} 0: isatty()=1; pgrp=8916; ttyname()=`/dev/cons0`
+{PID:8916} 1: isatty()=1; pgrp=8916; ttyname()=`/dev/cons0`
+{PID:8916} 2: isatty()=1; pgrp=8916; ttyname()=`/dev/cons0`
+{PID:8916} calling fork (pgid=8916)
+{PID:8916} child pid=5912 pgid=8916 was created (ourpgid=8916)
+{PID:8916} PTY was created: `/dev/pty0`; Child PID:5912
+{PID:8916} 0: isatty()=1; pgrp=8916; ttyname()=`/dev/cons0`
+{PID:8916} 1: isatty()=1; pgrp=8916; ttyname()=`/dev/cons0`
+{PID:8916} 2: isatty()=1; pgrp=8916; ttyname()=`/dev/cons0`
+{PID:8916} raising SIGUSR1 in pid=5912
+{PID:8916} SIGUSR1 received
+{PID:8916} ioctl(5,TIOCSWINSZ,(139,46)) succeeded (0)
+{PID:5912} closing log file (3)
+{PID:5912} closing log file (4)
+{PID:5912} child created (pgid=5912)
+{PID:5912} child process wating for SIGUSR1 (pgid=5912)
+{PID:5912} SIGUSR1 received
+{PID:5912} child process continues after 15 ms (SIGUSR1=1)
+{PID:5912} ttyname(1)=`/dev/pty0`
+{PID:5912} ttyname(1)=`/dev/pty0`
+{PID:5912} 0: isatty()=1; pgrp=5912; ttyname()=`/dev/pty0`
+{PID:5912} 1: isatty()=1; pgrp=5912; ttyname()=`/dev/pty0`
+{PID:5912} 2: isatty()=1; pgrp=5912; ttyname()=`/dev/pty0`
+{PID:5912} raising SIGUSR1 in pid=8916
+{PID:5912} argv[0]: `/conemu-cyg-64`
+{PID:5912} shell: `/wsl/wslbridge.exe` `-eConEmuBuild` `-eConEmuPID` `-eConEmuServerPID` `-t` `bash` `-l` `-i`
+{PID:5912}   dir: `/cygdrive/c/Users/jonatas`
+wslbridge error: failed to start backend process
+note: backend error output: -v: -c: line 0: unexpected EOF while looking for matching `''
+-v: -c: line 1: syntax error: unexpected end of file
+{PID:8916} read(pty=5) failed (len=-1,errno=5): Input/output error
+{PID:8916} pid=5912 was terminated, exitcode=1
+{PID:8916} pty_fd set to -1

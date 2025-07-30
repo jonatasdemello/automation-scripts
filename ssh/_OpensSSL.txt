@@ -1,0 +1,133 @@
+https://github.com/openssl/openssl
+
+
+Before going into the descriptions of each format we will spend a few words on the X.509 v3 standard, which is the foundation for the definitions of all the formats we’ll talk about here.
+
+
+X.509
+X.509 is the name given to an ITU-T standard for public-key infrastructures (PKI): presented for the first time in 1998, it was used in the following years to define a set of standard formats for most public-key certificates and of the relative revocation lists (CRL, from Certificate Revocation List). The term Certificate X.509 is used nowadays to refer to the third revision of the standard (X.509 v3), which is detailed in RFC 5280.
+
+PEM (.cer .crt .pem .key)
+This is the most common format used for distributing certificates.
+In most cases these are ASCII files that contain one or more certificates,
+with or without private key, encoded in Base64 format and enclosed within the
+-----BEGIN CERTIFICATE-----  and  -----END CERTIFICATE----- descriptor blocks.
+The private key, if present, is also enclosed within the
+-----BEGIN RSA PRIVATE KEY-----  and  -----END RSA PRIVATE KEY----- descriptor blocks.
+Despite the format does indeed support the certificates and the private key together in a single file,
+most servers (Apache, NGINX) require the private key to be stored in a separate key file for security reasons.
+
+The most commonly used file extensions for this format are .CER, .CRT, .PEM and .KEY (the latter being used for the private key only).
+
+DER (.der .cer)
+This is the “binary” version of the PEM certificate described above: the DER format can also contain a single certificate or multiple certificates, with or without a private key. This is a format used mainly by Java and is not present on other platforms.
+
+The extensions commonly used for this format are .DER and .CER. To distinguish a .CER in PEM format from a .CER in .DER format, open the file with a text editor and watch if it’s an ASCII file or not.
+
+PKCS#7 (.p7b .p7c)
+This is an ASCII formatted file encoded in Base64, mainly used by Microsoft Windows and Java Tomcat.
+
+The extensions commonly used for this format are .P7B and .P7C.
+
+PKCS#12 (.pfx .p12)
+Binary format that contains the certificate, the set of intermediate certificates (if any) and the private key in a single encrypted and password protected file. It is mainly used within Windows systems and infrastructures to import and export certificates and private keys between the various services and applications (Firewall, Proxy, etc.).
+
+The extensions commonly used for this format are .PFX and .P12.
+
+
+
+Installing OpenSSL
+The first thing to do is to make sure your system has OpenSSL installed: this is a tool that provides an open source implementation of SSL and TLS protocols and that can be used to convert the certificate files into the most popular X.509 v3 based formats.
+
+OpenSSL on Linux
+If you’re using Linux, you can install OpenSSL with the following YUM console command:
+
+Shell
+> yum install openssl
+1
+> yum install openssl
+
+If your distribution is based on APT instead of YUM, you can use the following command instead:
+
+> apt-get install openssl
+1
+> apt-get install openssl
+
+
+OpenSSL on Windows
+If you’re using Windows, you can install one of the many OpenSSL open-source implementations: the one we can recommend is Win32 OpenSSL by Shining Light Production, available as a light or full version, both compiled in x86 (32-bit) and x64 (64-bit) modes . You can install any of these versions, as long as your system support them.
+
+https://slproweb.com/products/Win32OpenSSL.html
+
+IMPORTANT: OpenSSL for Windows requires the Visual C++ 2008 Redistributables runtime in order to work.
+OpenSSL is basically a console application, meaning that we’ll use it from the command-line: after the installation process completes, it’s important to check that the installation folder (C:\Program Files\OpenSSL-Win64\bin for the 64-bit version) has been added to the system PATH (Control Panel > System> Advanced > Environment Variables): if it’s not the case, we strongly recommend to manually add it, so that you can avoid typing the complete path of the executable everytime you’ll need to launch the tool.
+
+
+Once OpenSSL will be installed, we’ll be able to use it to convert our SSL Certificates in various formats.
+
+From PEM (pem, cer, crt) to PKCS#12 (p12, pfx)
+This is the console command that we can use to convert a  PEM certificate file (.pem, .cer or .crt extensions), together with its private key (.key extension), in a single PKCS#12 file (.p12 and .pfx extensions):
+
+> openssl pkcs12 -export -in certificate.crt -inkey privatekey.key -out certificate.pfx
+1
+> openssl pkcs12 -export -in certificate.crt -inkey privatekey.key -out certificate.pfx
+If you also have an intermediate certificates file (for example, CAcert.crt) , you can add it to the “bundle” using the -certfile command parameter in the following way:
+
+> openssl pkcs12 -export -in certificate.crt -inkey privatekey.key -out certificate.pfx -certfile CAcert.cr
+1
+> openssl pkcs12 -export -in certificate.crt -inkey privatekey.key -out certificate.pfx -certfile CAcert.cr
+From PKCS#12 to PEM
+If you need to “extract” a PEM certificate (.pem, .cer or .crt) and/or its private key (.key)from a single PKCS#12 file (.p12 or .pfx), you need to issue two commands.
+
+The first one is to extract the certificate:
+
+> openssl pkcs12 -in certificate.pfx -nokey -out certificate.crt
+1
+> openssl pkcs12 -in certificate.pfx -nokey -out certificate.crt
+And a second one would be to retrieve the private key:
+
+> openssl pkcs12 -in certificate.pfx -out privatekey.key
+1
+> openssl pkcs12 -in certificate.pfx -out privatekey.key
+IMPORTANT: the private key obtained with the above command will be in encrypted format: to convert it in RSA format, you’ll need to input a third command:
+
+> openssl rsa -in certificate.pfx -out privatekey_rsa.key
+1
+> openssl rsa -in certificate.pfx -out privatekey_rsa.key
+Needless to say, since PKCS#12 is a password-protected format, in order to execute all the above commands you’ll be prompted for the password that has been used when creating the .pfx file.
+
+From DER (.der, cer) to PEM
+> openssl x509 -inform der -in certificate.cer -out certificate.pem
+1
+> openssl x509 -inform der -in certificate.cer -out certificate.pem
+From PEM to DER
+> openssl x509 -outform der -in certificate.pem -out certificate.der
+1
+> openssl x509 -outform der -in certificate.pem -out certificate.der
+From PEM to PKCS#7 (.p7b, .p7c)
+> openssl crl2pkcs7 -nocrl -certfile certificate.pem -out certificate.p7b -certfile CAcert.cer
+1
+> openssl crl2pkcs7 -nocrl -certfile certificate.pem -out certificate.p7b -certfile CAcert.cer
+From PKCS#7 to PEM
+> openssl pkcs7 -print_certs -in certificate.p7b -out certificate.pem
+1
+> openssl pkcs7 -print_certs -in certificate.p7b -out certificate.pem
+From PKCS#7 to PFX
+> openssl pkcs7 -print_certs -in certificatename.p7b -out certificatename.cer
+> openssl pkcs12 -export -in certificatename.cer -inkey privateKey.key -out certificatename.pfx -certfile cacert.cer
+1
+2
+> openssl pkcs7 -print_certs -in certificatename.p7b -out certificatename.cer
+> openssl pkcs12 -export -in certificatename.cer -inkey privateKey.key -out certificatename.pfx -certfile cacert.cer
+Online SSL Converters
+If you can’t (or don’t want to) install OpenSSL, you can convert your SSL Certificates using one of these web-based online tools:
+
+SSL Certificates Converter Tool by SSLShopper.com
+SSL Converter by NameCheap
+Both of them work really well and can convert most, if not all, the format detailed above: at the same time, you need to seriously think about the security implications that come with uploading your SSL Certificates (and possibly their private keys) to a third-party service. As trustable and secure those two site have been as of today, we still don’t recommend such move.
+
+Conclusions
+That’s it, at least for the time being: we hope that these commands will be helpful to those developers and system administrators who need to convert SSL certificates in the various formats required by their applications.
+
+
+

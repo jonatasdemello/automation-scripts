@@ -1,0 +1,14 @@
+
+https://www.techwalla.com/articles/how-to-enable-a-web-interface-on-a-cisco-catalyst
+
+
+Click "Auth" under "SSH."
+
+Deselect the
+	"Bypass Authentication Entirely,"
+	"Attempt Authentication Using Pageant" and
+	"Attempt TLS or CryptoCard Auth"
+check boxes by clicking them if they're enabled.
+
+Verify the "Attempt Keyboard-Interactive Auth" check box is enabled. Click it if it isn't enabled.
+

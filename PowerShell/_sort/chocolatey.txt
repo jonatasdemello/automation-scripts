@@ -1,0 +1,12 @@
+choco list --local-only
+clist -l
+
+choco uninstall nodejs
+choco install nodejs --version=12.13.0
+
+
+npm install grunt-protractor-runner --save-dev
+npm rebuild node-sass --force
+
+
+

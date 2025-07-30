@@ -1,0 +1,128 @@
+docker --version
+
+# How to build an image
+
+docker build -t temp-ubuntu .
+
+An image tag is a text string that's used to version an image.
+
+-t temp-ubuntu
+
+
+
+"Successfully tagged temp-ubuntu: latest". When building an image, we name and optionally tag the image using the -t command flag. In our example, we named the image using -t temp-ubuntu, while the resulting image name was tagged temp-ubuntu: latest. An image is labeled with the latest tag if you don't specify a tag.
+
+
+
+
+For Windows, Microsoft doesn't provide base container images with the latest tag. For Windows base container images, you have to specify a tag that you want to use. For example, the Windows base container image for Server Core is mcr.microsoft.com/windows/servercore. Among its tags are ltsc2016, ltsc2019, and ltsc2022.
+
+Here's another example. Suppose you want to use the .NET Core samples Docker images. Here we have four platforms versions from which we can choose:
+
+    mcr.microsoft.com/dotnet/core/samples:dotnetapp
+
+    mcr.microsoft.com/dotnet/core/samples:aspnetapp
+
+    mcr.microsoft.com/dotnet/core/samples:wcfservice
+
+    mcr.microsoft.com/dotnet/core/samples:wcfclient
+
+In the preceding image list, we can see that Microsoft provides multiple samples of .NET Core. Tags specify to which samples the image refers: ASP.NET, WCF Service, and so on.
+
+
+# How to list images
+
+docker images
+
+# How to remove an image
+
+docker rmi temp-ubuntu:version-1.0
+
+# How to view available containers
+
+docker ps -a
+
+
+Why are containers given a name?
+
+This feature enables you to run multiple container instances of the same image. Container names are unique, which means if you specify a name, you can't reuse that name to create a new container. The only way to reuse a specific name is to remove the previous container.
+
+# How to run a container
+
+docker run -d tmp-ubuntu --publish 8080:80
+
+# How to pause a container
+
+docker pause happy_wilbur
+
+# How to restart a container
+
+docker stop happy_wilbur
+
+# How to remove a container
+
+docker rm happy_wilbur
+
+
+# What is a volume?
+
+A volume is stored on the host filesystem at a specific folder location. Choose a folder where you know the data won't be modified by non-Docker processes.
+
+Docker creates and manages the new volume by running the `docker volume create` command.
+
+Volumes are stored within directories on the host filesystem. Docker will mount and manage the volumes in the container. After mounting, these volumes are isolated from the host machine.
+Multiple containers can simultaneously use the same volumes. Volumes also don't get removed automatically when a container stops using the volume.
+
+# What is a bind mount?
+
+A bind mount is conceptually the same as a volume; however, instead of using a specific folder, you can mount any file or folder on the host.
+
+Volumes are considered the preferred data-storage strategy to use with containers.
+
+For Windows containers, another option is available: You can mount an SMB path as a volume and present it to containers. This allows containers on different hosts to use the same persistent storage.
+
+
+# Docker container network configuration
+
+# What is the bridge network?
+
+The bridge network is the default configuration applied to containers when launched without specifying any other network configuration. This network is an internal, private network used by the container, and it isolates the container network from the Docker host network.
+
+Each container in the bridge network is assigned an IP address and subnet mask, with the hostname defaulting to the container name. Containers connected to the default bridge network are allowed to access other bridge-connected containers by IP address. The bridge network doesn't allow communication between containers using hostnames.
+
+By default, Docker doesn't publish any container ports. To enable port mapping between the container ports and the Docker host ports, use the Docker port --publish flag.
+
+The publish flag effectively configures a firewall rule that maps the ports.
+
+In this example, your tracking portal is accessible to clients browsing to port 80. You'll have to map port 80 from the container to an available port on the host. You have port 8080 open on the host, which enables you to set the flag like this:
+Console
+
+--publish 8080:80
+
+Any client browsing to the Docker host IP and port 8080 can access the tracking portal.
+
+Aside from Linux-specific configurations, the NAT network on Windows hosts functions the same as a bridge network. Also, NAT is the default network on Windows, and all containers will connect to it unless otherwise specified.
+
+
+# What is the host network?
+
+The host network enables you to run the container on the host network directly. This configuration effectively removes the isolation between the host and the container at a network level.
+
+In this example, let's assume you decide to change the networking configuration to the host network option. Your tracking portal is still accessible using the host IP. You can now use the well-known port 80 instead of a mapped port.
+
+Keep in mind that the container can use only ports the host isn't already using.
+
+On Windows, the host network isn't available. On Windows hosts, there's no option to share the same IP address (networking stack) between the host and container. The NAT network functions much like a bridge network, and the Overlay option provides an IP address to the container from the same network as the host, but not the same IP address.
+
+Overlay and other network options
+
+For more advanced scenarios, both Linux and Windows provide additional network options. For example, the overlay option creates a virtual switch from the host network, so containers on that network can get IP addresses from DHCP servers or operate with IP addresses from that network segment. Furthermore, Docker allows third-party vendors to create network plugins.
+What is the none network?
+
+To disable networking for containers, use the none network option. This might be useful if you have an application that doesn't use the network, or if you just want to validate that an application runs as expected in a container.
+Operating system considerations
+
+Keep in mind that there are differences among desktop operating systems for the Docker network-configuration options. For example, the Docker0 network interface isn't available on macOS when using the bridge network, and using the host-network configuration isn't supported for both Windows and macOS desktops.
+
+These differences might affect the way your developers configure their workflow to manage container development. In addition, container orchestrators might also provide other networking configurations on top of the Docker setup.
+

@@ -1,0 +1,50 @@
+Clear Git master branch history in the Git server
+
+Table of Contents
+
+    Clear Git master branch history in the Git server
+        Book keeping in the operating Git repository clone
+    Reset other existing Git repository clones after the branch is cleared
+
+To clear the history of the master branch, we can do the operations of:
+
+    creating a “clean” temporary branch
+    add all files into the temporary branch and commit
+    delete the current master branch
+    rename the temporary branch to be the master branch
+    force push the master branch to the Git server
+
+Because the new master branch has only one commit, after the master branch is force pushed to the Git server, the master branch’s history is “cleared”.
+
+The commands are as follows, operating in a cloned repository.
+
+git checkout --orphan tmp-master # create a temporary branch
+git add -A  # Add all files and commit them
+git commit -m 'Add files'
+git branch -D master # Deletes the master branch
+git branch -m master # Rename the current branch to master
+git push -f origin master # Force push master branch to Git server
+
+Book keeping in the operating Git repository clone
+
+The repository we are operating has the new branch metadata and some garbage files. We can add the remote master branch tracking and do a garbage collection in the operating repository as follows.
+
+git branch --set-upstream-to=origin/master master # Local master tracks origin/master
+git gc --aggressive --prune=all # remove the old files
+
+Reset other existing Git repository clones after the branch is cleared
+
+One consequence of clearing (or changing) history of a Git repository is that we have to forcefully update other cloned repositories which contain the old Git history. We can make Git forcefully resetting the cloned repositories too.
+
+In any cloned repositories, to do a “forceful” pull, run the following commands.
+
+git fetch --all
+git reset --hard origin/master
+
+git reflog expire --expire=now --all
+git gc --prune=now
+git gc --aggressive --prune=now
+
+git push origin --force --all
+git push origin --force --tags
+

@@ -1,0 +1,59 @@
+
+
+using the AsNoTracking as mentioned in some articles stops the entity framework caching
+and after stopping the caching the dapper sample is performing better, (but not a very big difference)
+
+
+EF vs Dapper
+	https://exceptionnotfound.net/dapper-vs-entity-framework-vs-ado-net-performance-benchmarking/
+	https://exceptionnotfound.net/dapper-vs-entity-framework-core-query-performance-benchmarking-2019/
+
+	https://www.iamtimcorey.com/blog/137806/entity-framework
+	https://koukia.ca/entity-framework-core-2-0-vs-dapper-net-performance-benchmark-querying-sql-azure-tables-7696e8e3ed28
+	https://www.techgems.net/posts/2020-04-04/dapper-vs-entity-framework-core-going-beyond-just-performance
+
+	https://medium.com/@kagacode/speed-benchmark-dapper-vs-ef-core-3-f3777b76dd0
+	https://medium.com/@engr.mmohsin/entity-framework-core-2-dapper-performance-benchmark-c29e8cce9e1b
+
+
+https://www.iamtimcorey.com/blog/137806/entity-framework
+
+What are the criteria for using Entity Framework?
+
+    Does your team understand how to use Entity Framework well?
+    Does your team know how to diagnose issues with Entity Framework code?
+    Does your team know how to diagnose under-performing EF queries and fix them?
+    Does your team understand the code that EF wrote for you well enough to know what it is doing?
+    Does your team know how to protect the EF credentials on client machines?
+
+Let's look at those same questions but with Dapper as the ORM:
+
+    Does your team understand how to use Dapper well? It is about 4 lines of code, so yeah, typically.
+    Does your team know how to diagnose issues with Dapper code? There is no Dapper-generated code. It is all code you wrote.
+    Does your team know how to diagnose under-performing Dapper queries and fix them? Dapper uses SQL queries you wrote so you should. If not, maybe you shouldn't be using SQL (using EF isn't a way to not understand SQL).
+    Does your team understand the code that Dapper wrote for you well enough to know what it is doing? Again, no generated code.
+    Does your team know how to protect the Dapper credentials on client machines? At worst, this is no different than EF. At best, this is a non-issue.
+
+
+
+https://www.techgems.net/posts/2020-04-04/dapper-vs-entity-framework-core-going-beyond-just-performance
+
+Development speed and Flexibility
+
+So let’s talk about the other important things when it comes to choosing a method of accessing your DB. Development speed is important, but it’s highly dependent on your team, if your team is familiarized with every caveat, that entity framework can give you both in development and in production, then EF might be the better option.
+
+However, take note that EF Core is different from EF 6 which is what most seasoned developers will have worked with in production environments. There are new caveats to EF that have to be taken into consideration, such as what actually happens when you use the “Include” function to make joins, when you should enable lazy loading and when you should keep it off, and how to deal with DB objects more basic than tables.
+
+In the case of dapper, you don’t need your team to be full of dapper experts, the learning curve is small and it’s fairly easy to pick up with basic SQL and C# knowledge, some ADO.NET experience wouldn’t hurt but is absolutely not mandatory.
+
+
+
+The mental algorithm I use to determine if I should refactor a given code snippet goes like this:
+
+    If the code doesn't work, change it.
+    If the code doesn't fulfill the customer requirements, change it.
+    If the code doesn't match team coding standards, change it.
+    If you think the code isn't fast enough, prove it.
+    If you can't prove it or don't have time to, leave it alone.
+
+

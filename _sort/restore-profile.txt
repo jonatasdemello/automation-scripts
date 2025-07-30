@@ -1,0 +1,56 @@
+
+
+C:\Users\username\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\MicrosoftEdge\User\Default
+
+C:\Users\jonatas\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\MicrosoftEdge\User\Default
+
+C:\Users\jonatas\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\MicrosoftEdge\User\Default
+
+%LocalAppData%\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\MicrosoftEdge\User\Default\Recovery\Active
+
+https://stackoverflow.com/questions/34117660/how-to-restore-session-in-microsoft-edge
+
+
+
+You might want to try logging like this:
+
+Username: \mymachinename\mylocalusername Password mylocaluserpassword
+
+
+C:\Users\jonatas\AppData\Roaming\Notepad++
+
+
+Firefox:
+	http://kb.mozillazine.org/Transferring_data_to_a_new_profile_-_Firefox#Suggested_profile_contents_to_transfer
+
+	https://support.mozilla.org/en-US/kb/back-and-restore-information-firefox-profiles?redirectslug=Backing+up+your+information&redirectlocale=en-US
+
+	https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data?redirectslug=Profiles&redirectlocale=en-US
+	https://support.mozilla.org/en-US/kb/restore-bookmarks-from-backup-or-move-them
+	https://support.mozilla.org/en-US/kb/recovering-important-data-from-an-old-profile
+	https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles
+	https://support.mozilla.org/en-US/questions/833585#:~:text=Your%20Bookmarks%20(and%20History)%20are,to%20open%20the%20Profile%20Folder.
+
+
+
+%APPDATA%\Mozilla\Firefox\Profiles\
+
+from	C:\Temp\jonatas\AppData\Roaming\Mozilla\Firefox\Profiles\zze5c2s5.default-release
+to		C:\Users\jonatas\AppData\Roaming\Mozilla\Firefox\Profiles\7jdro4ak.default-release
+
+from 	C:\Temp\jonatas\AppData\Local\Mozilla\Firefox\Profiles\zze5c2s5.default-release
+to		C:\Users\jonatas\AppData\Local\Mozilla\Firefox\Profiles\7jdro4ak.default-release
+
+
+Edge
+	https://www.tenforums.com/tutorials/159004-how-backup-restore-everything-microsoft-edge-windows.html
+
+%LocalAppData%\Microsoft
+The name of this folder is required to be the same original
+	Edge, Edge Beta, Edge Dev, or Edge SxS name for the Microsoft Edge channel when ready to restore it in Option Two.
+
+
+This will open the hidden C:\Users\<username>\AppData\Local\Microsoft folder for the current user.
+
+from	C:\Temp\jonatas\AppData\Local\Microsoft\Edge\User Data
+to		C:\Users\jonatas\AppData\Local\Microsoft\Edge\User Data

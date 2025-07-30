@@ -1,0 +1,92 @@
+
+
+https://help.github.com/en/github/authenticating-to-github/removing-sensitive-data-from-a-repository
+
+
+Tell your collaborators to rebase, not merge, any branches they created off of your old (tainted) repository history.
+One merge commit could reintroduce some or all of the tainted history that you just went to the trouble of purging.
+
+
+or you can use another way to rebase a branch.
+
+switch to master
+	git checkout master
+    git pull origin master
+switch back to your own branch
+	git checkout {your branch}
+    git rebase origin/master
+
+then, your branch is updated to newest commits.
+
+
+git rebase <upstream> <branch>
+
+is equal to
+
+git checkout <branch>
+git rebase <upstream>
+
+https://stackoverflow.com/questions/29164321/git-difference-git-rebase-origin-branch-vs-git-rebase-origin-branch/29164447
+https://www.atlassian.com/git/tutorials/merging-vs-rebasing
+https://git-scm.com/book/en/v2/Git-Branching-Rebasing
+
+
+$ git checkout -b iss53
+Switched to a new branch "iss53"
+
+This is shorthand for:
+
+$ git branch iss53
+$ git checkout iss53
+
+
+$ vim index.html
+$ git commit -a -m 'Create new footer [issue 53]'
+
+$ git checkout master
+Switched to branch 'master'
+
+
+$ git checkout -b hotfix
+Switched to a new branch 'hotfix'
+$ vim index.html
+$ git commit -a -m 'Fix broken email address'
+[hotfix 1fb7853] Fix broken email address
+ 1 file changed, 2 insertions(+)
+
+$ git checkout master
+$ git merge hotfix
+Updating f42c576..3a0874c
+Fast-forward
+ index.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+
+
+
+$ git branch -d hotfix
+Deleted branch hotfix (3a0874c).
+
+Now you can switch back to your work-in-progress branch on issue #53 and continue working on it.
+
+$ git checkout iss53
+Switched to branch "iss53"
+$ vim index.html
+$ git commit -a -m 'Finish the new footer [issue 53]'
+[iss53 ad82d7a] Finish the new footer [issue 53]
+1 file changed, 1 insertion(+)
+
+
+git merge master
+
+$ git checkout master
+Switched to branch 'master'
+$ git merge iss53
+Merge made by the 'recursive' strategy.
+index.html |    1 +
+1 file changed, 1 insertion(+)
+
+
+$ git branch -d iss53
+
+

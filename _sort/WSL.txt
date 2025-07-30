@@ -1,0 +1,24 @@
+\\wsl$
+
+\\wsl.localhost\Ubuntu-22.04
+
+
+wsl --list --online
+wsl --list --all
+
+wsl --install -d <Distribution Name>
+wsl --setdefault <DistributionName>
+
+wsl --set-default-version 2
+
+
+
+deploying WSL2 distributions
+ensuring main distro is deployed: checking if main distro is up to date: checking main distro bootstrap version: getting main distro bootstrap version: open \\wsl$\docker-desktop\etc\wsl_bootstrap_version: The filename, directory name, or volume label syntax is incorrect.
+checking if isocache exists: CreateFile \\wsl$\docker-desktop-data\isocache\: The filename, directory name, or volume label syntax is incorrect.
+
+run:
+
+wsl --unregister docker-desktop-data
+
+

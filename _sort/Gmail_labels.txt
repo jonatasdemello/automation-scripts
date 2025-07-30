@@ -1,0 +1,26 @@
+https://raisedbyturtles.org/view-unlabeled-gmail
+
+Method 1 — Simple and mostly reliable
+
+    -has:userlabels -in:sent -in:chat -in:draft -in:inbox
+
+Method 2 — Simple but doesn’t work for everyone
+
+    has:nouserlabels -in:sent -in:chat -in:draft -in:inbox
+
+Method 3 — Highly reliable but a pain in the butt
+
+    -label:{label1 label2} -label:label-three -label:label-four -in:sent -in:chat -in:inbox
+
+Method 4 — Roundabout but very effective
+
+    Search for everything with any label (has:userlabels),
+	apply a new label to all messages found, LABEL
+	then search for messages with no labels.
+	This can help with some of the issues related to Conversation Mode.
+
+	First search for every message that HAS a label (has:userlabels)
+    Label ALL of the results with a new “LABELED” label (or whatever you want)
+    Now search for has:nouserlabels
+    Ba Dum, you got them!
+    Delete your “LABELED” label.

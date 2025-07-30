@@ -1,0 +1,19 @@
+Use the following keys and actions for multi-caret selection behaviors:
+Commands
+Shortcut 	Action
+Ctrl+Alt + click 	Add a secondary caret
+Ctrl+Alt + double-click 	Add a secondary word selection
+Ctrl+Alt + click + drag 	Add a secondary selection
+Shift+Alt+. 	Add the next matching text as a selection
+Shift+Alt+; 	Add all matching text as selections
+Shift+Alt+, 	Remove last selected occurrence
+Shift+Alt+/ 	Skip next matching occurrence
+Alt + click 	Add a box selection
+Esc or click 	Clear all selections
+
+Turns out that I sent a quick Tweet out over Twitter and several people responded with the short cut to move a window inside of the VS environment:
+
+Alt – M  (that’s Alt minus M)
+
+which lets you move a window with the keyboard by using the arrow keys. The process for the Find Dialog is to press Ctrl-F to activate the window then Alt – M followed by moving the arrow keys until you find the window in your work space.
+

@@ -1,0 +1,56 @@
+Cloning only a subset of the repo (with sparse checkout)
+
+You can follow the steps below to clone individual files from the sql-server-samples git repo. Note: The following script clones only the files under the features and demos folders.
+
+git clone -n https://github.com/Microsoft/sql-server-samples
+cd sql-server-samples
+git config core.sparsecheckout true
+echo samples/features/*| out-file -append -encoding ascii .git/info/sparse-checkout
+echo samples/demos/*| out-file -append -encoding ascii .git/info/sparse-checkout
+git checkout
+
+For more information about sparse checkout please visit this stackoverflow thread.
+
+	https://stackoverflow.com/questions/23289006/on-windows-git-error-sparse-checkout-leaves-no-entry-on-the-working-directory
+
+
+tl;dr
+
+From the folder in which you want the source to live, using a git-bash prompt NOT powershell (although see my edit below):
+
+git clone –n <repo> <local-directory-name>
+cd <local-directory-name>
+git config core.sparsecheckout true
+echo some/sub-folder/you/want >> .git/info/sparse-checkout
+git checkout <branch-name>
+
+Full explanation
+
+Sparse checkouts enable you to work on a subset of the repository. It’s worth the effort to set up sparse checkouts on large repositories, everything is much faster!
+
+I struggled with setting it up on windows getting a lot of “error: Sparse checkout leaves no entry on the working directory”. After a bit of research, I found the following steps were minimal and had consistently good results for me – YMMV.
+
+The most important point is this – DO NOT USE POWERSHELL/CMD FOR THESE STEPS – use a git bash prompt. This is because otherwise the echo command produces a UNICODE file with a BOM marker. The file MUST be an ANSI formatted file with UNIX style line endings for git to parse it correctly. This is the most likely cause of “error: Sparse checkout leaves no entry on the working directory” errors.
+
+    From a parent of the directory you wish to be the root folder, assuming a folder name of “src” do the following, This grabs the whole repo (which is still required), but does importantly does not perform a checkout, and correctly sets up the origin remote and branch tracking.
+
+    git clone –n <your repository> src
+
+    You should have a fairly empty looking src folder (it will have the .git hidden folder). Now run the following. This updates the local git config to turn on sparse checkouts, and creates a file in the .git/info hidden folder that will list all the folders you want to include when doing a sparse checkout. This can be edited later to add other folders. Important: Be sure to use a git bash prompt for the below, and use an editor supporting unix line-ending conventions and save as ANSI when editing the sparse-checkout file, or you may get “error: Sparse checkout leaves no entry on the working directory” errors. The <path you want to checkout> might look like this: path/to/subfolder - note the lack of leading and trailing path separators.
+
+    cd src
+    git config core.sparsecheckout true
+    echo <path you want to checkout> >> .git/info/sparse-checkout
+
+    Now you are ready to checkout. This should leave just the sparse-checkout folders populated. If it doesn’t, carefully check your spelling of everything above!
+
+    git checkout <branch-name>
+
+Edit - Echo in Powershell
+
+I recently discovered that echo in powershell is a synomym for write-output. It's possible to get ASCII output by piping the echo to the out-file command which allows you to specify an encoding. So this will work from Powershell and give the correct file contents:
+
+echo some/sub/folder/you/want | out-file -encoding ascii .git/info/sparse-checkout
+
+Set-Content .git\info\sparse-checkout "some/sub-folder/you/want/*" -Encoding Ascii
+

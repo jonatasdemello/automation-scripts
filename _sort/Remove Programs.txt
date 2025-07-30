@@ -1,0 +1,54 @@
+Remove Programs
+
+https://onedrive.live.com/?id=27E6A35D1A492AF7%21910&cid=27E6A35D1A492AF7&group=0&parId=27E6A35D1A492AF7%21376&authkey=%21ANs8Pr0aVhaT%5FqQ&action=locate
+
+
+c:\temp\msiinv.exe -s | Select-String "SQL Server" -Context 0,1
+
+
+
+This output is marginally useful for now; I can quickly scan the list and see all the GUID codes for the products I want to remove, and start mentally filtering any out as necessary. I could manually copy and change the output to feed each GUID individually to msiexec, but ultimately where I want to end up is a set of commands I can run directly from the command line, for example:
+
+rem Microsoft SQL Server System CLR Types
+msiexec /x "{C3F6F200-6D7B-4879-B9EE-700C0CE1FCDA}"
+
+rem SQL Server 2014 Integration Services
+msiexec /x "{327B1B40-2434-4DC5-9D4D-B9B24D4B2EDE}"
+
+rem SQL Server 2014 SQL Data Quality Common
+msiexec /x "{2D95D8C0-0DC4-44A6-A729-1E2388D2C03E}"
+
+...
+
+And I get there with a little help from my good buddy, co-worker, and PowerShell officionado, Allen White (@SQLRunr):
+
+$a = c:\temp\msiinv.exe -s | Select–String "SQL Server" -Context 1,1;
+$a = $a -replace "Product code:	","msiexec /x """;
+$a = $a -replace ">", "rem";
+$a = $a -replace "\t", "";
+$a = $a -replace "}","}""";
+$a | Out-File c:\temp\remove.bat -encoding ascii;
+
+
+-- or remove messages:
+$a = $a -replace "}","}"" /quiet";
+
+$a = c:\temp\msiinv.exe -s | Select–String "SQL Server" -Context 1,1;
+$a = $a -replace "Product code:	","msiexec /x """;
+$a = $a -replace ">", "rem";
+$a = $a -replace "\t", "";
+$a = $a -replace "}","}"" /quiet";
+$a | Out-File c:\temp\remove.bat -encoding ascii;
+
+
+Now, you can open up remove.bat, look through the list, and remove any products you *don't* want to uninstall. The format will look like this, almost exactly how I wanted them:
+
+rem Microsoft SQL Server System CLR Types
+  msiexec /x "{C3F6F200-6D7B-4879-B9EE-700C0CE1FCDA}"
+
+rem SQL Server 2014 Integration Services
+  msiexec /x "{327B1B40-2434-4DC5-9D4D-B9B24D4B2EDE}"
+
+rem SQL Server 2014 SQL Data Quality Common
+  msiexec /x "{2D95D8C0-0DC4-44A6-A729-1E2388D2C03E}"
+

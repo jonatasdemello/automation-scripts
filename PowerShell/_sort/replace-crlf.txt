@@ -1,0 +1,21 @@
+
+
+In PowerShell there are so many solutions, given a lot of tools in the .NET platform
+
+With a path to file in $file = 'path\to\file' we can use
+
+[IO.File]::WriteAllText($file, $([IO.File]::ReadAllText($file) -replace "`r`n", "`n"))
+
+or
+
+(Get-Content $file -Raw).Replace("`r`n","`n") | Set-Content $file -Force
+
+It's also possible to use -replace "`r", "" instead
+
+To do that for all files just pipe the file list to the above commands:
+
+Get-ChildItem -File -Recurse | % { (Get-Content -Raw -Path $_.Fullname).Replace("`r`n", "`n") | Set-Content -Path $_.Fullname -encoding utf8 }
+
+
+Get-ChildItem -File -Recurse | % { (Get-Content -Raw -Path $_.Fullname).Replace("`r`n", "`n") | Set-Content -Path $_.Fullname -encoding utf8 }
+

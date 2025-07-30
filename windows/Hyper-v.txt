@@ -1,0 +1,609 @@
+PS C:\WINDOWS\system32> get-vm
+First let’s check a VM:
+
+    PS C:\WINDOWS\system32> Get-VMProcessor NT40 | fl CompatibilityForOlderOperatingSystemsEnabled
+
+    CompatibilityForOlderOperatingSystemsEnabled : False
+
+As you can see it’s disabled. Â Now to enable it with:
+
+    PS C:\WINDOWS\system32> Set-VMProcessor NT40 -CompatibilityForOlderOperatingSystemsEnabled $true
+
+Now we can verify it’s turned on:
+
+    PS C:\WINDOWS\system32> Get-VMProcessor NT40Â | fl CompatibilityForOlderOperatingSystemsEnabled
+
+    CompatibilityForOlderOperatingSystemsEnabled : True
+
+
+The following step is to enable the vCPU legacy compatibility for Windows 2000. So open up Powershell in administrator mode and enter:
+
+Set-VMProcessor <VM Name Here> -CompatibilityForOlderOperatingSystemsEnabled $true
+
+So in my case I type:
+
+Set-VMProcessor “Windows 2000 Adv En” -CompatibilityForOlderOperatingSystemsEnabled $true
+(Notice the quotes. These are needed if you have spaces in your VM name)
+
+
+
+https://www.youtube.com/watch?v=XLLcc29EZ_8
+
+It basically use the following script as the meat of the process...
+
+$vm = "MyVMsName"
+
+Add-VMGpuPartitionAdapter -VMName $vm
+Set-VMGpuPartitionAdapter -VMName $vm -MinPartitionVRAM 80000000 -MaxPartitionVRAM 100000000 -OptimalPartitionVRAM 100000000 -MinPartitionEncode 80000000 -MaxPartitionEncode 100000000 -OptimalPartitionEncode 100000000 -MinPartitionDecode 80000000 -MaxPartitionDecode 100000000 -OptimalPartitionDecode 100000000 -MinPartitionCompute 80000000 -MaxPartitionCompute 100000000 -OptimalPartitionCompute 100000000
+
+Set-VM -GuestControlledCacheTypes $true -VMName $vm
+Set-VM -LowMemoryMappedIoSpace 1Gb -VMName $vm
+Set-VM –HighMemoryMappedIoSpace 32GB –VMName $vm
+
+Put all the above in a ps1 (powershell) script file and run it as admin then your VM will be sharing the GPU with the host system.
+
+
+---------------------------------------------------------------------------------------------------
+
+User Manager
+%SystemRoot%\system32\compmgmt.msc /s
+
+-------------------------------------------------------------------------------------------------------------------------------
+Virtual Disks
+
+C:\Users\Public\Documents\Hyper-V\Virtual Hard Disks\
+
+-------------------------------------------------------------------------------------------------------------------------------
+Desktop
+
+$ sudo apt install tasksel
+$ sudo tasksel install xubuntu-desktop
+OR
+$ sudo tasksel install xubuntu-core
+
+The above commands will install the Ubuntu version of the Xfce desktop environment.
+If you need a vanilla version of Xfce desktop environment then execute the bellow command and select the lightdm display manager during the installation:
+
+$ sudo apt install xfce4
+
+XFCE
+sudo apt-get install xubuntu-desktop
+KDE
+sudo apt-get install kubuntu-desktop
+
+
+display managers are:
+
+    GDM (GNOME Display Manager): preferred by GNOME
+    SDDM (Simple Desktop Display Manager): preferred by KDE
+    LightDM: developed by Ubuntu for Unity desktop
+
+Switch between LightDM and GDM in Ubuntu
+
+	sudo dpkg-reconfigure gdm3
+
+-------------------------------------------------------------------------------------------------------------------------------
+IP Connect SSH
+
+172.27.107.251
+172.27.111.255
+
+ssh jonatas@172.22.84.131
+ssh jonatas@172.27.107.251
+
+win
+192.168.2.1		GW Bell
+192.168.2.30	255.255.255.0	eth0
+172.18.128.1	wi-fi
+
+172.28.240.1	switch
+172.18.32.41	VM V
+172.29.192.1
+
+184.148.47.52	Your public IP address
+
+
+Type in the following code, but replace the "4444" with the port you need to access
+
+netsh advfirewall firewall add rule name="TCP Port 4444" dir=in localport=4444 protocol=TCP action=allow
+netsh advfirewall firewall add rule name="TCP Port 4444" dir=in localport=4444 protocol=TCP action=allow
+
+Open a Command Prompt window and execute the following command to confirm whether or not your web application is listening on all IP addresses:
+
+netstat -a -o
+
+Linux, try running
+firewall-cmd --permanent --zone=public --add-port=4444/tcp
+
+-------------------------------------------------------------------------------------------------------------------------------
+Keyboard
+
+Windows Accelerator| Virtual Machine Connection Mapping| Description
+-----------------------------------------------------------------------
+Ctrl+Alt+Del       | Ctrl+Alt+End                      | Switches to the security screen providing options to lock, switch user, change password, log off or run the Windows task manager.
+Alt+Tab            | Alt+Page Up                       | Switches between running desktop applications
+Alt+Esc            | Alt+Insert                        | Switches between running applications in launch order
+Ctrl+Esc           | Alt+Home                          | Invokes the Windows Start menu
+None               | Ctrl+Alt+Pause                    | Switch Virtual Machine Connection Tool to and from full screen mode
+None               | Ctrl+Alt+Left Arrow               | Releases the mouse and keyboard focus from the Virtual Machine Connection Tool.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Connect
+
+
+VMConnect.exe <ServerName> <VMName> /edit
+
+C:\Program Files\Hyper-V>vmconnect WINSERVER "WinServer2008 Test"
+C:\Program Files\Hyper-V>vmconnect localhost "WinServer2008 Test"
+
+-------------------------------------------------------------------------------------------------------------------------------
+Files
+https://www.altaro.com/hyper-v/transfer-files-linux-hyper-v-guest/
+
+Enable-VMIntegrationService -VMName svlmon01 -Name 'Guest Service Interface'
+Enable-VMIntegrationService -VMName "Ubuntu 20.04" -Name 'Guest Service Interface'
+
+Get-VMIntegrationService -VMName 'svlmon01' | where Name -match 'guest' | Enable-VMIntegrationService
+
+Verifying the Linux Guest’s File Copy Service
+ps -u root | grep hyper
+hypervfcopyd
+
+Copy-VMFile -Name svlmon01 -SourcePath 'C:Sourcenagios-4.3.2.tar.gz' -DestinationPath '/home/eric/Downloads' -FileSource Host
+
+You can run Copy-VMFile remotely:
+
+Copy-VMFile -ComputerName svhv01 -Name svlmon01 -SourcePath 'C:Sourcenagios-4.3.2.tar.gz' -DestinationPath '/home/eric/Downloads' -FileSource Host
+
+
+Activate Nested Virtualization for VMs using PowerShell (Admin)
+
+    On the host machine (with target machine powered off) -> press Win+X and choose PowerShell (Admin) from the list.
+    Inside the PowerShell window -> paste this command changing the values to your VM processor and name: Set-VMProcessor <VMName> -ExposeVirtualizationExtensions $true
+    Windows PowerShell command - Error 0x80370102
+    Press Enter to run it.
+    In case you want to enable this service on all VM’s installed on your PC that is currently turned off,
+	paste this command inside PowerShell: Get-VM | ? State -eq ‘Off’ | Set-VMProcessor -ExposeVirtualizationExtensions $true
+
+-------------------------------------------------------------------------------------------------------------------------------
+EnhancedSession
+https://www.nakivo.com/blog/install-ubuntu-20-04-on-hyper-v-with-enhanced-session/
+
+Post Installation Configuration in Ubuntu
+
+There are important things to do after installing Ubuntu 20.0. You have to download and run the script to configure Ubuntu 20.04 installed on a Hyper-V VM as a guest OS to make the enhanced session mode work.
+
+Open the console (terminal) in Ubuntu 20.04.
+
+Go to the Downloads directory:
+
+cd ~/Downloads/
+
+Download the updated script for Ubuntu 20.04:
+
+wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/20.04/install.sh
+
+sudo curl -O https://raw.githubusercontent.com/Microsoft/linux-vm-tools/master/ubuntu/18.04/install.sh
+
+Add execution permissions to the downloaded install.sh script file:
+
+sudo chmod +x install.sh
+
+Run the script with the root privileges:
+
+sudo ./install.sh
+
+Reboot the Linux machine:
+
+init 6
+
+After reboot, open the terminal, go to the directory where the script is located, and run the script once again:
+
+cd ~/Downloads/
+
+sudo ./install.sh
+
+Reboot your Ubuntu virtual machine when execution of the script is finished.
+
+
+https://c-nergy.be/blog/?p=12429
+
+cd ~/Downloads/
+sudo curl -O https://raw.githubusercontent.com/Microsoft/linux-vm-tools/master/ubuntu/18.04/install.sh
+sudo chmod +x install.sh
+sudo ./install.sh
+
+Set-VM -VMName <your_vm_name> -EnhancedSessionTransportType HvSocket
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+SQL Server
+
+https://docs.microsoft.com/en-us/sql/powershell/download-sql-server-ps-module?view=sql-server-ver15
+	SqlServer
+	https://docs.microsoft.com/en-us/powershell/module/sqlserver/?view=sqlserver-ps
+	SQLPS
+	https://docs.microsoft.com/en-us/powershell/module/sqlps/?view=sqlserver-ps
+	SQL Server PowerShell Provider
+	https://docs.microsoft.com/en-us/sql/powershell/sql-server-powershell-provider?view=sql-server-ver15
+
+Install-Module -Name SqlServer -RequiredVersion 21.1.18256
+Get-Module SqlServer -ListAvailable
+Install-Module -Name SqlServer -Scope CurrentUser
+Install-Module -Name SqlServer -AllowClobber
+Install-Module -Name SqlServer -AllowClobber
+Import-Module SqlServer
+
+# Prompt for instance & credentials to login into SQL Server
+$serverInstance = Read-Host "Enter the name of your instance"
+$credential = Get-Credential
+
+# Connect to the Server and get a few properties
+Get-SqlInstance -ServerInstance $serverInstance -Credential $credential
+# done
+
+---- SQL Proider ----
+# NOTE: We are reusing the values saved in the $credential variable from the above example.
+New-PSDrive -Name SQLonDocker -PSProvider SqlServer -Root 'SQLSERVER:\SQL\localhost,10002\Default\' -Credential $credential
+Get-PSDrive
+dir SQLonDocker:\Databases
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Install SQL Server
+	https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup?view=sql-server-ver15
+	https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15
+
+Uninstall SQL Server
+	sudo rm -rf /var/opt/mssql/
+
+To Update or Upgrade SQL Server
+
+	sudo apt-get update
+	sudo apt install curl
+
+	sudo apt-get update
+	sudo apt-get install mssql-server
+
+To downgrade SQL Server to a previous release
+
+	sudo apt-get install mssql-server=<version_number>
+	sudo systemctl start mssql-server
+
+binaries located under /opt/mssql/
+
+Install
+sudo MSSQL_PID=Developer ACCEPT_EULA=Y MSSQL_SA_PASSWORD='<password>' /opt/mssql/bin/mssql-conf -n setup
+
+sudo dpkg -i mssql-server_versionnumber_amd64.deb
+sudo /opt/mssql/bin/mssql-conf setup
+
+
+To configure SQL Server on Ubuntu, run the following commands in a terminal to install the mssql-server package.
+
+Import the public repository GPG keys:
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+		 curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+Register the Microsoft SQL Server Ubuntu repository for SQL Server 2019:
+
+For Ubuntu 16.04:
+	sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2019.list)"
+
+For Ubuntu 18.04:
+	sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/18.04/mssql-server-2019.list)"
+
+For Ubuntu 20.04:
+	sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/20.04/mssql-server-2019.list)"
+
+Run the following commands to install SQL Server:
+
+	sudo apt-get update
+	sudo apt-get install -y mssql-server
+
+After the package installation finishes, run mssql-conf setup and follow the prompts to set the SA password and choose your edition.
+
+	sudo /opt/mssql/bin/mssql-conf setup
+
+Note
+
+Make sure to specify a strong password for the SA account (Minimum length 8 characters, including uppercase and lowercase letters, base 10 digits and/or non-alphanumeric symbols).
+Once the configuration is done, verify that the service is running:
+
+	systemctl status mssql-server --no-pager
+
+If you plan to connect remotely, you might also need to open the SQL Server TCP port (default 1433) on your firewall.
+
+SQL Tools
+-----------
+Import the public repository GPG keys.
+	curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+Register the Microsoft Ubuntu repository.
+For Ubuntu 16.04:
+	curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+For Ubuntu 18.04:
+	curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+For Ubuntu 20.04:
+	curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+
+Update the sources list and run the installation command with the unixODBC developer package. For more information, see Install the Microsoft ODBC driver for SQL Server (Linux).
+	sudo apt-get update
+	sudo apt-get install mssql-tools unixodbc-dev
+Note
+To update to the latest version of mssql-tools run the following commands:
+	sudo apt-get update
+	sudo apt-get install mssql-tools
+
+Optional: Add /opt/mssql-tools/bin/ to your PATH environment variable in a bash shell.
+
+To make sqlcmd/bcp accessible from the bash shell for login sessions, modify your PATH in the ~/.bash_profile file with the following command:
+	echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+
+To make sqlcmd/bcp accessible from the bash shell for interactive/non-login sessions, modify the PATH in the ~/.bashrc file with the following command:
+	echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+	source ~/.bashrc
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Test SQL
+
+sqlcmd -S localhost -U SA -P '<password>'
+
+CREATE LOGIN [computer_name\Mary]
+    FROM WINDOWS
+    WITH DEFAULT_DATABASE = [TestData];
+GO
+USE [TestData];
+GO
+CREATE USER [Mary] FOR LOGIN [computer_name\Mary];
+GO
+GRANT EXECUTE ON pr_Names TO Mary;
+GO
+-- remove
+REVOKE EXECUTE ON pr_Names FROM Mary;
+GO
+DROP USER Mary;
+GO
+DROP LOGIN [<computer_name>\Mary];
+GO
+DROP VIEW vw_Names;
+DELETE FROM Products;
+DROP TABLE Products;
+GO
+USE MASTER;
+GO
+DROP DATABASE TestData;
+GO
+
+-------------------------------------------------------------------------------------------------------------------------------
+SSH
+https://superuser.com/questions/681213/how-to-connect-to-a-local-hyper-v-virtual-machine-via-ssh
+
+I think the people missed one point so I'm going to elaborate really short. Guest - Virtual Machine, Linux, Host - WIndows 10
+
+    Make sure that the guest os (linux) can access the internet (as long as you use default switch in the hyper-v manager that's fine).
+
+    in the guest, install net-tools and open ssh server. You need sudo privilidges.
+    a. either sudo su, if not possible su root, provide the password. You will get a # instead of a $.
+    b. # apt-get install net-tools,
+    or, $ sudo apt-get install net-tools if you are not root. Use sudo infront of each command if you are not root from herein.
+
+c. apt-get install -y openssh-server - openssh server will now install.
+
+    Edit the configuration file for openssh once it's installed, it's in path /etc/ssh/ssh_config
+    nano /etc/ssh/ssh_config
+
+    Command text editor opens, key down to the line #Password Authentication yes, make sure that the # is removed (i.e the statement is uncommented, so it looks like):
+    Password Authentication yes . All is well? Continue on.
+
+    disable and enable ssh - because we just configured it.
+    a. # systemctl disable ssh
+    b. # systemctl enable ssh you can also try if somehow above commands are not working: -> # systemctl stop ssh
+    -> # systemctl start ssh "In the end, make sure that you check that the ssh is running" --> # systemctl status ssh
+    Peace of mind, When you are sure ssh is running
+
+    Find the ip of your guest os (linux). The ip looks like 172.154.123.321 and comes with a subnet mask (255.255.255.0) and default gateway (172.xyz.xyz.xyz. You need the ip, the first one that you find. You will need this ip on your host machine. Also remember your hostname. It is on your terminal, eg: misskiller@debian, here hostname is *misskiller
+
+On the terminal type:
+a. ip address (you will most likely find the ip of your computer in the eth0 adapter, for ease to read in the mess, you can also type command as below -> (alternative way, longer command but easy fish)
+b. ip address | grep -i eth0 (this is optional just for your ease, you can just go with 6. a)
+
+    On your Host Machine, you can either use Putty or directly your PowerShell to connect.
+
+SSH INTO THE GUEST*. For this example: hostname: misskiller, ip: 172.154.123.321
+A. From PowerShell Type this:
+ssh misskiller@172.154.123.321 (basically hostname@ip)
+You will be asked for the password that you setup at your machine. Type your password properly. You should be logged in now. B. From Putty: same, just input the ip address in the hostname and press enter, type password into the terminal and you should be in there too. This works - Tried and tested. :-)
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+SQL Server on Ubuntu
+
+https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15
+
+To configure SQL Server on Ubuntu, run the following commands in a terminal to install the mssql-server package.
+
+Import the public repository GPG keys:
+
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+Register the Microsoft SQL Server Ubuntu repository for SQL Server 2019:
+
+For Ubuntu 16.04:
+
+sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2019.list)"
+
+For Ubuntu 18.04:
+
+sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/18.04/mssql-server-2019.list)"
+
+For Ubuntu 20.04:
+
+sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/20.04/mssql-server-2019.list)"
+
+Run the following commands to install SQL Server:
+
+sudo apt-get update
+sudo apt-get install -y mssql-server
+
+After the package installation finishes, run mssql-conf setup and follow the prompts to set the SA password and choose your edition.
+
+sudo /opt/mssql/bin/mssql-conf setup
+
+Note
+
+Make sure to specify a strong password for the SA account (Minimum length 8 characters, including uppercase and lowercase letters, base 10 digits and/or non-alphanumeric symbols).
+
+Once the configuration is done, verify that the service is running:
+
+    systemctl status mssql-server --no-pager
+
+    If you plan to connect remotely, you might also need to open the SQL Server TCP port (default 1433) on your firewall.
+
+At this point, SQL Server 2019 is running on your Ubuntu machine and is ready to use!
+
+Install the SQL Server command-line tools
+
+To create a database, you need to connect with a tool that can run Transact-SQL statements on the SQL Server. The following steps install the SQL Server command-line tools: sqlcmd and bcp.
+
+Use the following steps to install the mssql-tools on Ubuntu.
+
+Note
+
+By default, curl isn't installed on Ubuntu. To install curl, run this code:
+
+sudo apt-get update
+sudo apt install curl
+
+    Import the public repository GPG keys.
+
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+Register the Microsoft Ubuntu repository.
+
+For Ubuntu 16.04:
+
+curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+
+For Ubuntu 18.04:
+
+curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+
+For Ubuntu 20.04:
+
+curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+
+Update the sources list and run the installation command with the unixODBC developer package. For more information, see Install the Microsoft ODBC driver for SQL Server (Linux).
+
+sudo apt-get update
+sudo apt-get install mssql-tools unixodbc-dev
+
+Note
+
+To update to the latest version of mssql-tools run the following commands:
+
+sudo apt-get update
+sudo apt-get install mssql-tools
+
+Optional: Add /opt/mssql-tools/bin/ to your PATH environment variable in a bash shell.
+
+To make sqlcmd/bcp accessible from the bash shell for login sessions, modify your PATH in the ~/.bash_profile file with the following command:
+
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+
+To make sqlcmd/bcp accessible from the bash shell for interactive/non-login sessions, modify the PATH in the ~/.bashrc file with the following command:
+
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+source ~/.bashrc
+
+
+Connect locally
+
+The following steps use sqlcmd to locally connect to your new SQL Server instance.
+
+    Run sqlcmd with parameters for your SQL Server name (-S), the user name (-U), and the password (-P). In this tutorial, you are connecting locally, so the server name is localhost. The user name is SA and the password is the one you provided for the SA account during setup.
+
+sqlcmd -S localhost -U SA -P '<password>'
+
+Tip
+
+You can omit the password on the command line to be prompted to enter it.
+
+Tip
+
+If you later decide to connect remotely, specify the machine name or IP address for the -S parameter, and make sure port 1433 is open on your firewall.
+
+If successful, you should get to a sqlcmd command prompt: 1>.
+
+If you get a connection failure, first attempt to diagnose the problem from the error message. Then review the connection troubleshooting recommendations.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Powershell
+https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1
+
+18.04
+sudo dpkg -i powershell_7.1.4-1.ubuntu.18.04_amd64.deb
+sudo apt-get install -f
+
+# Update the list of packages
+sudo apt-get update
+# Install pre-requisite packages.
+sudo apt-get install -y wget apt-transport-https software-properties-common
+# Download the Microsoft repository GPG keys
+wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+# Register the Microsoft repository GPG keys
+sudo dpkg -i packages-microsoft-prod.deb
+# Update the list of products
+sudo apt-get update
+# Enable the "universe" repositories
+sudo add-apt-repository universe
+# Install PowerShell
+sudo apt-get install -y powershell
+# Start PowerShell
+pwsh
+
+20.04
+sudo dpkg -i powershell_7.1.4-1.ubuntu.20.04_amd64.deb
+sudo apt-get install -f
+
+or
+
+# Update the list of packages
+sudo apt-get update
+# Install pre-requisite packages.
+sudo apt-get install -y wget apt-transport-https software-properties-common
+# Download the Microsoft repository GPG keys
+wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+# Register the Microsoft repository GPG keys
+sudo dpkg -i packages-microsoft-prod.deb
+# Update the list of products
+sudo apt-get update
+# Enable the "universe" repositories
+sudo add-apt-repository universe
+# Install PowerShell
+sudo apt-get install -y powershell
+# Start PowerShell
+pwsh
+
+-------------------------------------------------------------------------------------------------------------------------------
+Powershell - SqlServer module
+https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-manage-powershell-core?view=sql-server-ver15
+
+Install-Module -Name SqlServer
+Import-Module SqlServer
+Get-Module -Name SqlServer
+
+-------------------------------------------------------------------------------------------------------------------------------
+MSIX Packaging Tool
+
+The MSIX Packaging Tool enables you to update existing Win32 application installers to the MSIX format.
+Simply launch MSIX Packaging Tool from start menu to get started.
+
+To learn more about MSIX, visit aka.ms/MSIX.
+
+The license terms for the Windows 10 VMs supersede any conflicting Windows license terms.
+
+See https://aka.ms/windowsdevelopervirtualmachineeula for any additional details.

@@ -1,0 +1,965 @@
+-------------------------------------------------------------------------------------------------------------------------------
+Understanding RegEx with Notepad++
+November 27th, 2010 | Author: Haider M. al-Khateeb
+
+
+[ ]		The square brackets can be used to match ONE of multiple characters.
+		For instance, [abc] matches any of the characters a, b or c.
+		Hence, b[eo]n will match words like ben and bon, but not been or beon.
+		Ranges can also be used, [a-z] is any lower case character and so on.
+^		The caret can be used inside the square brackets to exclude characters from the match.
+		For instance, hell[^o] means the string ‘hell’ will be ignored if followed by the letter ‘o’.
+		Another example is [^A-Za-z] which will exclude all alphabetic characters.
+		However, if not placed inside a set, ^ can be used to matches the start of a line.
+$		This matches the end of a line.
+.		The period or dot matches any character.
+\d		Matches any single digit.
+\w		Matches any single alphanumeric characters or underscore.
+\s		Matches whitespaces including tabs and line breaks.
+*		The asterisk or star sign matches 0 or more times. For example, Ba*m matches Bm , Bam , Baam etc.
++		The plus sign matches 1 or more times. For example, lo+l matches lol , lool , loool etc.
+\<		Matches the start of a word. For example, \< directly followed by 'sh' matches 'she' but does not matches 'wish'.
+\>		Matches the end of a word. For example, sh\> matches ‘wish’ and does not matches ‘she’.
+( )		The round brackets can be used in the Find & Replace function to tag a match.
+		tagged matches can then be used in replace with \1, \2 etc.
+		For example, If you write 123xxxRRR in the search and 123\1HHH in the ‘Replace with’ filed, the result will be: 123xxxHHH.
+\		The backslash can be used to escape regex characters.
+		For example to match 1+1=2, the correct regex is 1\+1=2. Otherwise, the plus sign will have a special meaning.
+
+Further, the following two examples should be giving you a better idea of how to use regex in your editor:
+
+Find: Win([0-9]+) Replace with: Windows\1
+Will search for strings like Win2000, Win2003 and changes them to Windows2000, Windows2003…
+
+Find: [a-z]+(\d\d)\> Replace with: Windows\1
+Will search for all alphanumerics followed by 2 digits only at the end such as Win98 and Win07 and changes them to Windows98, Windows07…
+
+-------------------------------------------------------------------------------------------------------------------------------
+Search Find: Ctrl+F --> goto Mark tab --> toggle Bookmark line --> Click Mark All
+Select menu: Search --> Bookmark --> Copy Bookmarded Lines
+-------------------------------------------------------------------------------------------------------------------------------
+In Notepad++ :
+
+<option value value='1' >A
+<option value value='2' >B
+<option value value='3' >C
+<option value value='4' >D
+
+	Find what: (.*)(>)(.)
+	Replace with: \3
+	Replace All
+A
+B
+C
+D
+
+-------------------------------------------------------------------------------------------------------------------------------
+https://letconex.blogspot.com/2013/06/how-to-use-regular-expressions-in.html
+https://npp-user-manual.org/docs/searching/#regular-expressions
+
+******************************************************
+How to use regular expressions in Notepad++ (tutorial)
+******************************************************
+
+Notepad++ regular expressions use the Boost regular expression library v1.78 (as of NPP v8.2),
+which is based on PCRE (Perl Compatible Regular Expression) syntax, only departing from it in very minor ways.
+
+https://www.boost.org/doc/libs/1_78_0/libs/regex/doc/html/boost_regex/syntax/perl_syntax.html
+https://www.boost.org/doc/libs/1_78_0/libs/regex/doc/html/boost_regex/format/boost_format_syntax.html
+
+Note: Starting in v7.8.7, regex backward search is disallowed due to sometimes surprising results.
+If you really need this feature, please see Allow regex backward search to learn how to activate this option.
+
+
+Regular Expressions
+
+Notepad++ regular expressions use the Boost regular expression library v1.78 (as of NPP v8.2), which is based on PCRE (Perl Compatible Regular Expression) syntax, only departing from it in very minor ways. Complete documentation on the precise implementation is to be found on the Boost pages for search syntax and replacement syntax
+
+The Notepad++ Community has a FAQ on other resources for regular expressions.
+
+Note: Starting in v7.8.7, regex backward search is disallowed due to sometimes surprising results. If you really need this feature, please see Allow regex backward search to learn how to activate this option.
+
+Important Note: Syntax that works in the Find What: box for searching will not always work in the Replace with: box for replacement. There are different syntaxes. The Control Characters and Match by character code syntax work in both; other than that, see the individual sections for Searches vs Substitutions for which syntaxes are valid in which fields.
+Regex Special Characters for Searches
+
+In a regular expression (shortened into regex throughout), special characters interpreted are:
+
+-------------------------------------------------------------------------------------------------------------------------------
+Single-character matches
+
+    . or \C => Matches any character. If you check the box which says . matches newline, the dot match any character, including newline sequences. With the option unchecked, then . will only match characters within a line, and not the newline sequences (\r or \n).
+
+    \X => Matches a single non-combining character followed by any number of combining characters. This is useful if you have a Unicode encoded text with accents as separate, combining characters. For example, the letter ǭ̳̚, with four combining characters after the o, can be found either with the regex (?-i)o\x{0304}\x{0328}\x{031a}\x{0333} or with the shorter regex \X.
+
+    \$ , \( , \) , \* , \+ , \. , \? , \[ , \] , \\ , \| => Prefixing a special character with \ to “escape” the character allows you to search for a literal character when the regular expression syntax would otherwise have that character have a special meaning as a regex meta-character.
+        The characters $ ( ) * + . ? [ ] \ | all have special meaning to the regex engine in normal circumstances; to get them to match as a literal (or to show up as a literal in the substitution), you will have to prefix them with the \ character.
+        There are also other characters which are special only in certain circumstances (any time a charcter is used with a non-literal meaning throughout the Regular Expression section of this manual); if you want to match one of those sometimes-special characters as literal character in those situations, those sometimes-special characters will also have to be escaped in those situations by putting a \ before it.
+        Please note: if you escape a normal character, it will sometimes gain a special meaning; this is why so many of the syntax items listed in this section have a \ before them.
+
+-------------------------------------------------------------------------------------------------------------------------------
+Match by character code
+
+It is possible to match any character using its character code. This allows searching for any character, even if you cannot type it into the FIND box, or the FIND box doesn’t seem to match your emoji that you want to search for. If you are using an ANSI encoding in your document (that is, using a character set like Windows 1252), you can use any character code with a decimal codepoint from 0 to 255. If you are using Unicode (one of the UTF-8 or UTF-16 encodings), you can actually match any Unicode character. These notations require knowledge of hexadecimal or octal versions of the character code. (You can find such character code information on most web pages about ASCII, or about your selected character set, and about UTF-8 and UTF-16 representations of Unicode characters.)
+
+    \0nnn => A single byte character whose code in octal is nnn, where each n is an octal digit. (That’s the number 0, not the letter o or O.) This notation works for for codepoints 0-255 (\0000 - \0377), which covers the full ANSI character set range, or the first 256 Unicode characters. For example, \0101 looks for the letter A, as 101 in octal is 65 in decimal, and 65 is the character code for A in ASCII, in most of the character sets, and in Unicode.
+
+    \xnn => Specify a single character with code nn, where each n is a hexadecimal digit. What this stands for depends on the text encoding. This notation works for for codepoints 0-255 (\x00 - \xFF), which covers the full ANSI character set range, or the first 256 Unicode characters. For instance, \xE9 may match an é or a θ depending on the character set (also known as the “code page”) in an ANSI encoded document.
+
+These next two only work with Unicode encodings (so the various UTF-8 and UTF-16 encodings).
+
+    \x{nnnn} => Like \xnn, but matches a full 16-bit Unicode character, which is any codepoint from U+0000 to U+FFFF.
+
+    \x{nnnn}\x{nnnn} => For Unicode characters above U+FFFF, in the range U+10000 to U+10FFFF, you need to break the single 5-digit or 6-digit hex value and encode it into two 4-digit hex codes; these two codes are the “surrogate codes” for the character. For example, to search for the STEAM LOCOMOTIVE character at U+1F682, you would search for the surrogate codes \x{D83D}\x{DE82}.
+        If you want to know the surrogate codes for a give character, search the internet for “surrogate codes for character” (where charcter is the fancy Unicode character you need the codes for); the surrogate codes are equivalent to the two-word UTF-16 encoding for those higher characters, so UTF-16 tables will also work for looking this up. Any site or tool that you are likely to be using to find the U+###### for a given Unicode character will probably already give you the surrogate codes or UTF-16 words for the same character; if not, find a tool or site that does.
+        You can compute it yourself from the character code, but only if you are comfortable with hexadecimal and binary. Skip the following bullets if you are prone to mathematics-based PTSD.
+            Start with your Unicode U+######, calling the hexadecimal digits as PPWXYZ.
+            The PP digits indicate the plane. subtract one and convert to the 4 binary bits pppp (so PP=01 becomes 0000, PP=0F becomes 1110, and PP=10 becomes 1111)
+            Convert each of the other digits into 4 bits (W as wwww, X as xxvv, Y as yyyy, and Z as zzzz; you will see momentarily why two different characters used in xxvv)
+            Write those 20 bits in sequence: ppppwwwwxxvvyyyyzzzz
+            Group into two equal groups: ppppwwwwxx and vvyyyyzzzz (you can see that the X => xxvv was split between the two groups, hence the notation)
+            Before the first group, insert the binary digits 110110 to get 110110ppppwwwwxx, and split into the nibbles 1101 10pp ppww wwxx. Convert those nibbles to hex: it will give you a value from \x{D800} thru \x{DBFF}; this is the High Surrogate code
+            Before the second group, insert the binary digits 110111 to get 110111vvyyyyzzzz, and split into the nibbles 1101 11vv yyyy zzzz. Convert those nibbles to hex: it will give you a value from \x{DC00} thru \x{DFFF}; this is the Low Surrogate code
+            Combine those into the final \x{nnnn}\x{nnnn} for searching.
+        For more on this, see the Wikipedia article on Unicode Planes, and the discussion in the Notepad++ Community Forum about how to search for non-ASCII characters
+
+Collating Sequences
+
+    [[.col.]] => The character the col “collating sequence” stands for. For instance, in Spanish, ch is a single letter, though it is written using two characters. That letter would be represented as [[.ch.]]. This trick also works with symbolic names of control characters, like [[.BEL.]] for the character of code 0x07. See also the discussion on character ranges.
+
+Control characters
+
+    \a => The BEL control character 0x07 (alarm).
+
+    \b => The BS control character 0x08 (backspace). This is only allowed inside a character class definition. Otherwise, this means “a word boundary”.
+
+    \e => The ESC control character 0x1B.
+
+    \f => The FF control character 0x0C (form feed).
+
+    \n => The LF control character 0x0A (line feed). This is the regular end of line under Unix systems.
+
+    \r => The CR control character 0x0D (carriage return). This is part of the DOS/Windows end of line sequence CR-LF, and was the EOL character on Mac 9 and earlier. OSX and later versions use \n.
+
+    \t => The TAB control character 0x09 (tab, or hard tab, horizontal tab).
+
+    \cX => The control character obtained from character X by stripping all but its 6 lowest order bits. For instance, \c1, \cA and \ca all stand for the SOH control character 0x01. You can think of this as “\c means ctrl”, so \cA is the character you would get from hitting Ctrl+A in a terminal.
+
+Special Control escapes
+
+    \R => Any newline sequence. Specifically, the atomic group (?>\r\n|\n|\x0B|\f|\r|\x85|\x{2028}|\x{2029}). Please note, this sequence might match one or two characters, depending on the text. Because its length is variable-width, it cannot be used in lookbehinds. Because it expands to a parentheses-based group with an alternation sequence, it cannot be used inside a character class. If you accidentally attempt to put it in a character class, it will be interpreted like any other literal-character escape (where \X is used to make sure that the next character is literal) meaning that the R will be taken as a literal R, without any special meaning. For example, if you try [\t\R]: you may be intendeng to say, “match any single character that’s a tab or a newline”, but what you are actually saying is “match the tab or a literal R”; to get what you probably intended, use [\t\v] for “a tab or any vertical spacing character”, or [\t\r\n] for “a tab or carriage return or newline but not any of the weird verticals”.
+
+Ranges or kinds of characters
+
+Character Classes
+
+    [set] => This indicates a set of characters, for example, [abc] means any of the literal characters a, b or c. You can also use ranges by doing a hyphen between characters, for example [a-z] for any character from a to z. You can use a collating sequence in character ranges, like in [[.ch.]-[.ll.]] (these are collating sequence in Spanish).
+
+    [^set] => The complement of the characters in the set. For example, [^A-Za-z] means any character except an alphabetic character. Care should be taken with a complement list, as regular expressions are always multi-line, and hence [^ABC]* will match until the first A, B or C (or a, b or c if match case is off), including any newline characters. To confine the search to a single line, include the newline characters in the exception list, e.g. [^ABC\r\n].
+
+Please note that the complement of a character set is often many more characters than you expect: (?-s)[^x]+ will match 1 or more instances of any non-x character, including newlines: the (?-s) search modifier turns off “dot matches newlines”, but the [^x] is not a dot ., so that class is still allowed to match newlines.
+
+    [[:name:]] or [[:X:]] => The whole character class named name. For many, there is also a single-letter “short” class name, X. Please note: the [:name:] and [:X:] must be inside a character class [...] to have their special meaning.
+    short 	full name 	description 	equivalent character class
+    	alnum 	letters and digits
+    	alpha 	letters
+    h 	blank 	spacing which is not a line terminator 	[\t\x20\xA0]
+    	cntrl 	control characters 	[\x00-\x1F\x7F\x81\x8D\x8F\x90\x9D]
+    d 	digit 	digits
+    	graph 	graphical character, so essentially any character except for control chars, \0x7F, \x80
+    l 	lower 	lowercase letters
+    	print 	printable characters 	[\s[:graph:]]
+    	punct 	punctuation characters 	[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_{
+    s 	space 	whitespace (word or line separator) 	[\t\n\x0B\f\r\x20\x85\xA0\x{2028}\x{2029}]
+    u 	upper 	uppercase letters
+    	unicode 	any character with code point above 255 	[\x{0100}-\x{FFFF}]
+    w 	word 	word characters 	[_\d\l\u]
+    	xdigit 	hexadecimal digits 	[0-9A-Fa-f]
+
+    Note that letters include any unicode letters (ASCII letters, accented letters, and letters from a variety of other writing systems); digits include ASCII numeric digits, and anything else in Unicode that’s classified as a digit (like superscript numbers ¹²³…).
+
+    Note that those character class names may be written in upper or lower case without changing the results. So [[:alnum:]] is the same as [[:ALNUM:]] or the mixed-case [[:AlNuM:]].
+
+    As stated earlier, the [:name:] and [:X:] (note the single brackets) must be a part of a surrounding character class. However, you may combine them inside one character class, such as [_[:d:]x[:upper:]=], which is a character class that would match any digit, any uppercase, the lowercase x, and the literal _ and = characters. These named classes won’t always appear with the double brackets, but they will always be inside of a character class.
+
+    If the [:name:] or [:X:] are accidentally not contained inside a surrounding character class, they will lose their special meaning. For example, [:upper:] is the character class matching :, u, p, e, and r; whereas [[:upper:]] is similar to [A-Z] (plus other unicode uppercase letters)
+
+    [^[:name:]] or [^[:X:]] => The complement of character class named name or X (matching anything not in that named class). This uses the same long names, short names, and rules as mentioned in the previous description.
+
+    Character classes may not contain parentheses-based groups of any kind, including the special escape \R (which expands to a parentheses-based group when evaluated, even though \R doesn’t look like it contains parentheses).
+
+Character Properties
+
+These properties behave similar to named character classes, but cannot be contained inside a character class.
+
+    \pX or \p{name} => Same as [[:X:]] or [[:name:]], where X stands for one of the short names from the table above, and name stands for one of the full names from above. For instance, \pd and \p{digit} both stand for a digit, just like the escape sequence \d does.
+
+    \PX or \P{name} => Same as [^[:X:]] or [^[:name:]] (not belonging to the class name).
+
+Character escape sequences
+
+\X => Where X is one of d, l, s, u, w, h, v, described below. These single-letter escape sequences are each equivalent to a class from above. The lower-case escape sequence means it matches that class; the upper-case escape sequence means it matches the negative of that class. (Unlike the properties, these can be used both inside or outside of a character class.)
+
+Description] 	Escape Sequence 	Positive Class 	Negative Escape Sequence 	Negative Class
+digits 				\d 				[[:digit:]] 	\D 							[^[:digit:]]
+lowercase 			\l 				[[:lower:]] 	\L 							[^[:lower:]]
+space chars 		\s 				[[:space:]] 	\S 							[^[:space:]]
+uppercase 			\u 				[[:upper:]] 	\U 							[^[:upper:]]
+word chars 			\w 				[[:word:]] 		\W 							[^[:word:]]
+horizontal space 	\h 				[[:blank:]] 	\H 							[^[:blank:]]
+vertical space 		\v 				see below 		\V
+
+    Vertical space: This encompasses the LF, VT, FF, CR , NEL control characters and the LS and PS format characters : 0x000A (line feed), 0x000B (vertical tabulation), 0x000C (form feed), 0x000D (carriage return), 0x0085 (next line), 0x2028 (line separator) and 0x2029 (paragraph separator). There isn’t a named class which matches.
+
+Note: despite its similarity to \v, even though \R matches certain veritcal space characters, it is not a character-class-equivalent escape sequence (because it evaluates to a parentheses()-based expression, not a class-based expression). So while \d, \l, \s, \u, \w, \h, and \v are all equivalent to a character class and can be included inside another bracket[]-based character class, the \R is not equivalent to a character class, and cannot be included inside a bracketed[] character-class.
+Equivalence Classes
+
+    [[=char=]] => All characters that differ from char by case, accent or similar alteration only. For example [[=a=]] matches any of the characters: a, À, Á, Â, Ã, Ä, Å, A, à, á, â, ã, ä and å.
+
+Multiplying operators
+
+    + => This matches 1 or more instances of the previous character, as many as it can. For example, Sa+m matches Sam, Saam, Saaam, and so on. [aeiou]+ matches consecutive strings of vowels.
+
+    * => This matches 0 or more instances of the previous character, as many as it can. For example, Sa*m matches Sm, Sam, Saam, and so on.
+
+    ? => Zero or one of the last character. Thus Sa?m matches Sm and Sam, but not Saam.
+
+    *? => Zero or more of the previous group, but minimally: the shortest matching string, rather than the longest string as with the “greedy” operator. Thus, m.*?o applied to the text margin-bottom: 0; will match margin-bo, whereas m.*o will match margin-botto.
+
+    +? => One or more of the previous group, but minimally.
+
+    {n} => Matches n copies of the element it applies to (where n is any decimal number).
+
+    {n,} => Matches n or more copies of the element it applies to.
+
+    {n,p} => Matches n to p copies of the element it applies to, as much it can (where p ≥ n).
+
+    {n,}? or {n,p}? => Like the above, but minimally.
+
+    *+ or ?+ or ++ or {n,}+ or {n,p}+ => These so called “possessive” variants of greedy repeat marks do not backtrack. This allows failures to be reported much earlier, which can boost performance significantly. But they will eliminate matches that would require backtracking to be found. As an example:
+
+    When regex “.*” is run against the text “abc”x :
+
+    “  matches “
+    .* matches abc”x
+    ”  cannot match $ ( End of line ) => Backtracking
+
+    “  matches “
+    .* matches abc”
+    ”  cannot match letter x => Backtracking
+
+    “  matches “
+    .* matches abc
+    ”  matches ” => 1 overall match “abc”
+
+    When regex “.*+”, with a possessive quantifier, is run against the text “abc”x :
+
+    “   matches “
+    .*+ matches abc”x ( catches all remaining characters )
+    ” cannot match $ ( End of line )
+
+    Notice there is no match at all for the possessive version, because the possessive repeat factor prevents from backtracking to a possible solution
+
+Anchors
+
+Anchors match a zero-length position in the line, rather than a particular character.
+
+    ^ => This matches the start of a line (except when used inside a set, see above).
+
+    $ => This matches the end of a line.
+
+    \< => This matches the start of a word using Scintilla’s definitions of words.
+
+    \> => This matches the end of a word using Scintilla’s definition of words.
+
+    \b => Matches either the start or end of a word.
+
+    \B => Not a word boundary. It represents any location between two word characters or between two non-word characters.
+
+    \A or \` => Matches the start of the file.
+
+    \z or \' => Matches the end of the file.
+
+    \Z => Matches like \z with an optional sequence of newlines before it. This is equivalent to (?=\v*\z), which departs from the traditional Perl meaning for this escape.
+
+    \G => This “Continuation Escape” matches the end of the previous match. In Find All or Replace All circumstances, this will allow you to anchor your next match at the end of the previous match. If it is the first match of a Find All or Replace All, and any time you use a single Find Next or Replace, the “end of previous match” is defined to be the start of the search area – the beginning of the document, or the current caret position, or the start of the highlighted text.
+
+Capture Groups and Backreferences
+
+    (subset) => Numbered Capture Group: Parentheses mark a subset of the regular expression, also known as a subset expression or capture group. The string matched by the contents of the parentheses (indicated by subset in this example) can be re-used with a backreference or as part of a replace operation; see Substitutions, below. Groups may be nested.
+
+    (?<name>subset) or (?'name'subset) or (?(name)subset) => Named Capture Group: Names the value matched by subset as group name. Please note that group names are case-sensitive.
+
+    \n, \gn, \g{n}, \g<n>, \g'n', \kn, \k{n}, \k<n> or \k'n' => Numbered Backreference: These syntaxes match the nth capture group earlier in the same expression. (Backreferences are used to refer to the capture group contents only in the search/match expression; see the Substitution Escape Sequences for how to refer to capture groups in substitutions/replacements.)
+
+    A regex can have multiple subgroups, so \2, \3, etc can be used to match others (numbers advance left to right with the opening parenthesis of the group). You can have as many capture groups as you need, and are not limited to only 9 groups (though some of the syntax variants can only reference groups 1-9; see the notes below, and use the syntaxes that explicitly allow multi-digit n if you have more than 9 groups)
+
+        Example: ([Cc][Aa][Ss][Ee]).*\1 would match a line such as Case matches Case but not Case doesn't match cASE.
+
+        \gn, \g{n}, \g<n>, \g'n', \kn, \k{n}, \k<n> or \k'n' => These forms can handle any non-zero n.
+
+            For positive n, it matches the nth subgroup, even if n has more than one digit. \g10 matches the contents from the 10th capture group, not the contents from the first capture group followed by the literal 0.
+
+                If you want to match a literal number after the contents of the nth capture group, use one of the forms that has braces, brackets, or quotes, like \g{n} or \k'n' or \k<n>: For example, \g{2}3 matches the contents of the second capture group, followed by a literal 3, whereas \g23 would match the contents of the twenty-third capture group.
+
+                For clarity, it is highly recommended to always use the braces or brackets form for multi-digit n
+
+            For negative n, groups are counted backwards relative to the last group, so that \g{-1} is the last matched group, and \g{-2} is the next-to-last matched group.
+
+                Please, note the difference between absolute and relative backreferences. For instance, an exact four-letters word palindrome can be matched with :
+
+                    the regex (?-i)\b(\w)(\w)\g{2}\g{1}\b, when using absolute (positive) coordinates
+
+                    the regex (?-i)\b(\w)(\w)\g{-1}\g{-2}\b, when using relative (negative) coordinates
+
+        \n => This form can only have n as digits 1-9, so if you have more than 9 capture groups, you will have to use one of the other numbered backreference notations, listed in the next bullet point.
+
+        Example: the expression \10 matches the contents of the first capture group \1 followed by the literal character 0”, not the contents of the 10th group.
+
+    \g{name}, \g<name>, \g'name', \k{name}, \k<name> or \k'name' => Named Backreference: The string matching the subexpression named name. (As with the Numbered Backreferences above, these Named Backreferences are used to refer to the capture group contents only in the search/match expression; see the Substitution Escape Sequences for how to refer to capture groups in substitutions/replacements.)
+
+Readability enhancements
+
+    (?:subset) => A grouping construct for the subset expression that doesn’t count as a subexpression (doesn’t get numbered or named), but just groups things for easier reading of the regex, or for using a quantified amount of that group, with a quantifier located right after that grouping construct.
+
+    (?#comment) => Comments. The whole group is for humans only and will be ignored in matching text.
+
+Using the x flag modifier (see section below) is also a good way to improve readability in complex regular expressions.
+Search modifiers
+
+The following constructs control how matches condition other matches, or otherwise alter the way search is performed.
+
+    \Q => Starts verbatim mode (Perl calls it “quoted”). In this mode, all characters are treated as-is, the only exception being the \E end verbatim mode sequence.
+
+    \E => Ends verbatim mode. Thus, \Q\*+\Ea+ matches \*+aaaa.
+
+    (?enable-disable) or (?enable-disable:subpattern) => There are four flags, described below, which can be applied to a regex or subgroup. The enable term can be made up of 0-4 of the flags described below; the disable term can be made up of 0-4 of the flags described below. Any flags in enable will be enabled (turned on); any flags in disable will be disabled (turned off). (Remember, it does not make sense to include the same flag in both the enable and disable terms.) If there are no disable flags, the - is not necessary; if there are no enable flags, then the - will come immediately after the ?: (?-...). If there is a subpattern, then the flags only apply for the contents of the subpattern; without a subpattern, there is no : separator, and the flags apply for the remainder of the current regex, or until the next flags are set.
+        i => case insensitive (default: set by ☐ Match case dialog option)
+        m => ^ and $ match embedded newlines (default: on)
+        s => dot matches newline (default: as per ☐ . matches newline dialog option)
+        x => Ignore non-escaped whitespace in regex (default: off). Any whitespace that you need to match must be escaped
+
+    Examples:
+        blah(?i-s)foobar => enables case insensitivity and disables dot-matches-newline for the rest of the regular expression: thus expression blah is run under the default rules (set by the dialog), whereas expression foobar will be case-insensitive and dot will not match newline.
+        (?i-s:subpattern) => enables case insensitivity and disables dot-matches-newline, but just for the subpattern
+        (?-i)caseSensitive(?i)cAsE inSenSitive => disables case insensitivity (makes it case-sensitive) for the portion of the regex indicated by caseSensitive, and re-enables case-insensitive matching for the rest of the regex
+        (?m:justHere) => ^ and $ will match on embedded newlines, but just for the contents of this subgroup justHere
+        (?x) => Allow extra whitespace in the expression for the remainder of the regex
+
+    Please note that turning off “dot matches newline” with (?-s) will not affect character classes: (?-s)[^x]+ will match 1 or more instances of any non-x character, including newlines, even though the (?-s) search modifier turns off “dot matches newlines” (the [^x] is not a dot ., so is still allowed to match newlines).
+
+    (?|expression) => If an alternation expression has parenthetical subexpressions in some of its alternatives, you may want the subexpression counter not to be altered by what is in the other branches of the alternation. This construct will just do that.
+
+    For example, you get the following subexpression counter values:
+
+    #      before  ---------------branch-reset----------- after
+    / (?x) ( a )  (?| x ( y ) z | (p (q) r) | (t) u (v) ) ( z )
+    #      1            2         2  3        2     3     4
+
+    Without the branch reset, (y) would be group 3, and (p(q)r) would be group 4, and (t) would be group 5. With the branch reset, they both report as group 2.
+
+Control flow
+
+Normally, a regular expression parses from left to right linearly. But you may need to change this behavior.
+
+    | => The alternation operator, which allows matching either of a number of options. For example, one|two|three will match either of one, two or three. Matches are attempted from left to right. Use (?:) to match an empty string in such a construct.
+
+    (?n) => Refers to nth subexpression. If n is negative, it will use the nth subexpression from the end.
+
+    Please, note the difference between subexpressions and back-references. For instance, using a similar structure to the one, when searching for a four-letters word being a palindrome, this time, both regexes just find a four-letters word, because each subexpression, signed or not, refers to the regex itself, enclosed in each group and NOT to the present value of each group!
+
+        the regex (?-i)\b(\w)(\w)(?2)(?1)\b find a four-letter word, when using absolute coordinates
+
+        the regex (?-i)\b(\w)(\w)(?-1)(?-2)\b find a four-letter word, when using relative coordinates
+
+    Actually, these two regexes could be simplified to (?-i)\b(\w)(\w)\w\w\b, assuming that group 1 and 2 are still needed in replacement
+
+    (?0) or (?R) => Backtrack to start of pattern.
+
+    (?&name) or (?P>name) => Backtrack to subexpression named name.
+
+        If a non-signed subexpression is located OUTSIDE the parentheses of the group to which it refers, it is called a subroutine call
+
+        If a non-signed subexpression is located INSIDE the parentheses of the group to which it refers, it is called a recursive call
+
+    (?(assertion)YesPattern|NoPattern) => Conditional Expressions
+
+    If the assertion is true, then YesPattern will be used for matching the text; if the assertion is false, then NoPattern will be used for matching the text.
+
+    YesPattern and NoPattern are any valid regex patterns.
+
+    The assertion will always be inside parentheses; this is emphasized by including the parentheses in the list of supported assertion syntax, below:
+
+        (n) => true if nth unnamed group was previously defined
+
+        (<name>) or ('name') => true if group called name was previously defined
+
+        (?=lookahead) => true if the lookahead expression matches
+
+        (?!lookahead) => true if the lookahead expression does not match
+
+        (?<=lookbehind) => true if the lookbehind expression matches
+
+        (?<!lookbehind) => true if the lookbehind expression does not match
+
+        (R) => true if inside a recursion
+
+        (Rn) => true if in a recursion to subexpression numbered n
+
+        (R&name) => true if in a recursion to named subexpression name
+
+    Note: These are all still inside the conditional expression.
+
+    Do not confuse the assertions that control a conditional expression (here) with the assertions that are part of the pattern matching (the Assertions section, below). Here, if the assertion is used to decide which expression is used; below, the assertion decides whether the pattern is matching or not.
+
+    Note: PCRE doesn’t treat recursion expressions like Perl does:
+
+        In PCRE (like Python, but unlike Perl), a recursive subpattern call is always treated as an atomic group. That is, once it has matched some of the subject string, it is never re-entered, even if it contains untried alternatives and there is a subsequent matching failure.
+
+    (?>pattern) => Independent sub-expression
+
+    Match pattern independently of surrounding patterns. Search will never backtrack into independent sub-expression.
+
+    Independent sub-expressions are typically used to improve performance, because only the best possible match for pattern will be considered; if this doesn’t allow the expression as a whole to match then no match is found at all.
+
+    It can also be used to keep the logic for Conditional Expressions (above) correct, preventing an unexpected path to the wrong alternate being used. For example, when using a group-number as the conditional assertion, (?(n)YesPattern|NoPattern):
+
+        The regex (?:(100)|\d{3}) apples (?(1)YesPattern|NoPattern) does not use the independent sub-expression, so it will find 100 apples NoPattern, even though you expected YesPattern to be used when 100 was matched. Why? If YesPattern failed, the search will backtrack to the beginning and try next alternative, where 100 matches \d{3}, but that means that ?(1) does not match so the conditional expression uses NoPattern.
+
+        Instead, you can use the independent sub-expression to prevent backtracking, by using the regex (?>(100)|\d{3}) apples (?(1)YesPattern|NoPattern). Now, if YesPattern fails, it cannot backtrack to use the \d{3}, thus preventing it from accidentally using 100 apples NoPattern, so with 100 it will either match 100 apples YesPattern or the whole expression will fail.
+
+    \K => Resets matched text at this point. For instance, matching foo\Kbar will not match bar. It will match foobar, but will pretend that only bar matches. Useful when you wish to replace only the tail of a matched subject and groups are clumsy to formulate.
+
+    It is also useful if you would need a look-behind assertion which would contain a non-fixed length pattern (see further on). As variable-length lookbehind is not allowed in Boost’s regular expressions, you can use the \K syntax, instead. For instance, the non-allowed syntax (?-i)(?<=\d+)abc can be replaced with the correct syntax (?-i)\d+\Kabc which matches the exact string abc only if preceded by, at least, one digit.
+
+Assertions
+
+These special groups consume no characters. Their successful matching counts, but when they are done, matching starts over where it left.
+
+    (?=pattern) => positive lookahead: If pattern matches, backtrack to start of pattern. This allows using logical AND for combining regexes.
+
+        The expression (?=.*[[:lower:]])(?=.*[[:upper:]]).{6,} tries finding a lowercase letter anywhere. On success it backtracks and searches for an uppercase letter. On yet another success, it checks whether the subject has at least 6 characters.
+
+        q(?=u)i doesn’t match quit, because the assertion (?=u) matches the u but does not consume the u, as matching u consumes zero characters, so then trying to match i in the pattern fails, because it is still comparing against the u in the text being searched.
+
+    (?!pattern) => negative lookahead: Matches if lookahead pattern didn’t match.
+
+    (?<=pattern) => positive lookbehind: This assertion matches if pattern matches immediately before the current position in the search.
+
+    (?<!pattern) => negative lookbehind: This assertion matches if pattern does not match immediately before the current position in the search.
+        NOTE: In the lookbehind assertions, pattern has to be of fixed length, so that the regex engine knows where to test the assertion. Similar constructs for variable-length lookbehind include:
+            For variable-length lookbehind assertions from a limited set of constant data items, a construct such as ((?<=short)|(?<=longer)) is viable. The individual lookbehinds still cannot include + or * or similar variable-length syntax.
+            If your desired lookbehind is more complicated than that, you can use \K (see above): instead of (?<=a.*b)MATCH, which won’t work, use a.*b\KMATCH. The \K workaround will only work if the desired lookbehind is the first part of your match, because everything before the \K is excluded from the final match.
+
+Substitutions
+
+Substitution expressions (the contents of the Replace with entry) use similar syntax to the search expression, with the additional features described below.
+
+All characters are treated as literals except for $, \, (, ), ?, and :.
+Substitution Escape Sequences
+
+Substitutions understand the the Control Characters and Match by character code syntax described in the Searches section work in both Searches and Substitutions. The following additional escape sequences are recognized just for Substitutions:
+
+    \l => Causes next character to output in lowercase
+
+    \L => Causes next characters to be output in lowercase, until a \E is found.
+
+    \u => Causes next character to output in uppercase
+
+    \U => Causes next characters to be output in uppercase, until a \E is found.
+
+    \E => Puts an end to forced case mode initiated by \L or \U.
+
+    $&, $MATCH, ${^MATCH}, $0, ${0} => The whole matched text.
+
+    $` , $PREMATCH, ${^PREMATCH} => The text between the previous and current match, or the text before the match if this is the first one.
+
+    $', $POSTMATCH, ${^POSTMATCH} => Everything that follows current match.
+
+    $^N, $LAST_SUBMATCH_RESULT, ${^LAST_SUBMATCH_RESULT} => Returns what the last matching subexpression matched.
+
+    $+, $LAST_PAREN_MATCH, ${^LAST_PAREN_MATCH} => Returns what matched the last subexpression in the pattern, if that subexpression is currently matched by the regex engine.
+
+    $$ or \$ => Returns literal $ character.
+
+    $n, ${n}, \n => Returns what matched the nth subexpression (numbered capture group), where n is a positive integer (1 or larger). If n is greater than 9, use ${n}.
+        Please note: the \g... and \k... backreference syntaxes found in the Searching section (whether numbered or named groups) only work in the search expression, and are not designed or intended to work for numbered or named groups in the substitution/replacement expression.
+
+    $+{name} => Returns what matched subexpression named name (named capture group).
+
+If not described in this section, \ followed by any character will output that literal character.
+Substitution Grouping
+
+The parentheses ( and ) are used for creating lexical groups, and are not part of the output text. To output literal parentheses, use \( and \).
+Substitution Conditionals
+
+If you want to make decisions during the replacement (conditional replacement), use one of these variants of the conditional syntax below.
+
+    ?nYesPattern:NoPattern: where n is a decimal number (one or more decimal digits), and YesPattern and NoPattern are replacement expressions. If the nth numbered group from the search expression was matched, the YesPattern will be used as the output; if not, the NoPattern will be used instead. YesPattern cannot start with any digits (0-9) in this version of the syntax, because the digits will be interpreted as part of n instead of part of YesPattern; if YesPattern needs to start with one or more digits, use the ?{n} variant of the syntax, below.
+        For example: ?1george\($1\):gracie => if the first group from the search was matched, then use the literal text george, followed by the contents of the first match inside literal parentheses; if the first group does not match, use the literal text gracie.
+    ?{n}YesPattern:NoPattern: where n here can be one or more decimal digit, YesPattern and NoPattern are replacement expressions, as above. This syntax variant will work even if YesPattern needs to start with one or more digits, because the braces around n separate it from YesPattern.
+        For example: ?{13}1george\(${13}\):2gracie => if the thirteenth group from the search was matched, then use the literal text 1george, followed by the contents of the thirteenth match inside literal parentheses; if the thirteenth group does not match, use the literal text 2gracie.
+    ?{name}YesPattern:NoPattern: where name is the name of a named-match-group, and YesPattern and NoPattern are replacement expressions, as above.
+        For example: ?{comedian}george\($+{comedian}\):gracie => if the group named comedian from the search was matched, then use the literal text george, followed by the contents of the named group inside literal parentheses; if the named group does not match, use the literal text gracie.
+
+By placing the expression inside parentheses, you can separate the conditional from the surrounding replacement: a=?1george:gracie=b would output a=george or a=gracie=b, whereas a=(?1george:gracie)=b shows when the conditional ends, so would be a=george=b or a=gracie=b.
+
+Remember, to include literal parentheses, question marks, or colons in conditional substitution expressions, make sure to escape them as \( or \) or \? or \:.
+Zero length matches
+
+In normal or extended mode, there would be no point in looking for text of length 0; however, in regular expression mode, this can often happen. For example, to add something at the beginning of a line, you’ll search for “^” and replace with whatever is to be added.
+
+Notepad++ would select the match, but there is no sensible way to select a stretch zero character long. When this happens, a tooltip very similar to function call tips is displayed instead, with a caret pointing upwards to the empty match.
+Examples
+
+These examples are meant to help better show what the complex regex syntax will accomplish. Many of these examples, written by Georg Dembowski, have been in previous versions of the documentation for years; they have been updated to match with the modern Notepad++ v7.7 regular expression syntax.
+
+IMPORTANT
+
+    You have to check the box “regular expression” in search & replace dialog
+
+    When copying the strings out of here, pay close attention not to have additional spaces before or after them! Otherwise, the tested regex will not match anything!
+
+Example 0
+
+How to replace/delete full lines according to a regex pattern? Let’s say you wish to delete all the lines in a file that contain the word “unused”, without leaving blank lines in their stead. This means you need to locate the line, remove it all, and additionally remove its terminating newline.
+
+So, you’d want to do this:
+
+    Find: ^.*?unused.*?$\R
+    Replace with: nothing, not even a space
+
+The regular expression appears to always work is to be read like this:
+
+    assert the start of a line
+
+    match some characters, stopping as early as required for the expression to match
+
+    the string you search in the file, “unused”
+
+    more characters, again stopping at the earliest necessary for the expression to match
+
+    assert line ends
+
+    A newline character or sequence
+
+Remember that .* gobbles everything to the end of line if ☐ . matches newline is off, and everything to the end of file if the option is on!
+
+Well, why is appears above in bold letters? Because this expression assumes each line ends with an end of line sequence. This is almost always true, and may fail for the last line in the file. It won’t match and won’t be deleted.
+
+But the remedy is fairly simple: we translate in regex parlance that the newline should match if it is there. So the correct expression actually is:
+
+    Find: ^.*?unused.*?$\R?
+
+This is because ? makes it match 0 or 1 \R.
+Example 1
+
+You use a MediaWiki (like Wikipedia) and want to make all headings one level higher, so a H2 becomes a H1 etc.
+
+    Search ^=(=)
+
+    Replace with \1
+
+    Click Replace all
+
+You do this to find all headings2…9 (two equal sign characters are required) which begin at line beginning (^) and to replace the two equal sign characters by only the last of the two, so eliminating one and having one remaining.
+
+    Search =(=)$
+
+    Replace with \1
+
+    Click Replace all
+
+You do this to find all headings2…9 (two equal sign characters are required) which end at line ending ($) and to replace the two equal sign characters by only the last of the two, so eliminating one and having one remaining.
+
+== title == became = title =
+
+You’re done :-)
+Example 2
+
+You have a document with a lot of dates, which are in date format dd.mm.yy and you’d like to transform them to sortable format yy-mm-dd. Don’t be afraid by the length of the search term – it’s long, but consisting of pretty easy and short parts.
+
+Do the following:
+
+    Search ([^0-9.])([0123][0-9])\.([01][0-9])\.([0-9][0-9])([^0-9.]) or
+
+Search (\s)([0123][0-9])\.([01][0-9])\.([0-9][0-9])(\s)
+
+    Replace with \1\4-\3-\2\5
+
+    Click Replace all
+
+You do this to fetch:
+
+    the day, whose first number can only be 0, 1, 2 or 3
+
+    the month, whose first number can only be 0 or 1
+
+    but only if the separator is a literal dot and not any standard character ( \. versus . )
+
+    but only if no numbers are surrounding the date, as then it might be an IP address instead of a date
+
+and to write all of this in the opposite order, except for the surroundings. Pay attention: Whatever SEARCH matches will be deleted and only replaced by the stuff in the REPLACE field, thus it is mandatory to have the surroundings in the REPLACE field as well!
+
+Outcome:
+
+    31.12.97 became 97-12-31
+
+    14.08.05 became 05-08-14
+
+    the IP address 14.13.14.14 did not change
+
+You’re done :-)
+Example 3
+
+You have printed in windows a file list using dir /a-d /b/s /-p > filelist.txt to the file filelist.txt and want to make local URLs out of them.
+
+    Open filelist.txt with Notepad++
+
+    Search \\
+
+    Replace with /
+
+    Click Replace all.
+
+    This changes the Windows path separator char \ into the URL path separator char /
+
+    Search \x20
+
+    Replace %20
+
+    Click Replace all to change any space character into the %20 syntax
+
+    According on your requirements, you can similarly change any possible symbol ! # $ % & ' ( ) + , - ; = @ [ ] ^ { } ~ with the appropriate %nn expression
+
+    Search ^(?=.)
+
+    Replace with file:///
+
+    Click Replace all
+
+    This adds file:/// to the beginning of all non-empty lines
+
+After this sequence, C:\!\Test A.csv became file:///C:/!/Test%20A.csv.
+
+You’re done :-)
+Example 4
+
+Let’s suppose you need a comma delimited table from the table, below :
+
+[Data]
+AS AF AFG 004 Afghanistan
+EU AX ALA 248 Åland Islands
+EU AL ALB 008 Albania, People's Socialist Republic of
+AF DZ DZA 012 Algeria, People's Democratic Republic of
+OC AS ASM 016 American Samoa
+EU AD AND 020 Andorra, Principality of
+AF AO AGO 024 Angola, Republic of
+NA AI AIA 660 Anguilla
+AN AQ ATA 010 Antarctica (the territory South of 60 deg S)
+NA AG ATG 028 Antigua and Barbuda
+SA AR ARG 032 Argentina, Argentine Republic
+AS AM ARM 051 Armenia
+NA AW ABW 533 Aruba
+OC AU AUS 036 Australia, Commonwealth of
+
+Then use the following regex S/R :
+
+    Search for: (?-i)[\u\d]\K\x20(?=[\u\d])
+
+    Replace with: ,
+
+    Hit Replace All
+
+    [Final Data]
+    AS,AF,AFG,004,Afghanistan
+    EU,AX,ALA,248,Åland Islands
+    EU,AL,ALB,008,Albania, People's Socialist Republic of
+    AF,DZ,DZA,012,Algeria, People's Democratic Republic of
+    OC,AS,ASM,016,American Samoa
+    EU,AD,AND,020,Andorra, Principality of
+    AF,AO,AGO,024,Angola, Republic of
+    NA,AI,AIA,660,Anguilla
+    AN,AQ,ATA,010,Antarctica (the territory South of 60 deg S)
+    NA,AG,ATG,028,Antigua and Barbuda
+    SA,AR,ARG,032,Argentina, Argentine Republic
+    AS,AM,ARM,051,Armenia
+    NA,AW,ABW,533,Aruba
+    OC,AU,AUS,036,Australia, Commonwealth of
+
+You’re done :-)
+Example 5
+
+How to recognize a balanced expression, in mathematics or in programming?
+
+First, let’s give some example data:
+
+[Sample Test Start]
+
+((((ab(((cd((()))))ef))))))
+0000  000  00100000  00000•
+1234  567  89098765  43210
+
+
+((ab((((cd(((ef(()))))gh))))ijkl))))
+00  0000  000  1110000  0000    00••
+12  3456  789  0109876  5432    10
+
+
+((((((ab(cd(ef((()))))gh)ijkl)))mn)))))
+000000  0  0  01110000  0    000  00•••
+123456  7  8  90109876  5    432  10
+
+
+((01ab(cd(ef23gh(ij45kl)mn)op((qr67st)uv\wx)34)yz))128956)abc
+12    3  4      5      4  3  45      4     3  2  10      •
+
+[[@ab[cd{ef@gh{ij@kl}mn]op((qr@st}uv@x]34yz])12@56)[cdedf]
+                          12                1     0
+
+((12ab(cd{ef34gh{ij56kl}mn}123}op((qr78stu)v\wx34)yz)12905126]
+12    3                          45       4      3  2
+••
+
+[[@ab[cd{ef@gh{ij@kl}mn}123]op((qr@stu)v@x34)yz]12@5@6]
+                              12      1     0
+[Sample Test End]
+
+For instance, let’s try to build a regular expression that finds the largest range of text with well-balanced parentheses!
+
+First, some typographic conventions:
+
+    Let Sp be a starting parenthesis. So, its regex syntax is the escaped form \(, or simply ( if inside a character class
+
+    Let Ep be an ending parenthesis. So, its regex syntax is the escaped form \), or simply ) if inside a character class
+
+    Let Ac be any single allowed character, including EOF character(s), different from EP and SP. So, its regex syntax is the negative class character [^EpSp], i.e., the negative class character [^()]
+
+    Let R0 be a recursion to the whole matched pattern. By convention, in PCRE, its regex syntax is (?0) or (?R)
+
+    Let R1 be a recursion to the group 1 pattern. By convention, in PCRE, its regex syntax is (?1)
+
+    Now , let Bb be a well-balanced block, containing an Ep….Sp construction, itself possibly composed with, both, Ac characters and an other Bb, at any level greater than level 0
+
+    This Bb block can be represented by the symbolic regex, below ( Blank chars are ignored, for readability ) :
+
+    Sp ( Ac+ | R0 )* Ep
+
+    This syntax may be improved as Bb = Sp (?: Ac++ | R0 )* Ep, using, both :
+
+    A non-capturing group, surrounding the two alternatives
+
+    A possessive quantifier relative to the Ac character, to be similar to the atomic state of recursions, in PCRE.
+
+    It is important to point out that, if you would use the greedy form Ac+, instead of Ac++, the last match would be, wrongly, all the file contents, even against a very short text! Again, the advantage of not allowing backtracking reduces combinations and avoids the catastrophic backtracking process :-)
+
+Now, more precisely, between the Sp and Ep parentheses, you may meet:
+
+    Nothing, hence the star quantifier, after the non-capturing group
+
+    A non-null range of allowed chars, so the atomic group Ac++
+
+    Another well-balanced Bb construction which can be verified, in turn, by the recursion feature R0
+
+On the other hand, any subject text scanned can be defined, either, as:
+
+    A combination of successive syntaxes Ac* Bb Ac* Bb Ac* Bb, ended with a last Ac. So, in the symbolic regex syntax, this can be written as (?: Ac Bb)+ Ac*
+
+    A non-null range of allowed chars, when the subject text does NOT contain any Ep and Sp parenthesis, so the Ac+ symbolic syntax, only ( By extension, a text without parentheses is, obviously, a well-balanced parentheses text… as it contains no parenthesis ! )
+
+This implies that the general symbolic regex is (?: Ac* Bb )+ Ac* | Ac+
+
+Now, by substituting the above value of the well-balanced Bb construction, in our final expression, we get our final symbolic regex expression :
+
+(?: Ac* ( Sp (?: Ac++ | R1 )* Ep ) )+ Ac* | Ac+
+        \ ---------------------- /
+                 Group 1
+
+Note, however, that we just had to add two parentheses to define a new group #1 , which embeds the Bb construction,. Indeed, during the recursion process, it must refer, specifically, to that group #1 and NOT recurse to the whole regex pattern. Hence, the R1 notation, instead of the R0 notation!
+
+Finally, we can get something more legible if we use the free-spacing mode to identify the components of our regex and rewrite this expression with the correct regex syntax:
+
+(?x) (?: [^()]*  (  \(  (?:  [^()]++  |  (?1)  )*  \)  )  )+  [^()]*  |  [^()]+
+
+Note that, with the free-spacing mode, you may, as well, insert comments and split the regex on several lines, leading, for instance, to the following text:
+
+(?x)                  #  FREE-SPACING mode
+(?:                   #  Start of the FIRST NON-CAPTURING group
+    [^()]*            #      Any range, possibly NUL, of ALLOWED characters
+    (                 #      Start of CAPTURING group #1
+        \(            #          STARTING parenthesis
+        (?:           #          Start of the SECOND NON-CAPTURING group
+            [^()]++   #              Any NON-NULL ATOMIC range of ALLOWED characters,
+            |         #              OR
+            (?1)      #              A RECURSION, using the regex pattern of group #1
+        )*            #          End of the SECOND NON-CAPTURING group, repeated 0 or MORE times
+        \)            #          ENDING parenthesis
+    )                 #      End of the CAPTURING group 1
+)+                    #  End of the FIRST NON-CAPTURING group, repeated 1 or MORE times
+[^()]*                #  Any range, possibly NUL, of ALLOWED characters
+|                     #  OR
+[^()]+                #  Any NON-NULL range of ALLOWED characters,
+
+If we reduce the syntax of this recursive regular expression to its minimum, we get :
+
+(?:[^()]*(\((?:[^()]++|(?1))*\)))+[^()]*|[^()]+
+
+But it is about as hard to decrypt as a badly indented piece of code without a comment and with unpromising, unclear identifiers.
+Example 6
+
+This example gives more insight into using independent sub-expressions to prevent back-tracking when using Conditional Expressions.
+
+Given the file:
+
+  5 apples in a box
+100 apples in a box
+200 apples in a barrel
+250 apples in a box
+500 apples in a barrel
+
+We want to match when there are 250 or fewer apples only when they are in a box; if there are more apples than 250, it should only match in a barrel. Thus, 200 apples in a barrel should not match.
+
+First we need to construct Conditional Expression for apples container:
+
+(?('LEQ250')in a box|in a barrel)
+
+The ('LEQ250') refers to some Capture Group which will catch quantity of apples comparing with our condition:
+
+(?:(?'LEQ250'\d{1,2}|1\d\d|2[0-4]\d|250)|\d+)\D
+
+The trick here is that if we have alternatives in this Capture Group, we can’t allow search to back-track to try a different alternative from the condition when the conditional fails. Thus, we need to use an Independent sub-expression:
+
+(?>(?:(?'LEQ250'\d{1,2}|1\d\d|2[0-4]\d|250)|\d+)\D)
+
+But if we use Independent sub-expression we have other two problems:
+
+    we have possibility for spaces appear before digits \h*
+    we need to check where number ends \D
+
+Alternatives and Multiplying Operators need backtracking and so must be resolved inside the Independent sub-expression. In our example \h*\d is definitive - \h* always stops before non-space (and a digit \d is not a space), but if you need to include some alternatives or multiplying operators inside your capture group, then include all of them, to give the Independent sub-expression the possibility to backtrack within itself.
+
+It is better to check for the end in a more general form, in order to not include patterns not needed for Capture Group inside Independent sub-expression; thus, we will use the positive lookahead (?=\D) Assertion.
+
+As a result we have the following regexp:
+
+^\h*(?>(?:(?'LEQ250'\d{1,2}|1\d\d|2[0-4]\d|250)|\d+)(?=\D)) apples (?('LEQ250')in a box|in a barrel)
+
+With this expression, our search results are
+
+File1 (4 hits)
+Line 1: 5 apples in a box
+Line 2: 100 apples in a box
+Line 4: 250 apples in a box
+Line 5: 500 apples in a barrel
+
+If we didn’t use the Independent sub-expression, and instead used the regex
+
+^\h*(?:(?:(?'LEQ250'\d{1,2}|1\d\d|2[0-4]\d|250)|\d+)(?=\D)) apples (?('LEQ250')in a box|in a barrel)
+
+Our search results would incorrectly match line 3 (200 apples in a barrel):
+
+File1 (5 hits)
+Line 1: 5 apples in a box
+Line 2: 100 apples in a box
+Line 3: 200 apples in a barrel
+Line 4: 250 apples in a box
+Line 5: 500 apples in a barrel
+
+Searching actions when recorded as macros
+
+The Find family of actions can be recorded in a macro to make them easy to name and later replay via the Macro menu or an assigned keyboard shortcut. Somewhat unfortunately, Find what and Replace with text is hardwired into the macro when it is created, and isn’t something the user can change when the macro runs, but often this isn’t a significant limitation.
+
+Note, however, that Find-related actions are recorded a bit differently than other Notepad++ actions, so we’ll discuss them a bit more in-depth here. Typically, Notepad++ will record a step in a macro every time a user does something in the Notepad++ user interface. The Find family of actions is more “coordinated” where macro recording is concerned.
+
+The macro recorder only records when an actual Find family action (e.g. Replace, Find All in Current Document, etc.) occurs. Thus you can tweak a future action’s parameters (e.g. Match case, Wrap around, etc.) all you’d like, and all of that fiddling doesn’t get remembered. At the point where you perform an action, then a snapshot is taken of all of the parameters and the action, and this is logged in the macro memory as a proper macro sequence.
+
+While the user can simply record and use Find family macros, one can also edit those macros later to change or add to their functionality, so it is helpful to know the details of the macro sequences that were previously recorded. While the details of how macros in general are recorded and stored in shortcuts.xml is discussed elsewhere, here are the details of what happens when Notepad++ saves a recorded Find family macro:
+
+First comes a 1700 message which carries out some initialization of the Find engine:
+
+<Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
+
+Next is a 1601 message with the Find what text in the sParam field; in this example we search for “it”:
+
+<Action type="3" message="1601" wParam="0" lParam="0" sParam="it" />
+
+Following that is a 1625 message with the Search mode in lParam, with possible values of 0=Normal / 1=Extended / 2=Regular expression; let’s show Regular expression in this example:
+
+<Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
+
+After that, if a type of replacement operation is being performed, is a 1602 message with sParam holding the Replace with text; here we’ll make that “IT”:
+
+<Action type="3" message="1602" wParam="0" lParam="0" sParam="IT" />
+
+Moving on, next, if performing a Find All (really a Find-in-Files) or a Replace in Files, is a 1653 message containing the base Directory for the search in sParam:
+
+<Action type="3" message="1653" wParam="0" lParam="0" sParam="C:\Program Files\Notepad++\" />
+
+Also when doing a Find All or a Replace in Files, will be a 1652 message containing the Filters for the search in sParam:
+
+<Action type="3" message="1652" wParam="0" lParam="0" sParam="*.*" />
+
+Next will be a 1702 message that contains a bit-weighted number in lParam that represents the “checkbox” option parameters for the action (more on this later, for now we will just use 515 in the example, and present the bit-weight table):
+
+<Action type="3" message="1702" wParam="0" lParam="515" sParam="" />
+1702-Bit-Weight 	Binary-Bit-Weight 	Meaning (equivalent option ticked)
+1 	0000000001 	Match whole word only
+2 	0000000010 	Match case
+4 	0000000100 	Purge for each search
+16 	0000010000 	Bookmark line
+32 	0000100000 	In all sub-folders
+64 	0001000000 	In hidden folders
+128 	0010000000 	In selection
+256 	0100000000 	Wrap around
+512 	1000000000 	Backward direction (*)
+
+*: Backward direction ticked means 512 is not included; unticked means 512 is included.
+
+    Let’s see how the example value 515 used above is decoded:
+
+    lParam=“515” (decimal) = 203 (hex) = 10 0000 0011 (binary) = 512 + 2 + 1 = (not Backward direction + Match case + Match whole word only). Thus, this would represent a forward-from-caret-towards-end-of-file search of exact case specified, with the additional qualifier that the match text must be bracketed by non-word characters.
+
+Finally appears a 1701 message which encodes the Find family action to perform in lParam, which, when executed will conduct the action using all of the information encoded in the prior messages; let’s do a Replace in Files, which has an integer value of 1660, for purposes of an example:
+
+<Action type="3" message="1701" wParam="0" lParam="1660" sParam="" />
+1701-Value 	Meaning (equivalent button press)
+1 	Find Next
+1608 	Replace
+1609 	Replace All
+1614 	Count
+1615 	Mark All
+1633 	Clear all marks
+1635 	Replace All in All Opened Documents
+1636 	Find All in All Opened Documents
+1641 	Find All in Current Document
+1656 	Find All (in Files)
+1660 	Replace in Files
+
+Here is a complete example (that could occur in shortcuts.xml) and how it is interpreted:
+
+<Macro name='Book Mark lines NOT containing ABC' Ctrl="no" Alt="no" Shift="no" Key="0">
+    <Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
+    <Action type="3" message="1601" wParam="0" lParam="0" sParam="^(?-s)(?!.*ABC).*" />
+    <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
+    <Action type="3" message="1702" wParam="0" lParam="786" sParam="" />
+    <Action type="3" message="1701" wParam="0" lParam="1615" sParam="" />
+</Macro>
+
+First we have our initializing 1700 message.
+
+Following that in the 1601 message’s sParam field is a regular expression that will match lines that do not contain “ABC”: ^(?-s)(?!.*ABC).*
+
+The search type for “Regular expression” appears next as lParam=“2” in the 1625 message.
+
+Skipping the 1702 message for the moment, the 1701 message has lParam=“1615” which, from the 1701 table, means “Mark All”.
+
+Finally, let’s consider the 1702 message. Its pertinent part is lParam=“786”. The best way to break that down into its component parts is to convert the number to binary and then determine how the one-bits in the binary contribute to the meaning. 786 in binary is 1100010010 (= 512 + 256 + 16 + 2), which breaks down as follows, and then reading the 1702 table from earlier we get the contributors to functionality:
+
+    1000000000 = 512 - Backward direction disabled (thus forward direction from caret toward bottom end of file)
+
+    0100000000 = 256 - Wrap around
+
+    0000010000 = 16 - Bookmark line
+
+    0000000010 = 2 - Match case
+
+Note that in this example we seem to have conflicting search parameters: We have a direction encoded, as well as a Wrap around, which nullifies the need for a direction. This is not a problem, as the Wrap around option will take precedence, just like in a non-macro’d interactive searching operation.

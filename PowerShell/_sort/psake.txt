@@ -1,0 +1,49 @@
+psake
+
+Doc:
+	https://psake.readthedocs.io/en/latest/
+	https://psake.readthedocs.io/en/latest/run-psake/
+
+
+Code
+	https://github.com/psake/psake
+
+
+How to get started
+
+Step 1: Download and extract the project
+
+You will need to "unblock" the zip file before extracting - PowerShell by default does not run files downloaded from the Internet. Just right-click the zip and click on "properties" and click on the "unblock" button.
+
+Step 2: CD into the directory where you extracted the project (where the psake.psm1 file is)
+
+    Import-Module .\psake.psm1
+
+If you encounter the following error "Import-Module : ...psake.psm1 cannot be loaded because the execution of scripts is disabled on this system." Please see "get-help about_signing" for more details.
+
+    Run PowerShell as administrator
+    Set-ExecutionPolicy RemoteSigned
+
+    Get-Help Invoke-psake -Full
+
+        this will show you help and examples of how to use psake
+
+Step 3: Run some examples
+
+    CD .\examples
+
+    Invoke-psake
+
+        This will execute the "default" task in the "psakefile.ps1"
+
+    Invoke-psake .\psakefile.ps1 Clean
+
+        will execute the single task in the psakefile.ps1 script
+
+Step 4: Set your PATH variable
+
+If you wish to use the psake command from outside of the install folder, add the folder install directory to your PATH variable.
+
+Step 5: (With VS2017) Install the VSSetup dependency
+
+psake uses VSSetup to locate msbuild when using Visual Studio 2017. The VSSetup PowerShell module must be installed prior to compiling a VS2017 project with psake. Install instructions for VSSetup can be found here and here.

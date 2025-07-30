@@ -1,0 +1,70 @@
+
+dism /online /enable-feature /featurename:MicrosoftWindowsPowerShellRoot /all
+dism /online /enable-feature /featurename:MicrosoftWindowsPowerShell /all
+
+dism /online /enable-feature /featurename:NetFx3ServerFeatures /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:NetFx3 /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:MicrosoftWindowsPowerShell /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+
+dism /online /enable-feature /featurename:NetFx4ServerFeatures /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:NetFx4 /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:NetFx4Extended-ASPNET45 /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+
+dism /online /enable-feature /featurename:IIS-WebServerRole /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-WebServer /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-CommonHttpFeatures /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-Security /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-RequestFiltering /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-StaticContent /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-DefaultDocument /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-DirectoryBrowsing /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HttpErrors /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HttpRedirect /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-WebDAV /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ApplicationDevelopment /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-WebSockets /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ApplicationInit /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-NetFxExtensibility /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-NetFxExtensibility45 /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ISAPIExtensions /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ISAPIFilter /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ASPNET /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ASPNET45 /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ASP /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-CGI /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ServerSideIncludes /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HealthAndDiagnostics /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HttpLogging /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-LoggingLibraries /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-RequestMonitor /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HttpTracing /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-CustomLogging /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ODBCLogging /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-CertProvider /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-BasicAuthentication /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-WindowsAuthentication /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-DigestAuthentication /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ClientCertificateMappingAuthentication /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-IISCertificateMappingAuthentication /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-URLAuthorization /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-IPSecurity /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-Performance /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HttpCompressionStatic /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-HttpCompressionDynamic /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-WebServerManagementTools /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ManagementConsole /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-LegacySnapIn /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ManagementScriptingTools /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-ManagementService /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-IIS6ManagementCompatibility /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-Metabase /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-WMICompatibility /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-LegacyScripts /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-FTPServer /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-FTPSvc /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:IIS-FTPExtensibility /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+
+dism /online /enable-feature /featurename:WAS-WindowsActivationService /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:WAS-ProcessModel /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:WAS-NetFxEnvironment /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess
+dism /online /enable-feature /featurename:WAS-ConfigurationAPI /all /Source:WIM:E:\sources\install.wim:4 /LimitAccess

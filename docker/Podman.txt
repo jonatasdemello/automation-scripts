@@ -1,0 +1,69 @@
+Tutorial
+
+https://github.com/containers/podman/blob/main/docs/tutorials/README.md
+
+
+
+file:///C:/Program%20Files/RedHat/Podman/podman-for-windows.html
+
+https://github.com/containers/podman/releases
+
+podman --version
+podman info
+
+podman ps
+
+kubectl get pods
+
+podman machine init
+podman machine start
+
+podman machine ls
+podman machine stop
+podman machine set --rootful
+or
+podman machine set --rootful=false
+
+podman machine ssh sudo dnf upgrade -y
+
+
+podman run ubi8-micro date
+podman run --rm -d -p 8080:80 --name httpd docker.io/library/httpd
+curl http://localhost:8080/ -UseBasicParsing
+podman stop httpd
+
+
+
+Windows Style Paths:
+podman run --rm -v c:\Users\User\myfolder:/myfolder ubi8-micro ls /myfolder
+
+Unixy Windows Paths:
+podman run --rm -v /c/Users/User/myfolder:/myfolder ubi8-micro ls /myfolder
+
+Linux paths local to the WSL filesystem:
+podman run --rm -v /var/myfolder:/myfolder ubi-micro ls /myfolder
+
+
+wsl -d podman-machine-default
+
+wsl -d podman-machine-default enterns su user
+
+wsl -d podman-machine-default enterns systemctl status
+
+
+kubectl get pods
+
+
+# Podman
+winget install -e --id RedHat.Podman-Desktop
+
+# Run the following command to check the output returns the Podman version rather than the Docker version:
+$ docker info --format=json | jq -r .ServerVersion
+
+# Run the command to check that the Docker CLI context is set to the default value npipe:////./pipe/docker_engine.
+$ docker context list
+
+RUN dotnet pack -c Release --include-symbols --include-source --no-restore -p:PackageVersion=$BUILD_NUMBER
+
+
+

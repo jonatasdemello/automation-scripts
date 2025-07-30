@@ -1,0 +1,84 @@
+Web Automation
+
+UI.Vision
+	https://ui.vision/
+	https://addons.mozilla.org/en-CA/firefox/addon/rpa/
+	https://ui.vision/rpa/docs
+
+
+iMacros:
+	https://wiki.imacros.net/Main_Page
+	https://www.progress.com/imacros/browser/fx/welcome
+	https://addons.mozilla.org/en-CA/firefox/addon/imacros-for-firefox/
+
+
+Katalon:
+	https://addons.mozilla.org/en-CA/firefox/addon/katalon-automation-record/
+	https://katalon.com/katalon-recorder-ide
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+find and click
+#mat-radio-3 > label:nth-child(1) > div:nth-child(2) > span:nth-child(2)
+
+#mat-input-130
+#mat-input-154
+//*[@id="mat-input-130"]
+//*[@id="mat-input-130"]
+//*[@id="mat-input-154"]
+
+if value = 0
+set: 0.1
+
+# Click balance
+
+app-allocations-view.ng-star-inserted > app-weekly-view:nth-child(3) > mat-card:nth-child(1) > mat-card-content:nth-child(2) > div:nth-child(2) > div:nth-child(3) > button:nth-child(1)
+html.zmwtiiqqdv.idc0_337 body.theme app-root div main app-express-entry.ng-star-inserted app-allocations-view.ng-star-inserted app-weekly-view mat-card.mat-card.mat-focus-indicator.day-cell mat-card-content.mat-card-content.content div.action-btns div button.mat-focus-indicator.mat-tooltip-trigger.mat-icon-button.mat-button-base
+/html/body/app-root/div/main/app-express-entry/app-allocations-view/app-weekly-view/mat-card/mat-card-content/div/div[3]/button/span[1]/mat-icon
+
+
+# Click submit
+
+div.extra-actions-row:nth-child(29) > div:nth-child(1) > button:nth-child(1)
+/html/body/app-root/div/main/app-express-entry/app-allocations-view/app-weekly-view/mat-card/mat-card-content/app-allocation-entry-row/form/div[29]/div[1]/button
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+document.getElementById('mat-radio-3').click();
+
+document.getElementById('my-button').click();
+
+
+let total = 0;
+let target = 50;
+const clickAll = () => {
+  let count = 0;
+  let btns = document.querySelectorAll('.search-result__actions .search-result__actions--primary');
+  btns.forEach((btn) => {
+    count ++;
+    total ++;
+    setTimeout(() => {
+      btn.click();
+      setTimeout(() => {
+        let confirmations = document.querySelectorAll('.artdeco-modal__actionbar .artdeco-button--primary');
+        confirmations.forEach((cBtn) => { cBtn.click() });
+      },3000);
+    }, count * 30000);
+  });
+  if (total < target) {
+    setTimeout(() => {
+      let nextBtns = document.querySelectorAll('.artdeco-pagination__button--next');
+      nextBtns.forEach((nBtn) => { nBtn.click() });
+    }, (count + 1) * 30000);
+    setTimeout(() => {
+      clickAll();
+    }, (count + 2) * 30000);
+  }
+}
+clickAll();

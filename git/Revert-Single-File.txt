@@ -1,0 +1,19 @@
+Git and GitHub: How to Revert a Single File.
+
+git checkout [commit ID] -- path/to/file
+
+git checkout origin/master [filename]
+
+git commit -m 'commit message'
+
+
+git checkout master -- filename
+
+Note that the differences will be cached; so if you want to see the differences you obtained; use
+
+git diff --cached
+
+
+
+
+

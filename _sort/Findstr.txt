@@ -1,0 +1,36 @@
+Ctrl+F --> go to the Mark tab --> toggle Bookmark line --> Click Mark All.
+Select menu Search --> Bookmark --> Copy Bookmarked Lines.
+
+https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-xp/bb490907(v=technet.10)
+
+Findstr
+
+    Article
+    09/11/2009
+
+Searches for patterns of text in files using regular expressions.
+Syntax
+
+findstr [/b] [/e] [/l] [/r] [/s] [/i] [/x] [/v] [/n] [/m] [/o] [/p] [/offline] [/g:file] [/f:file] [/c:string] [/d:dirlist] [/a:ColorAttribute] [strings] [[Drive:][Path] FileName [...]]
+Parameters
+/b   : Matches the pattern if at the beginning of a line.
+/e   : Matches the pattern if at the end of a line.
+/l   : Uses search strings literally.
+/r   : Uses search strings as regular expressions. Findstr interprets all metacharacters as regular expressions unless you use /l.
+/s   : Searches for matching files in the current directory and all subdirectories.
+/i   : Specifies that the search is not to be case-sensitive.
+/x   : Prints lines that match exactly.
+/v   : Prints only lines that do not contain a match.
+/n   : Prints the line number before each line that matches.
+/m   : Prints only the file name if a file contains a match.
+/o   : Prints seek offset before each matching line.
+/p   : Skips files with non-printable characters.
+/offline   : Processes files with offline attribute set.
+/f: file   : Reads file list from the specified file.
+/c: string   : Uses specified text as a literal search string.
+/g: file   : Gets search strings from the specified file.
+/d: dirlist   : Searches a comma-delimited list of directories.
+/a: ColorAttribute   : Specifies color attributes with two hexadecimal digits.
+strings   : Specified text to be searched for in FileName.
+[ Drive : ][ Path ] FileName [...] : Specifies a file or files to search.
+/?   : Displays help at the command prompt.

@@ -1,0 +1,44 @@
+Powershell environment variable:
+
+$env:Path = "SomeRandomPath";             (replaces existing path)
+$env:Path += ";SomeRandomPath"            (appends to existing path)
+
+$env:Path
+
+$env:Path -split(";")
+
+
+PS> Get-PSProvider -PSProvider Environment
+PS> Get-ChildItem -Path Env:\
+PS> Set-Location -Path Env:\
+PS> Get-ChildItem -Path COMPUTERNAME
+PS> [System.Environment]::GetEnvironmentVariable('PATH','machine')
+PS> [System.Environment]::SetEnvironmentVariable('FOO', 'bar',[System.EnvironmentVariableTarget]::Machine)
+
+
+
+# show path
+$env:PSModulePath -split ";"
+
+# show var
+$Env:<variable-name>
+$Env:windir
+
+# set var
+$Env:<variable-name> = "<new-value>"
+$Env:Foo = 'An example'
+
+$Env:JAVA_HOME="C:\Progra~1\Java\jdk-18.0.1.1"
+$Env:JRE_HOME="C:\Progra~2\Java\jre1.8.0_333"
+
+Because an environment variable can't be an empty string, setting one to $null or an empty string removes it. For example:
+
+$Env:Foo = ''
+$Env:Foo | Get-Member -MemberType Properties
+
+[Environment]::SetEnvironmentVariable('Foo','')
+[Environment]::SetEnvironmentVariable('Foo','Bar')
+[Environment]::GetEnvironmentVariable('Foo')
+
+# get vars
+Get-ChildItem -Path Env:

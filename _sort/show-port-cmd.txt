@@ -1,0 +1,18 @@
+Checking which application is using a port:
+
+    Open the command prompt - start » run » cmd or start » All Programs » Accessories » Command Prompt.
+    Type netstat -aon | findstr '[port_number]'. Replace the [port_number] with the actual port number that you want to check and hit enter.
+    If the port is being used by any application, then that application’s detail will be shown. The number, which is shown at the last column of the list, is the PID  (process ID) of that application. Make note of this.
+    Type tasklist | findstr '[PID]'. Replace the [PID] with the number from the above step and hit enter.
+    You’ll be shown the application name that is using your port number.
+
+Checking which port is being used by a application:
+
+This is exactly the reverse of the above steps.
+
+    Open the command prompt - start » run » cmd or start » All Programs » Accessories » Command Prompt.
+    Type tasklist | findstr '[application_name]'. Replace the [application_name] with the application that you want to check (for example, apache) and hit enter.
+    Make note of the PID (second column) from the details shown.
+    Type netstat -aon | findstr '[PID]'. Replace the [PID] from the above step and hit enter.
+    You’ll be shown the application detail and the corresponding port to which it is listening.
+

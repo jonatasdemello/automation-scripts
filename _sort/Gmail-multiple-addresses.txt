@@ -1,0 +1,46 @@
+
+https://www.htstechtips.com/2010/09/24/multiple-google-email-addresses-one-gmail-account/
+
+https://www.youtube.com/watch?v=Ma6i510nPo4
+
+Using the @googlemail.com domain.
+Using the “dot” or period in your email name.
+Using the plus sign “+” at the end of your name and adding extra characters.
+Using the “@googlemail.com” Domain Name
+Let’s start with the use of the @googlemail.com domain name.
+With every Gmail account you actually get a second email address
+– one is the regular @gmail.com address while the second address has @googlemail.com as the domain.
+So Gmail will actually see myname@gmail.com as the same as myname@googlemail.com.
+All email messages that are sent to myname@googlemail.com will be delivered to your
+
+Using a Dot or Period in the Email name
+
+Another interesting facet of Gmail addresses is what is sometimes referred to as “Dot Blindness”.
+In an interesting twist Gmail does not recognize dots, ”.”or periods as characters in Google email address user names.
+This means that Gmail “sees” my.name@gmail.com or myna.me@gmail.com as the same address as myname@gmail.com.
+You can also use multiple “dots” in the username such as my.na.me@gmail.com.
+
+The same “dot blindness” also applies to email addresses using the @googlemail.com domain name
+with my.name@googlemail.com or my.na.me@googlemail.com being routed to the same Inbox as myname@gmail.com.
+
+Using the Plus Sign and Additional Characters
+The third trick for extending the use of your Gmail account is the ability to add extra characters to the end of your username by inserting a plus sign, “+” after your name.
+Google does not recognize these characters but Gmail search filters do.
+The characters after the plus sign can be either letters or numbers.
+So myname+abcde@gmail.com or myname+abcde@googlemail.com will end up in the same Inbox as myname@gmail.com.
+
+Test these out for yourself and see what works best for you.
+All the variations below are from the same Google email account and will all end up in the myname@gmail.com Gmail Inbox:
+
+myname@gmail.com
+myname@googlemail.com
+my.name@gmail.com
+my.name@googlemail.com
+my.na.me@gmail.com
+my.na.me@googlemail.com
+myname+abcde@gmail.com
+myname+123abc@gmail.com
+my.name+abcdefg78@gmail.com
+my.name+abcdefg78@googlemail.com
+
+

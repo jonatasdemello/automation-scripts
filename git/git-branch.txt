@@ -1,0 +1,32 @@
+
+Git branch
+https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches
+
+
+$ git checkout --track origin/newsletter
+
+git branch -vv
+
+
+git.exe checkout -b K5-3241 remotes/origin/K5-3241 --
+Branch 'K5-3241' set up to track remote branch 'K5-3241' from 'origin'.
+Switched to a new branch 'K5-3241'
+
+
+First, fetch the remote branches:
+
+ git fetch origin
+
+Next, checkout the branch you want. In this case, the branch we want is called “branchxyz.”
+
+ git checkout -b branchxyz origin/branchxyz
+
+Or you can use:
+
+ git branch branchxyz origin/branchxyz
+
+With newer versions, you can simply use:
+
+ git fetch
+
+ git checkout branchxyz

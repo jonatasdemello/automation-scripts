@@ -1,0 +1,32 @@
+
+Using git pull (and git pull origin master is no exception) will not only download new changes from the remote repository.
+It will also directly integrate them into your local HEAD branch.
+By default, this integration will happen through a "merge", but you can also choose a "rebase":
+
+$ git pull origin master --rebase
+
+If you don't want to integrate new changes directly, then you can instead use git fetch: this will only download new changes, but leave your HEAD branch and working copy files untouched.
+
+$ git fetch origin
+$ git fetch origin master
+
+
+a git pull is a combination of git fetch and a git merge.
+
+git pull = git fetch + git merge origin/branch
+
+There are different variations of 'git pull' which is discussed below:
+
+    `git pull origin master` fetches commits from the master branch of the origin remote (into the local origin/master branch), and then it merges origin/master into the branch you currently have checked out.
+    `git pull` only works if the branch you have checked out is tracking an upstream branch. For example, if the branch you have checked out tracks origin/master, `git pull` is equivalent to `git pull origin master`
+    `git pull origin/master` is invalid unless you have a remote called "origin/master". However, `git merge origin/master` is valid. (It is the second step of `git pull origin master` as described above.)
+
+
+
+git pull origin master will pull changes from the origin remote, master branch and merge them to the local checked-out branch.
+
+git pull origin/master will pull changes from the locally stored branch origin/master and merge that to the local checked-out branch. The origin/master branch is essentially a "cached copy" of what was last pulled from origin, which is why it's called a remote branch in git parlance. This might be somewhat confusing.
+
+You can see what branches are available with git branch and git branch -r to see the "remote branches".
+
+

@@ -1,0 +1,16 @@
+
+Setting your branch to exactly match the remote branch can be done in two steps:
+
+git fetch origin
+git reset --hard origin/master
+
+Update @2020 (if you have main branch instead of master in remote repo)
+
+git fetch origin
+git reset --hard origin/main
+
+If you want to save your current branch's state before doing this (just in case), you can do:
+
+git commit -a -m "Saving my work, just in case"
+git branch my-saved-work
+

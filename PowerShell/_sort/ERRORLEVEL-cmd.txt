@@ -1,0 +1,124 @@
+able 1 - Commands that not change the prior ERRORLEVEL value
+
+BREAK
+ECHO
+ENDLOCAL
+FOR      Not change the ERRORLEVEL by itself. See "Exit Code" below.
+IF       Not change the ERRORLEVEL by itself.
+PAUSE
+RD       Not change the ERRORLEVEL on errors, but the "Exit Code". See below.
+REM
+RMDIR    Same as RD.
+SET      Plain SET command (no arguments). See "Table 3" below.
+TITLE
+
+Table 2 - Commands that set ERRORLEVEL to 0 or 1 depending on result
+
+Command │ Set ERRORLEVEL = 0 when       │ Set ERRORLEVEL = 1 when
+────────┼───────────────────────────────┼─────────────────────────────────────────────────────────────
+CD      │Current directory was changed. │Directory not exists or is not accessible.
+CHDIR   │Same as CD.                    │
+COLOR   │Color was changed.             │Background and foreground colors are the same.
+COPY    │File(s) was processed.         │File not found or bad parameters given.
+DATE    │Date was changed or not given. │User has no admin privileges.
+DEL     │Almost always, excepting when: │Bad or no parameters given.
+DIR     │Same as COPY.                  │
+ERASE   │Same as DEL.                   │
+MD      │Directory was created.         │Directory could not be created.
+MKDIR   │Same as MD.                    │
+MKLINK  │Link was created.              │Link could not be created or bad parameters given.
+MOVE    │File(s) was moved/renamed.     │File not found, could not be moved/renamed or bad parameters.
+PUSHD   │Same as CD.                    │+ Bad switch given.
+REN     │Same as MOVE.                  │
+RENAME  │Same as MOVE.                  │
+SETLOCAL│New environment was created.   │Bad parameters given.
+TIME    │Time was changed or not given. │User has no admin privileges.
+TYPE    │Same as COPY.                  │
+VERIFY  │Right or no parameters given.  │Bad parameters given.
+VOL     │Volume label was displayed.    │Drive not found or bad parameters given.
+
+VERIFY is the command suggested by MS to set the ERRORLEVEL to 0 or 1; see the example in SETLOCAL /?.
+
+Table 3 - Commands that set the ERRORLEVEL on error; otherwise, not change it
+
+Command      │E│ Set ERRORLEVEL to = when
+─────────────┼─┼────────────────────────────────────────────────────────────────────────
+ASSOC        │*│1 = Extension associations could not be changed.
+CLS          │ │1 = Bad switch given.
+DPATH        │*│1 = Data path could not be established.
+FTYPE        │*│1 = File type associations could not be changed.
+GOTO label   │ │1 = Label not exist *in a subroutine* (equivalent to: EXIT /B 1).
+KEYS         │ │1 = Bad switch given.
+PATH         │*│1 = Path could not be changed.
+POPD         │ │1 = Bad switch given.
+PROMPT       |*│1 = Prompt could not be changed.
+SET var      │*│1 = No variable with such name exists.
+SET var=value│*│1 = Variable name start with "/" not enclosed in quotes.
+SET /P       │*│1 = Read an empty line or at end of file.
+SET /A       │*│1073750988 = Unbalanced parentheses, 1073750989 = Missing operand,
+             │ │1073750990 = Syntax error, 1073750991 = Invalid number,
+             │ │1073750992 = Number larger than 32-bits, 1073750993 = Division by zero.
+SHIFT        │ │1 = Bad switch given.
+
+The "E" column in Table 3 indicate those commands that change their behavior accordingly to the "Extensions" status as described in the corresponding documentation. When Extensions are enabled (the default) and these commands are placed in a file with .CMD extension instead of .BAT one, these commands set SETERRORLEVEL = 0 when they ends with no error, that is, when the conditions described in Table 3 are not present.
+
+Table 4 - Special cases
+
+CALL Table1     │If the called command is anyone of Table 1 (excepting FOR and IF): set ERRORLEVEL = 0.
+CALL subroutine │If the subroutine is called, not change prior ERRORLEVEL value;
+                │otherwise (subroutine not exists): set ERRORLEVEL = 1.
+EXIT /B, EXIT   │Not change prior ERRORLEVEL value.
+EXIT /B number  │Set ERRORLEVEL to given number.
+EXIT number     │Ends cmd.exe and set its returning ERRORLEVEL value to given number.
+START command   │If command is started, not change ERRORLEVEL; otherwise, set ERRORLEVEL = 9059.
+START /WAIT bat |When the started Batch file ends, set ERRORLEVEL = value from 'EXIT number' commmand.
+notExist        │If a non-existent command is entered for execution, set ERRORLEVEL = 9009.
+VER             │Set ERRORLEVEL = 0 almost always. If /? parameter is given, not change ERRORLEVEL.
+
+Exit Code management
+
+There are two ways to test the ERRORLEVEL value: via IF ERRORLEVEL / IF %ERRORLEVEL% command, or using the command && thenCmd when ERRORLEVEL is 0 || elseCmd when ERRORLEVEL is not 0 construct. However, certain particular commands and redirection errors returns a value that only works in the second case and is not reflected in the ERRORLEVEL; we may call "Exit Code" this value. When this Exit Code is not zero, it can be passed to the ERRORLEVEL executing any command of Table 1 in the elseCmd part. You may read further details on this matter at this post.
+
+Table 5 - Commands or features that set the Exit Code
+
+Feature      │ Set Exit Code to = when
+─────────────┼─────────────────────────────────────────────────────────────────────────
+command      │1 = Command not exist (when ERRORLEVEL = 9009).
+redirection  │1 = File not exists in "<", path not exists or access denied in ">" ">>".
+drive:       |1 = Drive unit not exists.
+POPD         |1 = No matching PUSHD was previously executed.
+RD           │1 = Bad switch given, 2 = Directory not found, 5 = Access denied,
+             │32 = Directory in use, 145 = Directory not empty.
+FOR /F       │1 = No data was processed.
+
+For example, to test if a redirection error happened, use this:
+
+command > C:\Path\that\does\not\exist\file.txt || rem
+if errorlevel 1 echo Previous redirection failed
+
+In this example the rem command is used to copy the Exit Code to the ERRORLEVEL, but any other internal command that preserve the ERRORLEVEL may be used (excepting FOR and IF).
+
+To test if a drive unit exists:
+
+U: || rem
+if errorlevel 1 echo Previous set current drive to U: unit failed
+
+More examples:
+
+rd c:\Some\directory 2> NUL || rem
+if %errorlevel% equ 0 (
+   echo Directory deleted
+) else if %errorlevel% equ 2 (
+   echo Directory not found
+) else if %errorlevel% equ 5 (
+   echo Can not access the directory, check rights
+) else if %errorlevel% equ 32 (
+   echo Can not delete current directory
+) else if %errorlevel% equ 145 (
+   echo Directory is not empty, use /S switch
+)
+
+
+(for /F "options" %%a in (input.txt) do echo %%a) || rem
+if errorlevel 1 echo Previous FOR didn't processed any value
+

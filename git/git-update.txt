@@ -1,0 +1,62 @@
+
+# will remove any locally saved remote branch refs for branches that no longer exist on origin
+git remote update origin --prune
+
+
+Step 1: From your project repository, bring in the changes and test.
+
+git fetch origin
+git checkout -b K5-3819 origin/K5-3819
+git merge master
+
+Step 2: Merge the changes and update on GitHub.
+
+git checkout master
+git merge --no-ff K5-3819
+git push origin master
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+git branch -m beta develop
+git fetch origin
+git branch -u origin/develop develop
+
+git branch -m beta develop
+git fetch origin
+git branch -u origin/develop develop
+git remote set-head origin -a
+
+#hotfix
+git pull
+git checkout develop
+git checkout -b hotfixMyFeature 0.4.627
+
+
+# git fix remote:
+git remote set-url origin <THE-URL-HERE>
+git remote set-url origin ssh://git@github.com/user/repo.git
+
+git remote rm origin
+git remote add origin git@github.com:user/repo.git
+git push origin master
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+rem git clean -fd
+rem git gc
+
+git checkout master
+git fetch
+git pull --progress -v --no-rebase --prune origin master
+git checkout -
+git merge master -m "merge from master"
+
+git checkout develop
+git fetch
+git pull --progress -v --no-rebase --prune origin develop
+git checkout -
+git merge develop -m "merge from develop"
+
+

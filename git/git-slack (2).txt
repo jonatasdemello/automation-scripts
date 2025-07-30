@@ -1,0 +1,169 @@
+Subscribe to notifications for a repository
+/github subscribe owner/repository
+Unsubscribe from notifications for a repository
+/github unsubscribe owner/repository
+Subscribe to notifications for repositories in an organization.
+/github subscribe owner
+Unsubscribe from notifications for repositories in an organization
+/github unsubscribe owner
+Subscribe to additional features and adjust the configuration of your subscription
+/github subscribe owner/repository reviews
+Unsubscribe from one or more additional features
+/github unsubscribe owner/repository reviews
+Subscribe to commits from a specific branch or a pattern of branches
+/github subscribe owner/repository commits:"mybranch/*"
+Unsubscribe from commits
+/github unsubscribe owner/repository commits
+Create required-label. Issues, Comments, PRs without that label will be ignored
+/github subscribe owner/repository +label:"my label"
+Remove required-label
+/github unsubscribe owner/repository +label:"my label"
+List all active subscriptions in a channel
+/github subscribe list
+List all active subscriptions with subscription features
+/github subscribe list features
+Close an issue
+/github close [issue link]
+Reopen an Issue
+/github reopen [issue link]
+Adjust settings for mute/unmute rich previews for links shared in this channel
+/github settings
+Show this help message
+/github help
+Create a new issue
+/github open owner/repository
+-------------------------------------------------------------------------------------------------------------------------------
+/github
+/github subscribe owner/repo
+
+/github subscribe list
+/github subscribe list features
+
+
+# keep only pulls, reviews
+/github unsubscribe Owner/repo issues, deployments, statuses, public, commits, releases
+
+/github subscribe Owner/repo pulls
+/github subscribe Owner/repo pulls, reviews
+
+/github subscribe list features
+
+-------------------------------------------------------------------------------------------------------------------------------
+https://github.com/Owner/
+-------------------------------------------------------------------------------------------------------------------------------
+
+https://github.com/integrations/slack#configuration
+
+
+
+@here, Hi everyone!
+I would like to kindly ask people to refrain from installing Slack apps that integrate with Github.
+The reason for that is because we are in a specific plan, which only allows 5000 github apis calls per hour.
+We had an issue some time ago where our PR's were being blocked or having to wait a long time to merge it in Jenkins.
+(Jenkins and Jira are already hooked to Github, and they are in my opinion of high importance...)
+Plus, there is a security concern here, giving access to our code to someone else.
+
+But fear not, we already have this one installed:
+
+https://slack.github.com/
+https://github.com/integrations/slack
+
+Thank you!
+
+
+Subscribing and Unsubscribing
+
+At this point, your Slack and GitHub user accounts are not linked. To link the two accounts, authenticate to GitHub using a /github slash command, /github signin.
+
+The /github slash command also accepts a subscribe argument that you can use to subscribe to an Organization or Repository's activity /github subscribe <organization>/<repository>.
+
+If you originally gave the app access to "All repositories" and you've created a new private repository on GitHub after installing the GitHub integration for Slack, the /github subscribe command will work automatically on your new repository. If you installed the app on a subset of repositories, the app will prompt you to install it on the new repository.
+
+The /github slash command also supports unsubscribe. To unsubscribe to notifications from a repository, use /github unsubscribe <organization>/<repository>
+
+/github subscribe owner/repo [feature]
+/github unsubscribe owner/repo [feature]
+
+These are enabled by default, and can be disabled with the /github unsubscribe owner/repo [feature] command:
+
+    issues - Opened or closed issues
+    pulls - New or merged pull requests, as well as draft pull requests marked "Ready for Review"
+    statuses - Statuses on pull requests
+    commits - New commits on the default branch (usually master)
+    deployments - Updated status on deployments
+    public - A repository switching from private to public
+    releases - Published releases
+
+These are disabled by default, and can be enabled with the /github subscribe owner/repo [feature] command:
+
+    reviews - Pull request reviews
+    comments - New comments on issues and pull requests
+    branches - Created or deleted branches
+    commits:all - All commits pushed to any branch
+    +label:"your label" - Filter issues, pull-requests and comments based on their labels.
+
+You can subscribe or unsubscribe from multiple settings at once.
+For example, to turn on activity for pull request reviews and comments:
+
+/github subscribe owner/repo reviews comments
+
+And to turn it back off:
+
+/github unsubscribe owner/repo reviews comments
+
+
+Subscribe to notifications for a repository:
+/github subscribe owner/repository
+
+Unsubscribe from notifications for a repository:
+/github unsubscribe owner/repository
+
+Subscribe to notifications for all repositories in an organization:
+/github subscribe owner
+
+Unsubscribe from notifications for an organization:
+/github unsubscribe owner
+
+Subscribe to additional features and adjust the configuration of your subscription (Learn more):
+/github subscribe owner/repository reviews,comments
+
+Unsubscribe from one or more subscription features:
+/github unsubscribe owner/repository commits
+
+Create required-label. Issues, Comments, PRs without that label will be ignored:
+/github subscribe owner/repository +label:my-label
+
+Remove required-label:
+/github unsubscribe owner/repository +label:my-label
+
+List all active subscriptions in a channel:
+/github subscribe list
+
+List all active subscriptions with subscription features:
+/github subscribe list features
+
+Close an issue:
+/github close [issue link]
+
+Reopen an Issue:
+/github reopen [issue link]
+
+Adjust your settings in this workspace:
+/github settings
+
+Show this help message:
+/github help
+
+Create a new issue:
+/github open owner/repository
+
+Trigger a deployment:
+/github deploy owner/repository
+
+List deployments of a repo:
+/github deploy owner/repository list
+
+
+
+/anon <your message>
+

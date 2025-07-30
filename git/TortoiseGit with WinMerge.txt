@@ -1,0 +1,22 @@
+TortoiseGit with WinMerge
+
+https://www.bricelam.net/2014/08/14/using-winmerge-with-tortoisegit.html
+
+Under Configure the program used for comparing different revisions of files, select External and type the following into the box.
+
+WinMergeU /r /e /x /u /wl %base %mine
+
+Next, select Merge Tool (on the left). Again, select External and type the following.
+
+WinMergeU /e /u %merged
+
+
+It's interesting use parameters "/dl %bname /dr %yname" to setup left and right window titles, respectively:
+
+WinMergeU /r /e /x /u /wl /dl %bname /dr %yname %base %mine
+
+/wl (left panel is read-only) parameter can be an issue If you love to "review" the modifications (by merging the right panel with the left one).
+I prefer this setup (without /wl, with /fr (focus on right panel)):
+
+WinMergeU /r /e /x /u /fr %base %mine
+

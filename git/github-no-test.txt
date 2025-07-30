@@ -1,0 +1,4 @@
+well, the "ghprb-plugin" has a 'hack' to avoid this
+
+If you add "[skip ci]" in PR title, it will not trigger builds when you push changes.
+

@@ -1,0 +1,12 @@
+
+az vm list-ip-addresses | select-string redis
+
+az vm list-ip-addresses
+
+az vm list-ip-addresses -g MyResourceGroup -n MyVm
+az vm list-ip-addresses --ids $(az vm list -g MyResourceGroup --query "[].id" -o tsv)
+
+az vm list-ip-addresses --ids $(az vm list -g *redis* --query "[].id" -o tsv)
+
+.GetType()
+https://docs.microsoft.com/en-us/cli/azure/vm?view=azure-cli-latest#az_vm_list_ip_addresses

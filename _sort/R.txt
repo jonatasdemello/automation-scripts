@@ -1,0 +1,5 @@
+https://community.chocolatey.org/packages/R.Project#install
+
+choco install r.project
+
+

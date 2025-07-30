@@ -1,0 +1,87 @@
+PS Editor
+https://4sysops.com/archives/psedit-edit-files-remotely-with-powershell/
+
+	File > New Remote PowerShell Tab
+	PSEdit .\*.ps1
+
+	I would like to point out that you can also open a new PS tab in PSEdit then run:
+
+	Enter-PSSession computername.company.com
+
+https://docs.microsoft.com/en-us/powershell/scripting/components/vscode/using-vscode-for-remote-editing-and-debugging?view=powershell-6
+
+	Run Open-EditorFile test.ps1 or psedit test.ps1 to open the remote test.ps1 file
+	The Open-EditorFile and psedit commands only work in the PowerShell Integrated Console created by the PowerShell extension for VSCode.
+
+https://codeandkeep.com/PowerShell-And-Vim/
+
+	Get-Module -Name PSReadline -ListAvailable
+
+	# Search for it
+	Find-Package -Name PSReadline
+
+	# install it with -Force to overwrite the older version if you have it
+	Install-Package -Name PSReadline -Force
+
+	Set-PSReadlineOption -EditMode vi -BellStyle None
+	# I like to also add -BellStyle 'None' because I hate the bell sound
+
+	#VIM
+	# This should download a file (gvim80-586.exe) to your Downloads folder
+	Invoke-WebRequest -Uri https://ftp.nluug.nl/pub/vim/pc/gvim80-586.exe -Outfile ~\Downloads\gvim80-586.exe
+
+	# Add these lines to your $PROFILE
+	New-Alias -Name vi -Value 'C:\Program Files (x86)\vim\vim80\vim.exe'
+	New-Alias -Name vim -Value 'C:\Program Files (x86)\vim\vim80\vim.exe'
+
+	# Include this if you like a vim command line experience
+	Set-PSReadlineOption -EditMode vi -BellStyle None
+
+Customize your vimrc file
+
+There should be a a file named "_vimrc" in your user directory. If there isn't you can go ahead and create it.
+
+$vimrc="~\_vimrc"
+# Make it if it's not already there
+if(!(Test-Path -Path $vimrc)){
+  New-Item -Path $vimrc -ItemType File
+}
+# Open it up in vi
+vi $vimrc
+
+Now I'm still relatively new with using Vim, but these are the settings that I have come accross that work well for me with PowerShell. The biggest problem for me was finding a color scheme that worked with PowerShell's color scheme.
+
+" Enable syntax highlighting
+syntax on
+
+" Change tabs to 2 spaces
+set expandtab
+set tabstop=2
+set shiftwidth=2
+
+" Automatically indent when starting new lines in code blocks
+set autoindent
+
+" Add line numbers
+set number
+
+" shows column, & line number in bottom right
+set ruler
+
+" Color scheme I found that works best with PowerShell
+colorscheme shine
+
+" helpful if using 'set ruler' and 'colorscheme shine', makes lineNumbers grey
+" Same example from http://vim.wikia.com/wiki/Display_line_numbers
+highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+
+" Disable bell sounds
+set noerrorbells visualbell t_vb=
+
+This is a start; hopefully you can build on this and improve on it.
+
+
+
+bash -c “vi filename.txt”
+bash -c “nano filename.txt”
+bash -c “vi /mnt/c/Users/username/Documents/filename.txt”

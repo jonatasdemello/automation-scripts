@@ -1,0 +1,41 @@
+
+git patch
+	https://medium.com/@groksrc/protip-how-to-split-large-branches-into-small-pull-requests-81d607660c05
+
+	Step 1: Create a patch against your base branch
+
+$ git diff master my_large_feature_branch > ../my_pr_patch
+
+Step 2: Checkout a new branch
+
+Create a new branch that will contain a subset of the changes in my_large_feature_branch
+
+$ git checkout master
+$ git checkout -b small_pr_one
+
+Step 3: Apply Changes Selectively
+
+Now apply the patch to your new small_pr_one branch. This will apply all of the changes from my_large_feature_branch to disk and allow you to stage things that can go individually.
+
+$ git apply ../my_pr_patch
+
+Once you’ve staged and committed whatever you want for small_pr_one it’s time to clean up.
+Step 4: Stash the Remaining Changes
+
+To stash everything that isn’t staged, including untracked files, run the following command.
+
+git stash --include-untracked --keep-index
+
+Now small_pr_one is clean and you can open a PR against it. Next move on to small_pr_two through small_pr_n until complete.
+Step 5: Repeat 3 & 4 Until Done
+
+If the next set of changes can be made independently then open small_pr_two against master. If you need what was in small_pr_one to keep going just branch from there.
+
+git checkout master
+git checkout -b small_pr_two
+
+You can use $ git stash show to list the remaining files in your stash. If you want to apply changes from the stash selectively you can use git checkout stash@{0} -- <your filename> to checkout an individual file from the stash. If you need to see a diff between what’s in the stash and your current branch run: git diff stash@{0} -- <your filename>
+
+
+https://unhashable.com/stacked-pull-requests-keeping-github-diffs-small/
+

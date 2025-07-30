@@ -1,0 +1,95 @@
+Collaboration tools
+-------------------------------
+todo:
+	https://todoist.com/features
+
+
+	https://www.notion.so/
+	https://miro.com/
+	https://trello.com/tour
+
+	https://monday.com/features/dashboards
+	https://www.proofhub.com/features
+	https://redbooth.com/features
+	https://milanote.com/product/remote-working
+	https://asana.com/pricing
+
+
+	https://www.notion.so/about
+
+	https://resources.workable.com/tutorial/collaboration-tools
+
+Communicate with your team
+
+People can’t collaborate if they don’t communicate. From instant messaging to video conferencing tools (the best alternative to face-to-face meetings), there are many options for team collaboration tools:
+
+
+1. Flowdock
+
+	Flowdock is a group and private chat platform. Its most interesting feature is its team inbox which aggregates notifications from other channels, like Twitter, Asana and customer support tools.
+
+2. GoToMeeting
+
+	GoToMeeting is an online video conferencing software that allows users to schedule meetings and share screens. It’s one of the most popular video tools with millions of users.
+
+3. Slack
+
+	Slack is a popular and well-crafted platform offering instant messaging, file transfers and powerful message search. It has many features and dozens of integrations with other tools like Trello and Intercom.
+
+4. WebEx
+
+	Cisco’s WebEx provides personalized video meeting rooms where users can to host and join meetings. People can use WebEx for team collaboration, webinars, training and customer support.
+
+Manage projects and tasks
+
+	Project management tools are critical. Who can coordinate effectively when they can’t monitor task progress or keep track of objectives?
+
+5. Asana
+
+	One of the most well-known project management tools, Asana allows users to assign tasks to other members, add followers to projects and monitor deadlines. It’s very useful as a to-do list or calendar for strategic planning.
+
+6. Dapulse
+
+	Dapulse is a collaboration tool that helps you communicate, set objectives and assign tasks. Its big advantage: it has a great visual design so it’s easy to understand and work with.
+
+7. ProofHub
+
+	ProofHub is a work management tool that offers a comprehensive suite of collaboration and project management functions. On this platform, you can organize files, plan and monitor projects and discuss with colleagues and stakeholders. ProofHub also lets you review and approve files through an online proofing tool.
+
+8. Redbooth
+
+	Redbooth is an easy-to-use project management tool. Its platform allows users to plan and collaborate through many functions from video conferencing to creating Gantt charts.
+
+9. Trello
+
+	Trello has an intriguing interface that resembles solitaire (you can even drag task cards across columns, just like you would playing cards). It’s easy to learn and works well for monitoring projects and assigning tasks. Trello also makes using Agile, Scrum and other project management frameworks easy.
+
+10. Wimi
+
+	Wimi offers users their own ‘unified workspaces’ where teams can manage projects and share files and calendars. You can control access in each workspace with a rights-based system. Wimi Drive, their file syncing software, helps you make the most out of cloud technology.
+
+11. Milanote
+
+	Milanote is one of the qualified tools that can be used for serving numerous purposes including blogging. Using this tool, you can organize creative projects and place them into excellent visual boards. It will provide you a feel like you’re working on the wall in a creative studio. Milanote would be a great fit too for designers who work remotely.
+
+
+A task isn’t always one person’s responsibility. Sometimes team members need to create together. These are the best collaboration tools:
+
+12. Codingteam
+
+	Coders can easily collaborate when writing their code through platforms like Codingteam. It offers a free ‘software forge’ that encourages visibility and collective code building.
+
+13. Igloo
+
+	Igloo is a company intranet that allows people to communicate and get work done. Its wiki allows colleagues to share information and ideas.
+
+14. Google Docs
+
+	Google needs no introduction. Google’s collaboration tools include its Docs and Sheets services, which are designed to allow teams to edit files at the same time and save all their changes automatically.
+
+15. Quip
+
+	Quip started off as a mobile app and released a desktop version later. Teams can import and work live on different file types. Edits are saved automatically and its chat, comment and checklist features make collaboration easy.
+
+
+

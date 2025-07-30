@@ -1,0 +1,13 @@
+Get a Windows 11 development environment
+
+https://developer.microsoft.com/en-us/windows/downloads/virtual-machines/
+
+The evaluation virtual machine includes:
+Windows 11 Enterprise (Evaluation)
+Visual Studio 2022 Community Edition with UWP, .NET Desktop, Azure, and Windows App SDK for C# workloads enabled
+Windows Subsystem for Linux 2 enabled with Ubuntu installed
+Windows Terminal installed
+Developer mode enabled
+
+https://aka.ms/windev_VM_hyperv
+Expiration date: October 23, 2024

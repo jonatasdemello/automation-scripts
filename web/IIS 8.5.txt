@@ -1,0 +1,188 @@
+Windows Server 2022 Datacenter edition
+21H2
+Image Version: 10.0.20348.1366
+
+Works with IIS 8.5 (Windows Server 2012 R2)
+
+IIS Anonymous Authentication
+
+N:\dotnetframework\dotnetfx.exe /t:c:\temp /c:"msiexec.exe /i c:\temp\netfx.msi REINSTALL=ALL ReinstallMODE=vomus"
+
+
+	get-windowsfeature | select Name | sort name
+
+	Get-WindowsOptionalFeature -Online | Select FeatureName | Sort FeatureName
+
+	dism.exe -online -get-features
+
+
+
+
+Get-WindowsFeature
+Get-WindowsFeature -Name Web-* | Install-WindowsFeature
+
+Install-WindowsFeature Net-Framework-Core -source \\network\share\sxs
+
+# 4
+Install-WindowsFeature Net-Framework-45-Core -source C:\Temp\dotnet-fx
+Install-WindowsFeature Net-Framework-45-ASPNET -source C:\Temp\dotnet-fx
+# 3.5
+Install-WindowsFeature Net-Framework-Core -source C:\Temp\dotnet-fx
+# or
+DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
+
+
+DISM /Online /Enable-Feature /FeatureName:IIS-ManagementService /All
+
+
+Install-WindowsFeature -Name Web-Server -Source \\server2\winsxs
+Install-WindowsFeature -Name Web-Mgmt-Tools
+Install-WindowsFeature -Name Web-Mgmt-Console
+
+Install-WindowsFeature -Name PowerShell
+Install-WindowsFeature -Name WAS
+
+
+Remove-WindowsFeature -Name Web-Mgmt-Console
+
+Remove-WindowsFeature -Name WAS
+Remove-WindowsFeature -Name Web-Server
+
+
+Get-WindowsFeature
+
+-Source "WIM:E:\sources\install.wim:4"
+Source:WIM:E:\sources\install.wim:4
+
+
+	Install-WindowsFeature NET-Framework-Core –Source E:\Sources\sxs
+
+	DISM /Online /Enable-Feature /FeatureName:NetFx3 /Source:E:\sources\sxs
+
+	Install-WindowsFeature NET-Framework-Core –Source \\ServerName\ShareName\sxs
+
+
+https://stackoverflow.com/questions/63459851/there-is-no-anonymous-authentication-on-fresh-install-iis-10-windows-server-201
+
+to list:
+	Get-WindowsFeature
+	Get-WindowsFeature -ComputerName Server1 -Credential contoso.com\user1
+	Get-WindowsFeature -Vhd D:\ps-test\vhd1.vhd
+	Get-WindowsFeature -Name AD*, Web*
+	Get-WindowsFeature -ComputerName Server01 | Where Installed
+	Get-WindowsFeature -ComputerName Server01 | Where InstallState -Eq Removed
+
+
+to remove them or there is a GUI tool, but its not where you expect.
+	Remove-WindowsFeature
+
+Uninstall-WindowsFeature
+
+Get-WindowsFeature | Where-Object -FilterScript { $_.Installed -Eq $TRUE } | Uninstall-WindowsFeature
+
+This example removes Web Server (IIS) from Server1, including all role services.
+The user account specified to perform the operation is contoso\user1.
+
+Uninstall-WindowsFeature -Name Web-Server -ComputerName Server1 -Credential contoso\user1
+Uninstall-WindowsFeature –Name Web-Server –IncludeManagementTools -Remove -Restart
+
+Install-WindowsFeature -name Web-Server -IncludeManagementTools
+Install-WindowsFeature –Name Web-Server –IncludeManagementTools -IncludeAllSubFeature
+
+
+
+Registering ASP.Net With IIS in Microsoft Windows Server 2008 / 2008 R2:
+	64-bit: <WindowsDir>\Microsoft.NET\Framework64\<version number>\
+	aspnet_regiis.exe -i
+	aspnet_regiis.exe -r
+
+Enable-WindowsOptionalFeature -Online -FeatureName "IIS-WebServerRole"
+Enable-WindowsOptionalFeature -Online -FeatureName "IIS-WebServer"
+
+
+Get-Service –Name AppHostSVC, W3SVC, WAS
+Get-Module -ListAvailable
+
+
+PS C:\> Import-Module –Name WebAdministration
+PS C:\> Get-Help *Web*
+PS C:\> Get-Command –Module WebAdministration
+
+PS C:\> Get-ChildItem -Path IIS:
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+IISRESET
+
+cd\Windows\Microsoft.NET\Framework64\v4.0.30319
+aspnet_regiis.exe -iru
+iisreset
+
+
+
+Get-ChildItem "C:\Program Files\dotnet\sdk" -Directory | Foreach {New-Item -Type File -Path "$($_.FullName).complete"}
+
+
+
+https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.ps1
+
+
+dotnet-install.ps1 -Channel 7.0 -Runtime aspnetcore
+dotnet-install.ps1 -Channel STS
+
+
+Import-Module WebAdministration
+Get-Website | Remove-Website
+
+
+Import-Module WebAdministration
+Get-Website | Remove-Website
+Get-ChildItem IIS:\AppPools\ | Select-Object Name | Foreach-Object {Remove-WebAppPool $_}
+
+
+# Get WebAdminstration module
+Add-PSSnapin WebAdministration -ErrorAction SilentlyContinue
+# Import module in order to run it
+Import-Module WebAdministration
+# Remove All Websites from IIS
+Remove-Website -Name *
+
+
+$appCmd = "C:\windows\system32\inetsrv\appcmd.exe"
+$sites = & $appcmd list site /text:name | where {$_ -eq "SITENAME"}
+$sites | %{ & $appCmd delete site $_}
+
+
+
+
+
+
+Enabling and disabling Anonymous authentication can also be performed programmatically using AppCmd or PowerShell.
+To set a default of enabling Anonymous authentication using AppCmd, execute the following line of code:
+
+Appcmd.exe set config -section:system.webServer/security/authentication/anonymousAuthentication /enabled:true
+
+Appcmd.exe list config -section:system.webServer/security/authentication/anonymousAuthentication /enabled:true
+Appcmd.exe set config -section:system.webServer/security/authentication/anonymousAuthentication /enabled:true
+
+
+.\appcmd.exe list config -section:system.webServer/security/authentication/anonymousAuthentication
+.\appcmd.exe set config -section:system.webServer/security/authentication/anonymousAuthentication /enabled:"true"
+
+
+appcmd.exe set config "www.website.com" -section:system.webServer/security/authentication/anonymousAuthentication /enabled:"True" /userName:"IUSR_website" /password:"<password>" /commit:apphost
+
+
+
+
+To enable Anonymous authentication for a specific website (or other location) using PowerShell, run the following command,
+setting the - location parameter appropriately:
+
+Set-WebConfigurationProperty - filter/system. WebServer/security/authentication/ anonymousAuthentication - name enabled - value true - location "Default Web Site"
+
+Enabling the use of a specific pool identity for requests, rather than relying on the default identity,
+can be configured by executing the following AppCmd command:
+
+Appcmd.exe set config - section:system. webServer/security/authentication/ anonymousAuthentication /userName:Username /password:<password>
+

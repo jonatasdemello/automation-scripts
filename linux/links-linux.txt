@@ -1,0 +1,177 @@
+
+xfce:
+$ sudo apt install tasksel
+$ sudo tasksel install xubuntu-desktop
+OR
+$ sudo tasksel install xubuntu-core
+
+
+If you need a vanilla version of Xfce desktop environment then execute the bellow command and select the lightdm display manager during the installation:
+
+$ sudo apt install xfce4
+
+sudo apt-get install xubuntu-desktop
+
+
+lxqt
+$ sudo apt install lxqt sddm
+
+sudo dpkg-reconfigure gdm
+sudo dpkg-reconfigure lightdm
+sudo dpkg-reconfigure gdm3
+
+
+#remove
+
+sudo apt-get remove --purge kubuntu-desktop kde-standard language-pack-kde-en
+sudo dpkg-reconfigure gdm
+sudo apt-install gdm
+
+sudo apt-get install gdm
+sudo dpkg-reconfigure gdm
+
+sudo dpkg-reconfigure gdm3
+
+systemctl stop lightdm
+systemctl start gdm3
+
+sudo dpkg-reconfigure lightdm
+
+
+ls -l /usr/share/xsessions/
+
+
+sudo apt --purge autoremove plasma-desktop-data plasma-workspace kded5 libkf5plasma5 libkf5runner5 kactivities
+
+sudo apt purge kwalletmanager
+
+1. Auto remove the plasma-desktop and kubuntu desktop.
+
+$ sudo apt remove plasma-desktop --autoremove
+$ sudo apt remove kubuntu-desktop --autoremove
+
+2. Remove all the remaining file
+
+$ sudo apt-get remove kde* --autoremove
+$ sudo apt-get remove plasma* --autoremove
+
+3. Reset the Splash Interface
+
+$ sudo update-alternatives --config default.plymouth
+
+
+.Now Disable the Simple Desktop Display Manager (SDDM).
+
+$ systemctl disable sddm
+$ systemctl stop sddm
+6. Enable the Gnome Display Manager (gdm3).
+
+$ sudo systemctl enable gdm3
+$ sudo systemctl start gdm3
+
+
+
+
+
+In most editors, a line of code can be commented out by pressing
+the Ctrl+/ hotkey for a single-line comment and
+something like Ctrl+Shift+/ – for multiline comments
+(select a piece of code and press the hotkey).
+For Mac, try Cmd instead of Ctrl and Option instead of Shift.
+
+
+
+Links:
+
+https://snapcraft.io/#
+
+https://tecadmin.net/install-geany-ide-ubuntu/
+
+
+list all the packages installed on your system:
+$ dpkg --list
+
+
+The apt-get remove command removes a software from your system but keeps the configuration files and any plugins and settings that you might have installed later. This helps in keeping the same settings when you want to reinstall the software.
+remove a software;
+
+$ sudo apt-get remove package-name
+
+remove an application completely from your system, also removing any personalized settings, it is best to use the apt-get purge command.
+
+$ sudo apt-get purge package-name
+
+in case you want to remove any dependencies such as the applications and libraries used by the software you once installed that is no longer in use, you can do some housekeeping through the following command:
+
+$ sudo apt-get autoremove
+
+
+RetroPie
+	https://retropie.org.uk/docs/Debian/
+
+sudo apt install -y git dialog unzip xmlstarlet
+git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
+sudo ./retropie_setup.sh
+emulationstation
+
+
+
+https://askubuntu.com/questions/1112555/is-apt-dist-upgrade-not-necessary-anymore
+
+sudo apt-get update # Fetches the list of available updates
+sudo apt-get upgrade # Strictly upgrades the current packages
+sudo apt-get dist-upgrade # Installs updates (new ones)
+
+$ cat /etc/apt/sources.list
+$ sudo apt update
+$ sudo apt-get update
+
+apt-get upgrade
+apt-get dist-upgrade
+
+
+apt-get upgrade
+	only upgrades the apps, tools, and utilities.
+	It does not install new Linux kernel of the OS.
+
+apt upgrade
+	upgrades the apps, tools, and utilities and installs new Linux kernel of the OS.
+	However, it never removes old packages.
+
+apt full-upgrade
+	upgrades the apps, tools, and utilities and installs new Linux kernel of the OS.
+	It also removes old packages if needed for the upgrade.
+
+apt full-upgrade does the same thing as apt-get dist-upgrade.
+
+
+Logitech F310
+----------------------------------
+sudo apt-get install jstest-gtk
+sudo modprobe xpad
+sudo gedit /etc/modules
+then add
+xpad
+
+
+Memory:
+
+sudo lshw -short -C memory
+
+sudo dmidecode --type 17
+
+
+Fonts:
+gnome-font-viewer
+sudo gnome-font-viewer
+
+sudo add-apt-repository ppa:font-manager/staging
+sudo apt-get update
+sudo apt-get install font-manager
+
+
+sudo apt install winetricks
+winetricks allfonts
+
+

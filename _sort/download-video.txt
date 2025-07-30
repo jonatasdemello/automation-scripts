@@ -1,0 +1,47 @@
+Arpita:
+	https://www.udemy.com/join/login-popup/?next=/course/70532-azure/learn/lecture/13361756#overview
+	https://www.udemy.com/share/101YwkB0Qbc1ZWRno=/
+
+	u: <user>
+	p: <pass>
+
+
+youtube-dl -u user@domain.com -p P@ssw0rd https://www.udemy.com/mta-windows-server-administration-fundamentals/
+
+youtube-dl -u <user> -p <pass> https://www.udemy.com/course/70532-azure/
+youtube-dl -u <user> -p <pass> -o '%(playlist)s/%(chapter_number)s - %(chapter)s/%(playlist_index)s. %(title)s.%(ext)s' https://www.udemy.com/course/70532-azure/
+
+Note for using YouTube-DL:
+
+    The URL Path should be formatted as follows (DO NOT Add /learn/v4/content, from the examples, to the URL Path).
+    https://www.udemy.com/<course_name>/
+
+To Download the Course Videos, w/ Folder & File Organization, use the following.
+    youtube-dl -u user@domain.com -p P@ssw0rd -o '%(playlist)s/%(chapter_number)s - %(chapter)s/%(playlist_index)s. %(title)s.%(ext)s' https://www.udemy.com/mta-windows-server-administration-fundamentals/
+
+If you get an Error, before you've finished Downloading the entire course, include the "--playlist-start" Command, to pickup where it left off.
+
+    NOTE: From experience, most Errors tend to be thrown during the "Downloading Webpage" or "Downloading JSON" Stages, just before Downloading the Video File, itself. Therefore, if an Error was thrown just after Video #20 has Finished Downloading and Video #21 is Starting Up, simply insert --playlist-start 21 at the end of the previous command, above (as seen in the example, below).
+    youtube-dl -u user@domain.com -p P@ssw0rd -o '%(playlist)s/%(chapter_number)s - %(chapter)s/%(playlist_index)s. %(title)s.%(ext)s' https://www.udemy.com/mta-windows-server-administration-fundamentals/ --playlist-start 21
+
+
+var videoLink = document.querySelector(".vjs-tech").getAttribute('src');
+window.open(videoLink,'_blank');
+
+
+var videoLink = document.querySelector(".vjs-tech").getAttribute('src');
+console.log(videoLink,'_blank');
+
+https://mp4-b.udemycdn.com/2019-01-22_05-38-50-82dfebf6c0a9e1ca07f9abf20b0744a7/WebHD_720p.mp4?secure=STzKlkwuD_oT1ef_WBptYQ%3D%3D%2C1600879682
+
+videos = [];
+function save() {
+	var videoLink = document.querySelector(".vjs-tech").getAttribute('src');
+	videos.push(videoLink);
+	window.open(videoLink,'_blank');
+	console.log(videoLink,'_blank');
+}
+
+var videoLink = document.querySelector(".vjs-tech").getAttribute('src');
+	videos.push(videoLink);
+	window.open(videoLink,'_blank');

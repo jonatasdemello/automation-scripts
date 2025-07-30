@@ -1,0 +1,109 @@
+"Unable to launch the IIS Express Web server." in Visual Studio
+
+
+netsh http add iplisten ipaddress=::
+
+netsh interface ipv4 show excludedportrange protocol=tcp
+
+
+netstat -ano | findstr <your port number>
+
+The port might be excluded, try this command to see if the range is blocked by something else:
+
+netsh interface ipv4 show excludedportrange protocol=tcp
+
+You can try to unblock the range from the start port for a number of ports (need Command Prompt with Administrator):
+
+netsh int ip delete excludedportrange protocol=tcp numberofports=<number of ports> startport=<start port>
+
+For me I couldn't unblock these, I just got "Access is denied", so I ended up having to pick another port for my site.
+
+
+netstat -ao | findstr <port_number_to_search_for>
+
+The a parameter tells netstat to display all connections and listening ports.
+The o parameter tells netstat to display the process ID associated with the connection.
+Running the above netstat command will produce output such as:
+
+C:\>netstat -ao | findstr 4026
+TCP    12.0.0.1:4026        cs-pc:4026         LISTENING       9544
+
+To fix this you must temporarily disable the winnat service, this is simply done by running this command (must be run as administrator)
+
+net stop winnat
+
+Start your docker services and start winnat again
+
+net start winnat
+
+
+
+I had a similar issue when trying to run a project from Visual Studio 2019 on Windows 10. The application could not start because the port was apparently being used by another process. However, the netstat command showed that the port was not being used by any application.
+
+After spending 2-days Googling I found a solution that worked for me. The port I was trying to use was in the excluded port range which you can see by running the command:
+
+netsh interface ipv4 show excludedportrange protocol=tcp
+
+The culprits that reserved these ports in my case were Docker for Windows and Hyper-V
+
+The Solution
+
+I uninstalled Docker (as I did not need it) and disabled Hyper-V. To disable Hyper-V: Go to: Control Panel-> Programs and Features-> Turn Windows features on or off. Untick Hyper-V and restart the computer.
+
+After the restart the command netsh interface ipv4 show excludedportrange protocol=tcp showed no ports reserved.
+
+I then added the port for my application to the excluded port range by running the following command from an elevated command line:
+
+netsh int ipv4 add excludedportrange protocol=tcp startport=50403 numberofports=1 store=persistent
+
+Then I reenabled Hyper-V (Docker can be reinstalled if needed) and restarted the computer again.
+
+Hyper-V now reserved its ports without interfering with the port used by my application: Reserved Port Ranges
+
+
+IIS Express
+https://docs.microsoft.com/en-us/iis/extensions/using-iis-express/running-iis-express-from-the-command-line
+
+cd \Program Files\IIS Express
+cd \Program Files (x86)\IIS Express
+
+iisexpress /?
+
+IIS Express Usage:
+------------------
+iisexpress [/config:config-file] [/site:site-name] [/siteid:site-id] [/systray:boolean]
+iisexpress /path:app-path [/port:port-number] [/clr:clr-version] [/systray:boolean]
+
+/config:config-file
+The full path to the applicationhost.config file. The default value is the IISExpress8\config\applicationhost.config file that is located in the user's Documents folder.
+
+/site:site-name
+The name of the site to launch, as described in the applicationhost.config file.
+
+/siteid:site-id
+The ID of the site to launch, as described in the applicationhost.config file.
+
+/path:app-path
+The full physical path of the application to run. You cannot combine this option with the /config and related options.
+
+/port:port-number
+The port to which the application will bind. The default value is 8080. You must also specify the /path option.
+
+/clr:clr-version The .NET Framework version (e.g. v2.0) to use to run the application. The default value is v4.0. You must also specify the /path option.
+
+/systray:boolean
+Enables or disables the system tray application. The default value is true.
+
+/trace:debug-trace-level
+Valid values are info or i,warning or w,error or e.
+
+Examples:
+iisexpress /site:WebSite1
+This command runs WebSite1 site from the user profile configuration file.
+
+iisexpress /config:c:\myconfig\applicationhost.config
+This command runs the first site in the specified configuration file.
+
+iisexpress /path:c:\myapp\ /port:80
+This command runs the site from c:\myapp folder over port 80.
+

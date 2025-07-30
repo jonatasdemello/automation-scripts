@@ -1,0 +1,22 @@
+Entity Framework
+	https://docs.microsoft.com/en-us/ef/core/cli/powershell
+	https://docs.microsoft.com/en-us/ef/core/cli/dotnet
+	https://docs.microsoft.com/en-us/ef/core/managing-schemas/scaffolding?tabs=dotnet-core-cli
+	https://docs.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli
+
+Install-Package Microsoft.EntityFrameworkCore.Tools
+
+Update-Package Microsoft.EntityFrameworkCore.Tools
+
+Get-Help about_EntityFrameworkCore
+
+Update-Database -Args '--environment Production'
+
+
+Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables "Blog","Post" -ContextDir Context -Context BlogContext -ContextNamespace New.Namespace
+
+
+Scaffold-DbContext "Server=.\SQLExpress\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+

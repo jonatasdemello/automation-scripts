@@ -1,0 +1,14 @@
+
+diff:
+C:\Program Files\WinMerge\WinMergeU.exe -e -ub -dl %bname -dr %yname %base %mine
+
+merge:
+C:\Program Files\WinMerge\WinMergeU.exe /e /ub /fr /wl /wm /dl %bname /dm %tname /dr %yname  %base %theirs %mine /o %merged /ar
+
+
+Winmerge
+
+C:\Users\jonatas\AppData\Local\Programs\WinMerge\WinMergeU.exe -e -ub -dl %bname -dr %yname %base %mine
+
+C:\Users\jonatas\AppData\Local\Programs\WinMerge\WinMergeU.exe /e /ub /fr /wl /wm /dl %bname /dm %tname /dr %yname  %base %theirs %mine /o %merged /ar
+

@@ -1,0 +1,23 @@
+
+netsh interface ipv4 show excludedportrange protocol=tcp
+
+Check port exclusion ranges whether your port falls under this list; if yes then use the following commands:
+
+net stop winnat
+net start winnat
+
+After Windows 10 Update KB4074588, some ports are reserved by Windows and applications cannot bind to these ports. 50067 is in the blocked range.
+
+You can use
+
+netsh interface ipv4 show excludedportrange protocol=tcp
+
+to list the reserved ranges.
+excludedportrange list
+
+
+net stop hns
+net start hns
+
+Failed to bind to address https://
+

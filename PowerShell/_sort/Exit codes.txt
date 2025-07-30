@@ -1,0 +1,401 @@
+
+    SS64
+    CMD
+
+How-to
+
+Errorlevel and Exit codes
+
+Almost all applications and utilities will set an Exit Code when they complete/terminate.
+
+The exit codes that are set do vary, in general a code of 0 (false) will indicate successful completion.
+By default SCCM will only consider 0 a success, but commands like Robocopy may return success Exit Codes from 0 to 7.
+
+The exit codes set by resource kit utilities are not always consistent, they can vary between machines with different Service packs/Resource kit updates applied. Some utilities will return negative numbers as an exit code.
+
+If you attempt to execute a non-existent command %ERRORLEVEL% will be set to 9009
+Detecting Errorlevels
+
+    There are two different methods of checking an errorlevel, the first syntax provides compatibility with old .bat batch files from the era of MS-DOS
+
+    The errorlevel is made available via IF ERRORLEVEL ... or the %ERRORLEVEL% variable.
+
+    IF ERRORLEVEL n statements should be read as IF Errorlevel >= number
+    i.e.
+    IF ERRORLEVEL 0 will return TRUE whether the errorlevel is 0, 1 or 5 or 64
+    IF ERRORLEVEL 1 will return TRUE whether the errorlevel is 1 or 5 or 64
+    IF NOT ERRORLEVEL 3 means if ERRORLEVEL is less than 3 ( 2, 1, 0 or a negative number).
+
+    To check for a specific error level N, you can use the following construct:
+
+    IF ERRORLEVEL N IF NOT ERRORLEVEL N+1 COMMAND
+
+    This is not very readable or user friendly and does not account for negative error numbers.
+
+    A preferred method of checking Errorlevels is to use the %ERRORLEVEL% variable:
+
+    IF %ERRORLEVEL% NEQ 0 Echo An error was found
+    IF %ERRORLEVEL% EQU 0 Echo No error found
+
+    IF %ERRORLEVEL% EQU 0 (Echo No error found) ELSE (Echo An error was found)
+    IF %ERRORLEVEL% EQU 0 Echo No error found || Echo An error was found
+
+    This allows you to trap errors that can be negative numbers, you can also test for specific errors:
+    IF %ERRORLEVEL% EQU 64 ...
+
+    When ending a subroutine, you can use EXIT /b N to set a specific ERRORLEVEL N.
+
+    Raymond Chen [MSFT] explains: ERRORLEVEL is not the same as the %ERRORLEVEL% environment variable.
+
+Error level vs Exit code
+
+    When an external command is run by CMD.EXE, it will detect the executable's Return or Exit Code and set the ERRORLEVEL to match. In most cases the ERRORLEVEL will be the same as the Exit code, but there are some cases where they can differ.
+
+    An Exit Code can be detected directly with redirection operators (Success/Failure ignoring the ERRORLEVEL) this can often be more reliable than trusting the ERRORLEVEL which may or may not have been set correctly.
+
+Old style .bat Batch files vs .cmd Batch scripts.
+
+    There is a key difference between the way .CMD and .BAT batch files set errorlevels:
+
+    A .BAT batch script running the 'new' internal commands: APPEND, ASSOC, PATH, PROMPT, FTYPE and SET will only set ERRORLEVEL if an error occurs. So if you have two commands in the batch script and the first fails, the ERRORLEVEL will remain set even after the second command succeeds.
+
+    There is little consistency in the ERRORLEVELs raised by different commands which makes debugging a problem .BAT script more difficult than an equlvalent .CMD script.
+    A .CMD batch script will set/reset the ERRORLEVEL after every command that you run [source] Mark Zbikowski (MSFT).
+
+    Here's an example script with an error check after each command:
+
+    command1
+    if %errorlevel% EQU 0 (echo OK ) Else ( Echo ERROR FAILED &color CF )
+    command2
+    if %errorlevel% EQU 0 (echo OK ) Else ( Echo ERROR FAILED &color CF )
+
+    A .CMD batch file running the above will display an error after the command that fails.
+    A .BAT batch file running the above will display an error after the command that fails and also for every subsequent test.
+
+Even in the CMD shell, some commands don't follow the rules
+
+    Even though a CMD batch script should set or reset ERRORLEVEL after every command, there are a few exceptions:
+
+    Commands that do NOT affect the ERRORLEVEL:
+    BREAK, ECHO, ENDLOCAL, FOR, IF, PAUSE, REM, RD/RMDIR, TITLE
+
+    Commands that will set but not clear an ERRORLEVEL:
+    CLS, GOTO, KEYS, POPD, SHIFT
+
+    Commands that set an Exit Code but not the ERRORLEVEL:
+    RD/RMDIR
+
+    Commands that set an ERRORLEVEL but not the Exit Code (SO explanation):
+    MD/MKDIR
+
+Set or Force an exit code
+
+    You can make a batch file return a non-zero exit code by using the EXIT command.
+
+    Exit 0
+    Exit /B 5
+
+    To force an ERRORLEVEL of 1 to be set without exiting, run a small but invalid command like COLOR 00 or run (CALL) which does nothing other than set the ERRORLEVEL to 1.
+
+    To clear the ERRORLEVEL back to 0, run (call ), which does nothing except set the ERRORLEVEL to 0.
+
+    You should never attempt to SET the %ERRORLEVEL% because that will create a user variable named %ERRORLEVEL% which then takes precedence over the internal pseudo variable %ERRORLEVEL%.
+    You can clear any such user variable with the following two commands at the start of your script, but really the best practice is to never set a variable with that name in the first place:
+    Set "errorlevel=1"
+    Set "errorlevel="
+
+PowerShell
+
+    In PowerShell $? contains True if last operation succeeded and False otherwise.
+
+    The exit code of the last Win32 executable execution is stored in the automatic variable $LASTEXITCODE
+
+    To read exit codes (other than 0 or 1) launch the PowerShell script and return the $LASTEXITCODE in a single line like this:
+
+    powershell.exe -noprofile C:\scripts\script.ps1; exit $LASTEXITCODE
+
+“I’d rather wake up in the middle of nowhere than in any city on earth” ~ Steve McQueen
+
+Related:
+
+Robocopy exit codes
+Conditional Execution - if command1 succeeds then execute command2
+HowTo: Error Handling in a batch file
+List of ERRORLEVEL values set by internal cmd.exe commands - Stackoverflow /Aacini.
+ERRORLEVEL is not %ERRORLEVEL% - The old new thing blog.
+
+
+Copyright © 1999-2021 SS64.com
+Some rights reserved
+
+
+
+
+
+    SS64
+    CMD
+
+How-to
+
+How-to: Redirection
+
+   command > filename        Redirect command output to a file
+
+   command >> filename       APPEND into a file
+
+   command < filename        Type a text file and pass the text to command
+
+   commandA  |  commandB     Pipe the output from commandA into commandB
+
+   commandA &  commandB      Run commandA and then run commandB
+   commandA && commandB      Run commandA, if it succeeds then run commandB
+   commandA || commandB      Run commandA, if it fails then run commandB
+
+   commandA && commandB || commandC
+                             If commandA succeeds run commandB, if it fails commandC
+
+Success and failure are based on the Exit Code of the command.
+In most cases the Exit Code is the same as the ErrorLevel
+
+Numeric handles:
+
+STDIN  = 0  Keyboard input
+STDOUT = 1  Text output
+STDERR = 2  Error text output
+UNDEFINED = 3-9 (In PowerShell 3.0+ these are defined)
+
+When redirection is performed without specifying a numeric handle, the default is 1, i.e. '>' will not redirect error messages.
+
+   command 2> filename       Redirect any error message into a file
+   command 2>> filename      Append any error message into a file
+  (command)2> filename       Redirect any CMD.exe error into a file
+   command > file 2>&1       Redirect errors and output to one file
+   command > fileA 2> fileB  Redirect output and errors to separate files
+
+   command 2>&1 >filename    This will fail!
+
+Redirect to NUL (hide errors)
+
+   command 2> nul            Redirect error messages to NUL
+   command >nul 2>&1         Redirect error and output to NUL
+   command >filename 2> nul  Redirect output to file but suppress error
+  (command)>filename 2> nul  Redirect output to file but suppress CMD.exe errors
+
+Any long filenames must be surrounded in "double quotes".
+A CMD error is an error raised by the command processor itself rather than the program/command.
+
+Redirection with > or 2> will overwrite any existing file.
+
+You can also redirect to a printer with > PRN or >LPT1
+Multiple commands on one line
+
+    In a batch file the default behaviour is to read and expand variables one line at a time, if you use & to run multiple commands on a single line, then any variable changes will not be visible until execution moves to the next line. For example:
+
+     SET /P _cost="Enter the price: " & ECHO %_cost%
+
+    This behaviour can be changed using SETLOCAL EnableDelayedExpansion
+
+Creating a new file
+
+    Create empty files using the NUL device:
+
+    Type NUL >EmptyFile.txt
+    or
+    Copy NUL EmptyFile.txt
+
+To prevent the > and < characters from causing redirection, escape with a caret: ^> or ^<
+
+Redirect multiple lines by bracketing a set of commands:
+
+(
+  Echo sample text1
+  Echo sample text2
+) > c:\logfile.txt
+
+Exit Codes
+
+    If the filename or command is not found then redirection will set an Exit Code of 1
+
+Unicode
+
+    The CMD Shell can redirect ASCII/ANSI (the default) or Unicode (UCS-2 le) but not UTF-8.
+    This can be selected by launching CMD /A or CMD /U
+
+    With the default settings a UCS-2 file can be converted by redirecting it (note it's the redirection not the TYPE/MORE command that makes the encoding change)
+    TYPE unicode.txt > asciifile.txt
+
+    European characters like ABCàéÿ will usually convert correctly, but others like £¥ƒ€ will become random extended ASCII characters: œ¾Ÿ?
+
+Pipes and CMD.exe
+
+    When a command is piped with '| batch_command ' this will instantiate a new CMD.exe instance, in effect running:
+
+    C:\Windows\system32\cmd.exe /C /S /D "batch_command"
+
+    This has several side effects:
+    Any newline (CR/LF) characters in the batch_command will be turned into & operators. (see StackOverflow)
+    If the batch_command includes any caret escape characters ^ they will need to be doubled up so that the escape survives into the new CMD shell.
+
+    Starting a new CMD shell also has a small (likely unnoticable) effect on performance.
+
+    For example, this syntax works, but would fail if the second or subsequent (piped) lines were indented with a space:
+    @Echo Off
+    echo abc def |^
+    find "abc" |^
+    find "def"> outfile.txt
+
+    Multi-line single commands with lots of parameters, can be indented as in this example:
+
+    Echo abc def ^
+      ghi jkl ^
+      mno pqr
+
+When redirecting the output of DIR to a file, you may notice that the output file (if in the same folder) will be listed with a size of 0 bytes. The command interpreter first creates the empty destination file, then runs the DIR command and finally saves the redirected text into the file.
+
+The maximum number of consecutive pipes is 2042
+
+Examples:
+
+   DIR >MyFileListing.txt
+
+   DIR /o:n >"Another list of Files.txt"
+
+   DIR C:\ >List_of_C.txt 2>errorlog.txt
+
+   DIR C:\ >List_of_C.txt & DIR D:\ >List_of_D.txt
+
+   ECHO y| DEL *.txt
+
+   ECHO Some text ^<html tag^> more text
+
+   COPY nul empty.txt
+
+   MEM /C >>MemLog.txt
+
+   Date /T >>MemLog.txt
+
+   SORT < MyTextFile.txt
+
+   SET _output=%_missing% 2>nul
+
+   FIND /i "Jones" < names.txt >logfile.txt
+
+   (TYPE logfile.txt >> newfile.txt) 2>nul
+
+“Stupidity, outrage, vanity, cruelty, iniquity, bad faith, falsehood,
+we fail to see the whole array when it is facing in the same direction as we” ~ Jean Rostand (French Historian)
+
+Related:
+
+conIN$ and conOUT$ behave like stdin and stdout, or 0 and 1 streams but only with internal commands.
+SORT - Sort input.
+CMD Syntax
+TYPE - Display the contents of one or more text files.
+Successive redirections explained (1>&3 ) - Stack Overflow.
+Equivalent PowerShell: Redirection - Spooling output to a file, piping input.
+Equivalent bash command (Linux): Redirection - Spooling output to a file, piping input.
+
+
+Copyright © 1999-2021 SS64.com
+Some rights reserved
+
+
+
+    SS64
+    PowerShell
+
+How-to
+
+How-to: Redirection
+
+  command >  filename     # Redirect command output to a file (overwrite)
+
+  command >> filename     # APPEND into a file
+
+  command 2> filename     # Redirect Errors from operation to a file(overwrite)
+
+  command 2>> filename    # APPEND errors to a file
+
+  command 2>&1            # Add errors to results
+
+  command 1>&2            # Add results to errors
+
+  command | command       # This is the basic form of a PowerShell Pipeline
+
+In PowerShell 3.0+
+
+  command 3> warning.txt  # Write warning output to warning.txt
+
+  command 4>> verbose.txt # Append verbose.txt with the verbose output
+
+  command 5>&1            # Writes debug output to the output stream
+
+  command *> out.txt      # Redirect all streams (output, error, warning, verbose, and debug) to out.txt
+
+Numeric handles:
+
+STDIN  = 0  Keyboard input
+STDOUT = 1  Text output
+STDERR = 2  Error text output
+WARNING = 3 Warning output
+VERBOSE = 4 Verbose output
+DEBUG  = 5 Debug output
+INFO   = 6 Information output (PowerShell 5.0+)
+
+When redirection is performed without specifying a numeric handle, the default is 1, i.e. '>' will not redirect error messages.
+
+In PowerShell 5.0+ an Error stream 6 was added for information, it is also used for the Host output.
+This means that host output can be supressed by redirecting 6>
+
+  command 6>$null
+
+Multiple redirections can be done on one line, so to redirect error and warning messages to null:
+
+  command 2>$null 3>$null
+
+In PowerShell you must redirect only the commands that will output string data:
+
+if ($demo -eq $null) {Echo 'result'} >demo.txt #this will fail
+if ($demo -eq $null) {Echo 'result' >demo.txt} #this will work
+
+Redirecting output to Null (to discard the output from a cmdlet) can be done with out-null, but a far faster method is redirecting to the $null automatic variable:
+
+PS C:\> get-childitem > $null
+
+In PowerShell it is not possible to redirect the output of an entire session (so Powershell.exe .... >filename.txt won't work) however a very similar text output can be produced using the Start-Transcript cmdlet.
+
+Raw .Net method calls are a special case, to redirect them, place in a scriptblock then use & (CALL) and redirect any errors to $null:
+
+& {[System.Math]::Sqrt('notanumber')} 2>$null
+
+The text files produced by PowerShell are by default in Unicode (UTF16), if you need a different encoding, use Out-File instead of the redirection operator.
+
+Examples
+
+PS C:\> Get-ChildItem c:\windows\system >> "c:\my logs\text1.txt"
+
+PS C:\> Get-ChildItem c:\windows\system | Out-File text2.txt -encoding ASCII
+
+PS C:\> Start-Transcript -path c:\docs\Text3.txt
+        ...
+PS C:\> Stop-Transcript
+
+“Most variables can show either an upward trend or a downward trend, depending on the base year chosen” ~ Thomas Sowell
+
+Related PowerShell Cmdlets:
+
+Preference Variables - Determine which commands will produce output (Output streams 1 - 6).
+Out-Host - Send the pipelined output to the host.
+Out-String - Send objects to the host as a series of strings.
+Write-Host - Display text on screen (does not wrap lines).
+Tee-Object - Send input objects to two places.
+Out-Default - Set the destination of default output, use this to redirect commands that write directly to the console, bypassing all streams.
+Start-Transcript - Start a transcript of a command shell session.
+Stop-Transcript - Stop the transcription process.
+Windows CMD equivalent: Redirection in CMD
+
+
+Copyright © 1999-2021 SS64.com
+Some rights reserved
+
+

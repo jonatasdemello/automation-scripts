@@ -1,0 +1,5 @@
+
+git checkout develop
+git pull origin develop
+git checkout -
+git merge develop -m "merge from develop"

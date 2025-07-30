@@ -1,0 +1,120 @@
+Time server
+
+godzilla.local
+
+w32tm /resync [/computer:<computer>] [/nowait] [/rediscover]
+
+w32tm /config /manualpeerlist:godzilla.local /syncfromflags:manual /reliable:yes /update
+
+w32tm /config /syncfromflags:DOMHIER /update
+net stop w32time && net start w32time
+
+
+w32tm /unregister
+net stop w32time
+w32tm /register
+net start w32time
+w32tm /config /syncfromflags:domhier /update
+net stop w32time
+net start w32time
+then check
+w32tm /query /source
+w32tm /query /configuration
+
+
+"w32tm /resync /force"
+-------------------------------------------------------------------------------------------------------------------------------
+Windows Time:
+
+
+To configure a client computer or a member server to sync time from the domain, run the following command:
+
+w32tm /config /syncfromflags:domhier /update
+
+And then stop and restart the time service by running:
+
+net stop w32time && net start w32time
+
+
+
+https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings
+https://learn.microsoft.com/en-us/azure/virtual-machines/windows/time-sync
+
+Press Windows key + X and select Command prompt(Admin).
+
+Type each one of the command below and press enter.
+
+net stop w32time
+w32tm /unregister
+w32tm /register
+net start w32time
+w32tm /resync
+
+Restart the computer to test the issue again.
+
+W32tm.exe is used to configure Windows Time service settings.
+It can also be used to diagnose problems with the time service.
+W32tm.exe is the preferred command line tool for configuring, monitoring, or troubleshooting the Windows Time service.
+
+
+
+time.windows.com
+
+w32tm /config /manualpeerlist:"time.windows.com" /syncfromflags:manual /update
+w32tm /config /manualpeerlist:time.windows.com,0x1 /syncfromflags:manual /reliable:yes /update
+w32tm /config /manualpeerlist:time.windows.com,0x01 /syncfromflags:manual /reliable:yes /update
+w32tm /config /update /manualpeerlist:"0.pool.ntp.org,0x8 1.pool.ntp.org,0x8 2.pool.ntp.org,0x8 3.pool.ntp.org,0x8" /syncfromflags:manual
+
+w32tm /config /syncfromflags:domhier /update
+
+net stop w32time
+net start w32time
+
+
+w32tm /config /manualpeerlist:"time.windows.com,0x8 clock.adatum.com,0x2" /syncfromflags:manual /update
+
+
+W32tm /query /status /verbose
+w32tm /query /source
+
+
+If you haven’t re-registered the time service earlier, you can include the method together with this one using the following commands:
+
+    w32tm /unregister
+    net stop w32time
+    w32tm /register
+    net start w32time
+    w32tm /config /manualpeerlist:"time.windows.com" /syncfromflags:manual /reliable:yes /update
+    net stop w32time
+    net start w32time
+
+CHKDSK /R
+sfc /scannow
+
+
+Check if you have UDP port 123 open between ntp server and ntp clients
+Try configure service manually "w32tm /config /manualpeerlist:[server],0x8 /syncfromflags:MANUAL /reliable:yes /update" -- > flag "0x8" force normal "client" request and not "symmetric active" requests, then w32tm /config /update.
+
+Additional commands to trobleshoot (also look for IMPORTANT event viewer events
+net time /querysntp
+net stop w32time
+w32tm /unregister
+w32tm /register
+W32tm /resync /rediscover
+net start w32time
+
+
+w32tm /unregister
+net stop w32time
+w32tm /register
+net start w32time
+w32tm /config /syncfromflags:domhier /update
+net stop w32time
+net start w32time
+
+then check
+
+w32tm /query /source
+w32tm /query /configuration
+
+

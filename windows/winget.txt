@@ -1,0 +1,68 @@
+
+winget uninstall –id 9MSSGKG348SP
+
+
+winget install --id Git.Git -e --source winget
+
+winget source reset --force
+winget source update
+winget source update --verbose-logs
+
+winget upgrade
+
+
+Git
+https://github.com/microsoft/winget-cli
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Add-AppxPackage -Path https://cdn.winget.microsoft.com/cache/source.msix
+
+Install-Module -Name Microsoft.WinGet.Client
+
+Get-AppxPackage microsoft.desktopappinstaller
+
+Remove-AppPackage Microsoft.DesktopAppInstaller_xxxxx
+
+Microsoft.Widget.Source_8wekyb3d8bbwe.msix
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Updating source: winget...
+Cancelled
+
+
+Logs:
+%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir
+
+Logs
+C:\Users\jonatas\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir
+
+Msg:[D:\a\_work\1\s\external\pkg\src\AppInstallerRepositoryCore\Microsoft\PreIndexedPackageSourceFactory.cpp(66)\WindowsPackageManager.dll!00007FFE82C9F7F6: (caller: 00007FFE82C9BC47) Exception(6) tid(3194) 80190193 Forbidden (403).
+
+
+renamed:
+C:\Users\jonatas\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\Microsoft.Winget.Source_8wekyb3d8bbwe.old
+
+"C:\Users\jonatas\AppData\Local\Microsoft\WinGet.old"
+
+
+
+
+
+
+
+App execution aliases
+
+The App Installer did not automatically add the PATH environment variable.
+You should add the path environment variable.
+The value to add is "%userprofile%\AppData\Local\Microsoft\WindowsApps".
+You can verify this by running %LOCALAPPDATA%\Microsoft\WindowsApps\winget from a command-prompt
+or & "$env:LOCALAPPDATA\Microsoft\WindowsApps\winget" from a powershell.
+If the command runs then, but not before, then you very likely have a missing PATH environment component.
+
+
+Get the PackageFullName of your installed App Installer package (PowerShell): Get-AppxPackage Microsoft.DesktopAppInstaller | Select Name, PackageFullName.
+Add-AppxPackage -register "C:\Program Files\WindowsApps\{PackageFullName}\appxmanifest.xml" -DisableDevelopmentMode (where {PackageFullName} is the info from the previous point).
+Toggle the App Execution Alias for winget, again (see above).
+

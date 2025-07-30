@@ -1,0 +1,5 @@
+Quartz.NET
+
+https://www.quartz-scheduler.net/documentation/quartz-3.x/quick-start.html
+
+https://github.com/quartznet/quartznet/tree/main/src/Quartz.Examples

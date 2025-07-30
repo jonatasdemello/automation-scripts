@@ -1,0 +1,231 @@
+C# Performance
+https://medium.com/@joni2nja/how-i-boosted-3-3-minutes-slow-asp-net-mvc-5-web-app-startup-to-3-seconds-e5ea166f9bce
+https://medium.com/@joni2nja/friends-dont-let-friends-swallow-nullreferenceexception-acd949833d70
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+using System.Diagnostics;
+// ...
+Stopwatch sw = new Stopwatch();
+sw.Start();
+// ...
+sw.Stop();
+Console.WriteLine("Elapsed={0}",sw.Elapsed);
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+public static TimeSpan Time(Action action)
+{
+    Stopwatch stopwatch = Stopwatch.StartNew();
+    action();
+    stopwatch.Stop();
+    return stopwatch.Elapsed;
+}
+
+    void func1()
+    {
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
+        func1();
+        sw.Stop();
+        Console.Write(sw.Elapsed);
+
+        sw.Restart();
+        func2();
+        sw.Stop();
+        Console.Write(sw.Elapsed);
+    }
+
+-------------------------------------------------------------------------------------------------------------------------------
+TelemetryConfiguration  - ApplicationInsights - App Insights
+
+As explained in the question not deploying or deploying an ApplicationInsights.config without <instrumentationkey>key</instrumentationkey> block events from being generated. You can then put the instrumentation key in code (only on release in my case)
+
+#if !DEBUG
+    Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = "instrumentation key";
+#endif
+
+
+#if DEBUG
+	Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.DisableTelemetry = true;
+#endif
+
+However adding the following to Configure() in Startup.cs did the job;
+
+if (_env.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    TelemetryConfiguration.Active.DisableTelemetry = true;
+    TelemetryDebugWriter.IsTracingDisabled = true;
+}
+
+	Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.DisableTelemetry = true;
+	Microsoft.ApplicationInsights.Extensibility.Implementation.TelemetryDebugWriter.IsTracingDisabled = true;
+
+
+
+protected void Application_Start()
+{
+    DisableApplicationInsightsOnDebug();
+    // do the other stuff
+}
+
+/// <summary>
+/// Disables the application insights locally.
+/// </summary>
+[Conditional("DEBUG")]
+private static void DisableApplicationInsightsOnDebug()
+{
+    TelemetryConfiguration.Active.DisableTelemetry = true;
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Prefix
+https://docs.stackify.com/docs/prefix-configure-iis-express
+
+
+logs
+https://weblog.west-wind.com/posts/2018/Dec/31/Dont-let-ASPNET-Core-Default-Console-Logging-Slow-your-App-down#summary
+
+
+
+Logging levels are incremental so Trace logs everything, Warning logs Warning, Error and Critical, and None logs... well none.
+
+    Trace
+    Debug
+    Information
+    Warning
+    Error
+    Critical
+    None
+
+So far so good.
+
+What if you have no applicationsettings.json and no other configuration overrides?
+In this case the default is Information meaning a lot of logging happens to Console and this is how I ended up with this post.
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  }
+}
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  }
+}
+
+public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+                WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+
+.ConfigureLogging((Action<WebHostBuilderContext, ILoggingBuilder>) ((hostingContext, logging) =>
+      {
+        logging.AddConfiguration((IConfiguration) hostingContext.Configuration.GetSection("Logging"));
+        logging.AddConsole();
+        logging.AddDebug();
+        logging.AddEventSourceLogger();
+      }))
+
+
+[ApiController]
+public class ValuesController : ControllerBase
+{
+    public ILogger<ValuesController> Logger { get; }
+
+    public ValuesController(ILogger<ValuesController> logger)
+    {
+        Logger = logger;
+    }
+
+    // GET api/values
+    [HttpGet]
+    public string  Get()
+    {
+        Logger.LogInformation("Hello World In Values Controller");
+        return "Hello World " + DateTime.Now;
+    }
+}
+
+The T in ILogger<T> provides a logging context that is shown on log messages so you can decide on whether to use a local or more global scope. ILogger has a number of methods to log the various logging levels like LogInformation() above or LogError(), LogCritical() and so on.
+
+If the default logging setup provided by the WebHostBuilder doesn't suit you you can clear everything out and configure your own logging stack from scratch by doing something like the following in your Startup.ConfigureServices() method:
+
+csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogging(config =>
+    {
+        // clear out default configuration
+        config.ClearProviders();
+
+        config.AddConfiguration(Configuration.GetSection("Logging"));
+        config.AddDebug();
+        config.AddEventSourceLogger();
+
+        if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
+        {
+        	config.AddConsole();
+        }
+    });
+
+    ...
+}
+
+There are no config.RemoveProviderXXX() functions - once created the logging configuration has to be cleared and effectively rebuilt completely, and since the default config sets this up, any changes pretty much require this type of code.
+
+
+
+
+
+
+
+https://stackoverflow.com/questions/46053175/c-sharp-async-await-with-without-awaiting-fire-and-forget
+
+
+
+I have the following code:
+
+    static async Task Callee()
+    {
+        await Task.Delay(1000);
+    }
+
+    static async Task Caller()
+    {
+        Callee(); // #1 fire and forget
+        await Callee(); // #2 >1s
+        Task.Run(() => Callee()); // #3 fire and forget
+        await Task.Run(() => Callee()); // #4 >1s
+        Task.Run(async () => await Callee()); // #5 fire and forget
+        await Task.Run(async () => await Callee()); // #6 >1s
+    }
+
+    static void Main(string[] args)
+    {
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        Caller().Wait();
+        stopWatch.Stop();
+        Console.WriteLine($"Elapsed: {stopWatch.ElapsedMilliseconds}");
+        Console.ReadKey();
+    }
+
+    #1 Starts the asynchronous method on the current thread. Ignores all results (including exceptions).
+    #2 Starts the asynchronous method on the current thread. Asynchronously waits for it to complete. This is the standard way of calling asynchronous code.
+    #3 Starts the asynchronous method on a thread pool thread. Ignores all results (including exceptions).
+    #4 Starts the asynchronous method on a thread pool thread. Asynchronously waits for it to complete.
+    #5 Exactly the same as #3.
+    #6 Exactly the same as #4.

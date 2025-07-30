@@ -1,0 +1,120 @@
+Failed to register URL "http://localhost:52031/" for site "Project.Services" application "/". Error description: The process cannot access the file because it is being used by another process. (0x80070020)
+
+Failed to register URL "http://localhost:52031/" for site "Project.Services" application "/". Error description: Access is denied. (0x80070005)
+
+
+Failed to register URL http://localhost: for site application "/". Error description: The process cannot access the file because it is being used by another process. (0x80070020)
+
+
+Failed to register URL http://localhost: for site application "/". Error description: Access is denied. (0x80070005)
+
+Failed to register URL "http://localhost:52031/" for site "Project.Services" application "/". Error description: Access is denied. (0x80070005)
+
+IIS Express
+Cannot start the website because administrative privileges are required to bind to hostname or port.
+
+
+Open Windows Task Manager and kill the
+Microsoft.VisualStudio.Web.Host.exe*32 process,
+
+for adding that on Win10, the process is
+Microsoft.VsHub.Server.HttpHost.exe
+
+
+o disable it, type services.msc in command prompt,
+then right click and disable Internet Connection Sharing.
+
+
+ListenOnlyList in for the ip address "::" (yes, that is just two colons)
+in HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\HTTP\Parameters.
+The fix is to run the following command from an admin cmd prompt:
+
+	netsh http add iplisten ipaddress=::
+
+
+https://stackoverflow.com/questions/23502327/unable-to-launch-the-iis-express-web-server-failed-to-register-url-access-is-d
+
+https://programmingflow.com/2015/08/28/solved-iis-express-failed-to-register-url-access-is-denied.html
+
+> netsh http add iplisten ipaddress=::
+
+netsh http add iplisten ipaddress=::
+
+
+netsh http show urlacl
+
+netsh http delete urlacl url=http://*:62940/
+
+netsh http add urlacl url=http://localhost:62940/ user=Everyone
+
+
+
+
+
+netsh http delete urlacl url=http://localhost:62940/
+
+... then ...
+
+netsh http add urlacl url=http://*:62940/ user=everyone
+
+and restart your site. It should work.
+
+
+
+netsh http add urlacl url=http://*:62940/ user=everyone
+
+netsh http delete urlacl url=http://+:15099/
+
+
+
+
+TL;DR
+
+Run the following command from an Administrative command prompt:
+
+> netsh http add iplisten ipaddress=::
+
+
+
+I got the same issue when running my application from Visual Studio 2019 on Windows 10.
+After some time googling and trying various proposed solutions without success,
+I determined that the "Access Denied" error was a result of the port number my application uses (50403) falling in an "excluded port range".
+
+You can view the excluded port ranges with the following command:
+
+netsh interface ipv4 show excludedportrange protocol=tcp
+
+After some more time googling I found that the two most likely culprits that create these exclusion ranges are Docker and Hyper-V.
+Docker was not installed on my computer but Hyper-V was.
+
+My Solution
+
+    Disable Hyper-V: Control Panel-> Programs and Features-> Turn Windows features on or off. Untick Hyper-V
+    Restart the computer.
+    Add the port you are using to the port exclusion range:
+	netsh int ipv4 add excludedportrange protocol=tcp startport=50403 numberofports=1 store=persistent
+    Reenable Hyper-V
+    Restart the computer
+
+I added the port I am using to the exclusion list to ensure that I won't get this problem again after reenabling Hyper-V.
+After Step 4 and 5 when I viewed the excluded port range I can see that Hyper-V reserved a port range starting with the next port after my port.
+
+
+
+
+netsh http add iplisten IPAddress
+
+Examples
+
+add iplisten address=fe80::1
+add iplisten address=1.1.1.1
+add iplisten address=0.0.0.0
+add iplisten address=::
+
+netsh http show urlacl
+netstat -ba
+
+
+
+
+

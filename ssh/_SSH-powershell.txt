@@ -1,0 +1,6 @@
+https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core?view=powershell-7
+
+The New-PSSession, Enter-PSSession, and Invoke-Command cmdlets now have a new parameter set to support this new remoting connection.
+
+(Get-Command New-PSSession).ParameterSets.Name
+

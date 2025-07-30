@@ -1,0 +1,28 @@
+
+If your text is pure text, without any specific frame, you may perform this useful S/R, in Regular expression mode ( updated 07/14/16 ) :
+SEARCH = ^\h+|\h+$|(\h+) and REPLACE = (?1\x20), which :
+
+    Deletes any leading or trailing horizontal blank character ( either a Space, a Tabulation or a No-Break space )
+
+    Normalizes any, other, range of consecutive horizontal blank characters to an unique SPACE character ( \x20 )
+
+
+If you want a STRICT splitting way, use, in regular expression search mode, the S/R, below :
+
+SEARCH = .{40}(?!\R) and REPLACE = $0\r\n
+
+=>Single words, exceeding 40 characters long, are split and paragraphs are wrapped, after, exactly, 40 characters !
+
+
+
+Now, you may prefer a “light” wrapping, that DOES NOT split words. So the splitting process will occur BETWEEN words ONLY !
+
+In that case, use, in regular expression search mode, the S/R, below :
+
+SEARCH = (.{1,40})(\h+\R?|\R) and REPLACE = \1\r\n
+
+=> This time, single words, exceeding 40 characters long are NOT split and paragraphs of text are wrapped, between words. However, all resulting lines of text, after the five test lines, still, have, at the most, 40 characters.
+
+
+With the S/R, SEARCH = (.{1,40})(\h+\R?|\R) and REPLACE = \1\r\n, we get the wrapped text, below :
+

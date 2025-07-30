@@ -1,0 +1,239 @@
+sc query state= all to find a complete list.
+If the computer in question is remote, you should use
+sc \\computername query state= all.
+
+sc qc service_name. To stop a particular service from running on a computer,
+use sc \\computername stop service_name.
+And if you have to start a service on a computer,
+you can use sc \\computername start service_name.
+
+Another query command that can come in handy if,
+for example, you have to see the results of a security audit is auditpol /get /category:*.
+With this command, you can ask for and establish audit settings on a local computer.
+To see the same results in CSV format you can use auditpol /get /category:* /r.
+
+sc query type= service > "%userprofile%\Desktop\ServicesList.txt"
+
+Get-Service | Where Status -eq "Running" | Out-GridView
+
+
+For instance, you can use the Get-Service cmdlet, filter the status on the word Running, and then output to the GridView, by using the following command:
+
+Get-Service | Where Status -eq "Running" | Out-GridView
+
+This will generate a list of the Running Services, and another window will open to show the result.
+
+To retrieve information about Stopped Services on a remote computer, and output it to GridView, use -ComputerName parameter, as shown below:
+
+Get-Service -ComputerName RemoteComputerName | Where Status -eq "Stopped" | Out-GridView
+
+To export the list of Windows Services, use the following command:
+
+Get-Service | Where-Object {$_.Status -eq "Running"} | Out-File -filepath "$Env:userprofile\Desktop\ServicesList.txt"
+
+This will save the list as a text file on your Desktop.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Get-Service | Format-Table -Auto
+
+To Enable a Service, type the command below you want into the PowerShell console and hit Enter:
+
+Note: Substitute the ServiceName placeholder in each of the commands with the actual service name you want to enable or disable.
+
+(Automatic (Delayed Start))​
+
+Set-Service -Name "ServiceName" -StartupType AutomaticDelayedStart​
+
+OR​
+
+(Automatic)​
+
+Set-Service -Name "ServiceName" -StartupType Automatic​
+
+OR​
+
+(Manual)​
+
+Set-Service -Name "ServiceName" -StartupType Manual​
+
+To Enable and Start a Service, type the command below you want into the PowerShell console and hit Enter:
+
+(Automatic (Delayed Start))​
+
+Set-Service -Name "ServiceName" -StartupType AutomaticDelayedStart -Status Running​
+
+OR​
+
+(Automatic)​
+
+Set-Service -Name "ServiceName" -StartupType Automatic -Status Running​
+
+OR​
+
+(Manual)​
+
+Set-Service -Name "ServiceName" -StartupType Manual -Status Running
+
+To Stop and Disable a Service, type the command below into the PowerShell console and hit Enter:
+
+Set-Service -Name "ServiceName" -StartupType Disabled -Status Stopped​
+
+    Exit PowerShell when done.
+
+Enable or Disable Services using Command Prompt
+
+Enable, Disable, Start, Stop, or Restart Services-Command Prompt
+
+To enable or disable Services using Command Prompt in Windows 11/10, do the following:
+
+    Press Windows key + X to open Power User Menu.
+    Tap A on the keyboard to open Windows Terminal in admin/elevated mode.
+    Select Command Prompt.
+    In the CMD prompt console, type or copy and paste in the command below and hit Enter to check the current state of all Services:
+
+sc queryex state=all type=service
+
+To Enable a Service, type the command below you want into the CMD prompt console and hit Enter:
+
+Note: Substitute the ServiceName placeholder in each of the commands with the actual service name you want to enable or disable.
+
+(Automatic (Delayed Start))​
+
+sc config "ServiceName" start=delayed-auto
+
+OR​
+
+(Automatic)​
+
+sc config "ServiceName" start=auto​
+
+OR​
+
+(Manual)​
+
+sc config "ServiceName" start=demand​
+
+To Enable and Start a Service, type the command below you want into the CMD prompt console and hit Enter:
+
+(Automatic (Delayed Start))​
+
+sc config "ServiceName" start=delayed-auto && sc start "ServiceName"
+
+OR​
+
+(Automatic)​
+
+sc config "ServiceName" start=auto && sc start "ServiceName"
+
+OR​
+
+(Manual)​
+
+sc config "ServiceName" start=demand && sc start "ServiceName"
+
+To Stop and Disable a Service, type the command below into the CMD prompt console and hit Enter:
+
+sc stop "ServiceName" && sc config "ServiceName" start=disabled​
+
+    Exit Command Prompt when done.
+
+Start, Stop, Restart Services using PowerShell, Task Manager, Net Command & CMD
+
+You must be signed in as an administrator to start, stop, or restart service. Also, you will not be able to start a disabled service until you enable the service.
+Start, Stop, or Restart Services using PowerShell
+
+To Start, Stop, or Restart Services in PowerShell in Windows 11/10, do the following:
+
+    Open PowerShell (Windows Terminal) in admin/elevated mode.
+
+To Start a Service, type the command below you want into the PowerShell console and hit Enter:
+
+Note: Substitute the ServiceName and DisplayName placeholder in each of the commands with the actual service name and display name respectively for the Service you want to Start, Stop, or Restart.
+
+Start-Service -Name "ServiceName"​
+
+OR​
+
+Start-Service -DisplayName "DisplayName"​
+
+To Stop a Service, type the command below you want into the PowerShell console and hit Enter:
+
+Stop-Service -Name "ServiceName"​
+
+OR​
+
+Stop-Service -DisplayName "DisplayName"
+
+To Restart a Service, type the command below you want into the PowerShell console and hit Enter:
+
+Restart-Service -Force -Name "ServiceName"​
+
+OR​
+
+Restart-Service -Force -DisplayName "DisplayName"
+
+    Exit PowerShell when done.
+
+Start, Stop, or Restart Services in Task Manager
+
+Enable, Disable, Start, Stop, or Restart Services-Task Manager
+
+To Start, Stop, or Restart Services in Task Manager in Windows 11/10, do the following:
+
+    Open Task Manager.
+    Click/tap on the Services tab.
+    Now, right-click or press and hold on a Service.
+    Click/tap on Start, Stop, or Restart.
+
+Note: Start will only be available if the service status is currently stopped. Stop and Restart will only be available if the service status is currently running.
+
+    Exit Task Manager when done.
+
+Start, Stop, or Restart Services using Net Command
+
+To Start, Stop, or Restart Services using Net Command in Windows 11/10, do the following:
+
+    Open Windows Terminal in admin/elevated mode.
+    Select Command Prompt or PowerShell.
+
+To Start a Service, type the command below you want into the console and hit Enter:
+
+Note: Substitute the ServiceName and DisplayName placeholder in each of the commands with the actual service name and display name respectively for the Service you want to Start, Stop, or Restart.
+
+net start ServiceName​
+
+OR​
+
+net start "DisplayName"
+
+To Stop a Service, type the command below you want into the console and hit Enter:
+
+net stop ServiceName​
+
+OR​
+
+net stop "DisplayName"
+
+    Exit Windows Terminal when done.
+
+Start, Stop, or Restart Services using Command Prompt
+
+To Start, Stop, or Restart Services using Command Prompt in Windows 11/10, do the following:
+
+    Open Windows Terminal in admin/elevated mode.
+    Select Command Prompt.
+
+To Start a Service, type the command below into the CMD prompt console and hit Enter:
+
+Note: Substitute the ServiceName placeholder in each of the commands with the actual service name for the Service you want to Start, Stop, or Restart.
+
+sc start ServiceName
+
+To Stop a Service, type the command below into the CMD prompt console and hit Enter:
+
+sc start ServiceName
+
+    Exit Command Prompt when done.
+
+

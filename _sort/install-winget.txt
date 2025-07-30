@@ -1,0 +1,230 @@
+# gpupdate
+Updating policy...
+
+Computer Policy update has completed successfully.
+
+The following warnings were encountered during computer policy processing:
+
+Windows failed to apply the MDM Policy settings. MDM Policy settings might have its own log file. Please click on the "More information" link.
+User Policy could not be updated successfully. The following errors were encountered:
+
+The processing of Group Policy failed. Windows could not determine if the user and computer accounts are in the same forest. Ensure the user domain name matches the name of a trusted domain that resides in the same forest as the computer account.
+
+To diagnose the failure, review the event log or run GPRESULT /H GPReport.html from the command line to access information about Group Policy results.
+
+
+# GPRESULT /H GPReport.html
+INFO: The user "jm" does not have RSoP data.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------
+Git:
+
+
+I opened TortoiseGit > Settings > Network and in section SSH client: I changed ssh.exe instead of TortoiseGitPlink.exe. Now it works fine.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+install
+
+winget install -e --id SumatraPDF.SumatraPDF
+
+winget install -e --id Microsoft.WindowsTerminal
+winget install -e --id WinMerge.WinMerge
+
+winget install --id Git.Git -e --source winget
+
+
+
+winget search Microsoft.PowerShell
+winget install --id Microsoft.Powershell --source winget
+winget install --id Microsoft.Powershell.Preview --source winget
+
+App
+https://apps.microsoft.com/store/detail/app-installer/9NBLGGH4NNS1
+
+
+Appx-Package -Path "X:\Path\to\File.Appx"
+Appx-Package -Path "D:\Appx\Microsoft.VCLibs.140.00_14.0.30704.0_x86__8wekyb3d8bbwe.Appx"
+
+get-appxpackage *installer* | select Name, Dependencies | fl
+
+
+Get-AppXPackage | Remove-AppxPackage
+
+Get-AppXPackage * | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+Get-AppXPackage -allusers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+get-appxpackage | sort-object -Property PackageFullName | select packagefullname | out-gridview
+
+
+Reinstall
+
+Get-AppxPackage -allusers | foreach {Add-AppxPackage -register "$($_.InstallLocation)\appxmanifest.xml" -DisableDevelopmentMode}
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Microsoft.VCLibs.140.00.UWPDesktop_14.0.30704.0_arm__8wekyb3d8bbwe.appx
+Microsoft.VCLibs.140.00.UWPDesktop_14.0.30704.0_arm64__8wekyb3d8bbwe
+Microsoft.VCLibs.140.00.UWPDesktop_14.0.30704.0_x64__8wekyb3d8bbwe.appx
+Microsoft.VCLibs.140.00.UWPDesktop_14.0.30704.0_x86__8wekyb3d8bbwe.appx
+
+Appx-Package -Path "C:\domain\WindowsTerminal\Microsoft.VCLibs.140.00.UWPDesktop_14.0.30704.0_x64__8wekyb3d8bbwe.appx"
+
+The winget command line tool is only supported on Windows 10 1709 (build 16299) or later at this time.
+The winget tool will not be available until you have logged into Windows as a user for the first time,
+triggering Microsoft Store to register Windows Package Manager as part of an asynchronous process.
+If you have recently logged in as a user for the first time and find that winget is not yet available,
+you can open PowerShell and enter the following command to request this winget registration:
+
+Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+
+
+$ProgressPreference='Silent'
+Invoke-WebRequest -Uri https://github.com/microsoft/winget-cli/releases/download/v1.3.2691/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+
+
+ls *.appx | Add-AppxPackage
+ls *.msixbundle | Add-AppxPackage
+
+
+Visit the following website:
+
+https://store.rg-adguard.net/
+
+
+Select Retail (or the appropriate branch accordingly), and click the generate button.
+
+https://www.microsoft.com/en-us/p/microsoft-store/9wzdncrfjbmp
+
+As the Microsoft Store app depends on .NET Framework, .NET Runtime, Microsoft.UI.Xaml, and VC Libs, download the latest packages of each item listed
+
+
+Add-AppxPackage Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.Appx
+Add-AppxPackage Microsoft.NET.Native.Runtime.1.7_1.7.27422.0_x64__8wekyb3d8bbwe.Appx
+Add-AppxPackage Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.Appx
+Add-AppxPackage Microsoft.UI.Xaml.2.7_7.2208.15002.0_x64__8wekyb3d8bbwe.Appx
+Add-AppxPackage Microsoft.VCLibs.140.00.UWPDesktop_14.0.30704.0_x64__8wekyb3d8bbwe.Appx
+Add-AppxPackage Microsoft.VCLibs.140.00_14.0.30704.0_x64__8wekyb3d8bbwe.Appx
+Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+
+
+
+
+
+Add-AppxPackage : Deployment failed with HRESULT: 0x80073D19, An error occurred because a user was logged off.
+Windows cannot install package Microsoft.DesktopAppInstaller_1.18.2691.0_x64__8wekyb3d8bbwe because this
+package depends on a framework that could not be found. Provide the framework "Microsoft.UI.Xaml.2.7" published
+by "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US", with neutral or x64
+processor architecture and minimum version 7.2109.13004.0, along with this package to install. The frameworks
+with name "Microsoft.UI.Xaml.2.7" currently installed are: {}
+NOTE: For additional information, look for [ActivityId] c816e320-5c5a-0004-cf3f-17c85a5cd901 in the Event Log
+or use the command line Get-AppPackageLog -ActivityID c816e320-5c5a-0004-cf3f-17c85a5cd901
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Get-AppXPackage *WindowsStore* -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+Get-AppXPackage * -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+Get-AppxPackage -allusers Microsoft.WindowsStore | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+Add-AppxPackage -Path "C:\Path\File.Appx"
+
+
+https://apps.microsoft.com/store/detail/app-installer/9NBLGGH4NNS1
+
+get-appxpackage *installer*
+
+
+
+Get-AppxPackage Microsoft.WindowsStore
+
+Get-AppXPackage | Remove-AppxPackage
+Get-AppXPackage | Reset-AppxPackage
+
+Reset-AppxPackage -Package publisher.package1_1.0.0.0_neutral__8wekyb3d8bbwe
+
+
+Get-AppxPackage -allusers Microsoft.WindowsStore | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+Get-ProvisionedAppXPackage -Online|Select DisplayName
+
+Get-AppxPackage -allusers | foreach {Add-AppxPackage -register "$($_.InstallLocation)\appxmanifest.xml" -DisableDevelopmentMode}
+
+
+https://social.technet.microsoft.com/wiki/contents/articles/37943.how-to-reinstall-and-re-register-all-the-built-in-apps-in-windows-10-creator-update.aspx
+
+https://www.winhelponline.com/blog/restore-windows-store-windows-10-uninstall-with-powershell/
+
+
+Visit the following website:
+https://store.rg-adguard.net/
+
+The above third-party site can generate download links (to app installers) for the chosen app.
+These are direct download links pointing to the official Microsoft servers.
+
+On the above page, paste the following link in the URL text box. The following is the Microsoft Store app’s official link.
+
+https://www.microsoft.com/en-us/p/microsoft-store/9wzdncrfjbmp
+
+Add-AppxPackage -Path "C:\Path\filename.Appx"
+
+get-appxpackage | sort-object -Property PackageFullName | select packagefullname | out-gridview
+
+
+
+Microsoft.NET.Native.Framework
+Microsoft.NET.Native.Runtime
+Microsoft.UI.Xaml
+Microsoft.VCLibs
+
+Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.Appx
+Microsoft.NET.Native.Runtime.1.7_1.7.27422.0_x64__8wekyb3d8bbwe.Appx
+Microsoft.UI.Xaml.2.7_7.2208.15002.0_x64__8wekyb3d8bbwe.Appx
+Microsoft.VCLibs.140.00_14.0.30704.0_x64__8wekyb3d8bbwe.Appx
+Microsoft.WindowsStore_22207.1401.1.0_neutral___8wekyb3d8bbwe.Msixbundle
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+icacls "C:\MyFolder" /grant Users:F
+icacls "C:\MyFolder" /grant IIS_IUSRS:M
+
+icacls "c:\folder" /remove:d /grant:r Everyone:(OI)(CI)F /T
+
+icacls "c:\folder" /remove:d Everyone /grant:r Everyone:(OI)(CI)F /T
+
+For Windows 10 the user/SID must be specified after the /remove:d option:
+Notes:
+
+    The command is applied to the specified directory.
+
+    Specifying the user "Everyone" sets the widest possible permission, as it includes every possible user.
+
+    The option "/remove:d" deletes any explicit DENY settings that may exist, as those override explicit ALLOW settings: a necessary preliminary to creating a new ALLOW setting. This is only a precaution, as there is often no DENY setting present, but better safe than sorry.
+
+    The option "/grant" creates a new ALLOW setting, an explicit permission that replaces (":r") any and all explicit ALLOW settings that may exist.
+
+    The "F" parameter (i.e. the permission created) makes this a grant of FULL control.
+
+    The "/T" parameter adds recursion, applying these changes to all current sub-objects in the specified directory (i.e. files and subfolders), as well as the folder itself.
+
+    The "(OI)" and "(CI)" parameters also add recursion, applying these changes to sub-objects created subsequently.
+
+
+TAKEOWN /F C:\Documents\*.*
+Press ENTER
+ICACLS C:\Documents\*.* /grant administrators:F
+
+
+    F = Full Control
+    CI = Container Inherit - This flag indicates that subordinate containers will inherit this ACE.
+    OI = Object Inherit - This flag indicates that subordinate files will inherit the ACE.
+    /T = Apply recursively to existing files and sub-folders. (OI and CI only apply to new files and sub-folders). Credit: comment by @AlexSpence.

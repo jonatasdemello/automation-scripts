@@ -1,0 +1,24 @@
+------------------------------------------------------------------------------
+VScode Shortcuts
+------------------------------------------------------------------------------
+Ctrl+Shift+[    Fold (collapse) region  editor.fold
+Ctrl+Shift+]    Unfold (uncollapse) region  editor.unfold
+Ctrl+K Ctrl+[   Fold (collapse) all subregions  editor.foldRecursively
+Ctrl+K Ctrl+]   Unfold (uncollapse) all subregions  editor.unfoldRecursively
+Ctrl+K Ctrl+0   Fold (collapse) all regions editor.foldAll
+Ctrl+K Ctrl+J   Unfold (uncollapse) all regions
+
+------------------------------------------------------------------------------
+workbench.colorCustomizations
+editor.tokenColorCustomizations
+
+C:\Users\jonatas\AppData\Roaming\Code\User\settings.json
+
+    "workbench.colorCustomizations": {
+        "editor.background": "#e4e3e3",
+        "editorOverviewRuler.errorForeground": "#0000",
+        "editorOverviewRuler.warningForeground": "#0000",
+        "editorOverviewRuler.infoForeground": "#fff0"
+    },
+
+------------------------------------------------------------------------------

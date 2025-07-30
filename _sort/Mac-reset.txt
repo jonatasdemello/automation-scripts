@@ -1,0 +1,43 @@
+SMC
+
+For MacBooks, the process is as follow:
+
+    Shut down the computer.
+    On the left side of the keyboard, press and hold the Shift, Control, and Option keys while simultaneously holding the power button.
+    After 10 seconds, release all of the keys.
+    Turn on your MacBook.
+
+For a desktop, follow these instructions:
+
+    Shut down the computer.
+    Unplug the power cord.
+    Plug the cord back in after 15 seconds have passed.
+    Wait at least 5 seconds and then turn on your Mac.
+
+If these steps fail to resolve the issue, repeat them one more time.
+PRAM
+
+The process for resetting the PRAM is the same across all devices. To start:
+
+    Shut down the computer.
+    Press the power button.
+    Immediately after, press Command, Option, P, and R all at the same time on the keyboard.
+    Hold these keys down until you hear the Mac's startup sound for a second time (the first was after the initial press of the power button).
+    Release all of the keys.
+
+As previously mentioned, repeating the steps may work if your issue isn't resolved.
+
+Start up an Intel-based Mac in safe mode
+
+    On your Mac, choose Apple menu  > Shut Down.
+    After your Mac shuts down, wait 10 seconds.
+    Restart your Mac, then immediately press and hold the Shift key.
+    Release the Shift key when you see the login window.
+
+Start up a Mac with Apple silicon in safe mode
+
+    On your Mac, choose Apple menu  > Shut Down.
+    After your Mac shuts down, wait 10 seconds.
+    Press and hold the power button on your Mac until the startup options window appears showing available startup disks and Options.
+    Select a startup disk.
+    Press and hold the Shift key, click Continue in Safe Mode, then release the Shift key.

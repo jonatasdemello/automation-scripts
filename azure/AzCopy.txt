@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------------------------------------------------------
+AzCopy
+
+choco install azcopy10
+choco upgrade azcopy10
+
+choco install azcopy
+choco upgrade azcopy

@@ -1,0 +1,498 @@
+An Introduction to Regular Expressions
+http://www.guistuff.com/articles/regexp_full_1.html
+An Effective Programming Concept
+
+Having its root in the theoretical Computer Science, regular expressions offer an effective
+and efficient tool to search down a set of strings matching a given criteria. Be you a
+programmer or an office assistant or an end user of a Personal Computer for other non-
+employment reasons, fact remains that you invariably are faced with a situation that
+demands from you to search down a certain text or number from a sea of textual
+information. It can be a populated directory or a lengthy word document or an extensive
+programming language code et al, at some point of time or the other, you are faced with a
+very tedious task of finding out a certain string, or number or alphanumeric character,
+through a large accumulation of textual or binary files. What do you do when faced with
+such a situation? You type that particular string and find it out with find command. Of
+course if you have any knowledge of wild cards like question mark (?) and asterisk (*), you
+use them to get closer and exhaustive results, don't you? Well, it is basically the theme of
+'regular expressions'! For example, wild card expression *.com is equivalent to .*\.com as
+a regular expression.
+
+Often abbreviated or trimmed up to be called regexp or regex in singular form and
+regexps, regexes or regexen in plural form, 'Regular Expressions' are an endowment of
+the automata theory and formal language theory of theoretical Computer Science. A
+regular expression may be defined as a string that puts forth criteria for matching a set of
+strings, subject to certain syntax rules. Utilized extensively by many text editors and
+utilities to search and manipulate bodies of text based on certain patterns, regular
+expressions have gradually become indispensable and integral to manipulation of strings
+in most of the programming languages. For example, Perl and Tcl have a powerful regular
+expression engine built directly into their syntax. The set of utilities, inclusive of the editor
+sed and the filter grep, provided by Unix distributions, were the first to bring in fashion the
+notion of regular expressions.
+
+Also known as a pattern or a short and sweet expression (description) for a set of strings,
+a regular expression is usually used to render an otherwise tedious and hectic task into an
+easy job. A regular expression effectively replaces the task of listing all elements one by
+one in the search criteria with a crisp and concise description of the set. For example,
+suppose you wish to fetch results containing the three strings - able, table and tablet. You
+can fetch these three strings by tiresomely typing each string one by one, or you can use a
+regular expression or a pattern describing the set - t?ablet?. The pattern t?ablet? simply
+means that the targeted string constitutes of zero or one 't' preceding able, followed by
+zero or one 't'. In other words, it is said that the pattern matches each of the three strings.
+
+To quote another example, say a set containing five strings Pitcher, Pitter, Patter, Platter
+and Putter needs to be searched down from a huge pool of text. The pattern that will
+describe the set will be P(i|l?a|u)t(t?|ch)er. The pattern means a string containing
+starting letter 'P', followed by either i or l?a or 'u', a letter 't', either t? or ch, and at last
+succeeded by er, wherein '?' stands for zero or one occurrence of the previous character.
+Further, the regex can also be replaced by either P(i|l?a|u)t(t?|ch)er or
+P(i|la|a|u)t(t?|ch)er as valid patterns, which will both match the same five strings.
+
+The pattern ((great )*grand )?(father|mother) matches any ancestor: father, mother,
+grand father, grand mother, great grand father, great grand mother, great great grand
+father, great great grand mother, great great great grand father, great great great grand
+mother and so on.
+
+The regular expression \b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b is a pattern that
+does the magic trick of searching down any email address in an entire document for a
+specialized text processing tool, like PowerGREP ( http://www.powergrep.com/ ).
+Minor alterations in the syntax, like replacing first \b with ^ and the last \b with $, realizes
+a further magical output in terms of an effective tool to check whether a user has entered a
+properly formatted email address.
+
+All the examples stated above essentially follow a strict syntax code that varies among
+tools and application areas. In most formalism, if there is any regex that matches a
+particular set then there are an infinite number of such expressions. In most formalism, it
+has been observed that certain operations are identically used to construct regular
+expressions. The following operations may be taken as typical examples.
+Alternation
+Most of the formalisms use a vertical bar (or |) to separate alternatives. For instance,
+tusk|task is a regex to match tusk and task, which is more commonly used in a shortened
+format t(u|a)sk.
+Grouping
+Parentheses are another popularly used operation that explicitly defines the scope and
+precedence of the operators. For example, tusk|task and t(u|a)sk are different patterns,
+but they both describe the set containing tusk and task.
+Quantification
+Most of the time, regex is required for strings of varying length. Thus, arises the need of a
+quantifier.
+A quantifier succeeding a character or group indicates how many times the preceding
+letter or group is anticipated to occur in the searched alphanumeric text. The most
+prevalent quantifiers are ?, *, and +, which coincidently are also famous wild card
+characters, especially ? and *. To elaborate their meanings per se:
+Question mark (or '?') indicates that there can be zero (0) or one (1) occurrence of the
+previous alphanumeric character in the string. For example, favou?r matches both favor
+and favour.
+Asterisk (or '*') indicates that there can be zero (0), one (1) or many (n number)
+occurences of the previous alphanumeric character in the searched string; for example,
+ya*hoo matches "yhoo", "yahoo", "yaahoo", "yaaahoo", etc.
+Plus sign (or '+') indicates that there is at least one (1) occurrence of the previous
+alphanumeric character in the target string. For example, ya+hoo matches "yahoo",
+"yaahoo", "yaaahoo", etc, but will not be equal to "yhoo".
+
+Further it is noteworthy that, these constructions can be combined to form arbitrarily
+complex expressions, very much like one can construct arithmetical expressions from the
+numbers and the operators +, -, * and /.
+Metacharacters in regular Expressions
+
+In essence, a 'metacharacter' means a character with a special meaning; metacharacters
+are the essence of Regular Expressions.
+
+Per se, any single letter or character naturally matches itself. A group of characters
+matches an identical group of character in the matching sequence without a problem. So
+"sequel" matches "sequel" without a hitch! However, there are instances when a single
+character or a special sequence of a series of characters does not match itself, but targets
+to a host of logical results in terms of alphanumeric text, in a sea of textual information.
+These instances hint at nothing else but the use of the phenomena called
+'metacharacters'.
+
+Metacharacters can be made to function like normal characters by escaping their default
+function or value, and thus make the system to take them literally. This can be achieved
+easily by using a useful character called a backslash (or '\') by preceding the escape
+sequences or metacharacters with it.
+To explain through instances, ^ is a metacharacter that matches the beginning of string. If
+you precede ^ with a backslash (\), the string \^ will match the letter ^. Likewise, \\ will
+match the character '\'; to put it in a more functional example, suppose you are searching
+for a string say ^tentative. Now the regular expression to overpower the metacharacter
+to subdue to its literal value will be \^tentative and so on.
+
+There are different types of metacharacters that eventually make possible Regular
+Expressions. Let us explore various Metacharacters, one by one.
+Metacharacters - line separators
+
+To begin with, there are some metacharacters that may also be termed or
+grouped as 'line separators' based on their utility. For example, the character
+'^' is a metacharacter that matches the beginning of the input string or text.
+The dollar sign ('$') is another metacharacter that matches only the end of the
+input string or text. Line separators embedded within the input text or string
+will not be identified by either of the metacharacters.
+The following table enumerates some line separators:
+^
+Start of line
+$
+End of line
+\A
+Start of text
+\Z
+End of text
+.
+Any character in line
+
+Examples showcasing the usage of the line separators can be examined in
+the table given below:
+^tentative
+Matches string 'tentative' only if it's at the beginning of line
+tentative$
+Matches string 'tentative' only if it's at the end of line
+^tentative$
+Matches string 'tentative' only if it's the only string in line
+tentat.ve
+Matches strings like 'tentative', 'tentatave', 'tentatuve', 'tentat1ve'
+and so on
+
+Metacharacters - modifiers
+
+Modifiers are another type of metacharacters that change the behavior of Regular
+Expressions. The usage of modifiers may be elucidated with the help of line separators
+explained above.
+
+The role of line separators can be rendered expansive and thus more helpful within a
+string with the help of "modifiers". Switching on modifier /m treats the string in question as
+a multi-line buffer, which in turn enables metacharacter ^ to match after any line separator
+within the string and $ to match before any line separator. As . Metacharacter matches
+any character by default, the modifier /s enables it to match the embedded line separators
+as well.
+
+Another noteworthy modifier that needs explanation is /x, which tells the Regular
+Expression to ignore the white space that is neither back slashed nor within a character
+class. You can use this to break up your regular expression to render it more legible. The
+'#' metacharacter, which is used to introduce a comment, can be used within to enhance
+the readability of your regex further. To illustrate:
+(
+(abc) # comment 1
+     |         # You can use spaces to format regex, as
+Regular Expression ignores them
+(efg) # comment 2
+)
+
+
+This also explicates the need to escape or encode white spaces or '#' characters using
+octal or hex escapes in the pattern, to get real white spaces and '#' characters, outside a
+character class where they are unaffected by /x, by default.
+
+To facilitate recall, we may arrange the modifiers such that it forms a word "gismox", which
+entails each of the six most frequently used modifiers. The following table enumerates the
+modifiers for your perusal:
+g
+A non-standard modifier to match globally. Switching it Off switches all operators into
+non-greedy mode. By default this modifier is On. So, if modifier /g is Off then + works
+as +?, * as *? and so on.
+i
+Does case-insensitive pattern matching.
+s
+Treats string as single line. That is, change . to match any character whatsoever, even
+a line separators, which it normally would not match.
+m
+Treats string as multiple lines. That is, change ^ and $ from matching at only the very
+start or end of the string to the start or end of any line anywhere within the string.
+o
+Only compiles pattern once.
+x
+Extends the pattern's legibility by permitting white space and comments.
+Metacharacters - escape sequences
+
+In regular expressions, special characters like new line, tab, alarm, carriage return, form
+feed etc. may be specified using escape sequence syntax, which are same as used in C
+and Perl. To exemplify a few, \n matches a newline, \t a tab and \xnn matches the
+character whose ASCII value is "nn", where "nn" is a string of hexadecimal digits. If You
+need wide (Unicode) character code, You can use \x{nnnn}, where "nnnn" - one or more
+hexadecimal digits. The following table enumerates various escape sequences with their
+utility:
+\xnn
+Char with hex code nn
+\x{nnnn}
+Char with hex code nnnn (one byte for plain text and two bytes for Unicode)
+\t
+Tab (HT/TAB), same as \x09
+\n
+New line (NL), same as \x0a
+\r
+Car. Return (CR), same as \x0d
+\f
+Form feed (FF), same as \x0c
+\a
+Alarm (bell) (BEL), same as \x07
+\e
+Escape (ESC), same as \x1b
+
+Metacharacters - character classes
+
+In regular expressions, you can spell out a character class by enclosing a list of characters
+in square parenthesizes [], which will eventually match any one character from the list.
+Occurrence of ^ character preceding the list of identified alphabets within the square
+brackets will mean that the class matches any character excluding the list. To exemplify,
+suppose you are trying to find fan, fin, fen and fun. To find these instances in one single
+expression, you can use f[aeiu]n. However, if you just precede the "aeiu" within the
+square brackets with a ^, it would change the entire set of target results. In other words,
+f[^aeiu]n will search down 'fon', 'frn', 'fbn' etc., but definitely not 'fen', 'fan', 'fin' and 'fun'.
+
+Further, character dash (or '-') is used to specify a range in a given list. For example, [d-
+x] means all numbers between 'd' and 'x', with 'd' and 'x' inclusive. If your search
+requirement is such that the character dash ('-') constitutes a member of the class, all you
+need to do is to put it at the start or the end of the list, devoid of any need to escape its
+functional meaning with a backslash ('\'). Very simple logic behind it too! If you have not
+gathered it already, lets examine deeper into the syntax. A syntax like [dx-] matches 'd','x'
+and '-'; this is obviously because the syntax does not outline a range as it is written. On
+similar lines, the syntax [-dx] also fetches you 'd','x' and '-' as the matching results.
+Further, backslash ('\') may also be used to deliver the good of the same quality with the
+syntax [d\-x]!
+
+Examples of usage of dash ('-') can be looked up from the following table, including the
+ones just explained:
+[-dx]
+Matches 'd', 'x' and '-'
+[dx-]
+Matches 'd', 'x' and '-'
+[d\-x]
+Matches 'd', 'x' and '-'
+[d-x]
+Matches all twenty six small characters from 'a' to 'z'
+[\n-\x0D]
+Matches any of #10, #11, #12, #13
+[\d-t]
+Matches any digit, '-' or 't'
+[]-a]
+Matches any char from ']' to 'a'
+
+Metacharacters - predefined classes
+
+Predefined classes constitute of metacharacters that explicitly group the
+target into alphanumeric, non-alphanumeric, numeric, non-numeric, non-
+space etc. To substantiate, lets examine the following table for the various
+examples of predefined classes and study them against the examples closely
+following the table.
+\w
+An alphanumeric character including '_'
+\W
+A non-alphanumeric character
+\d
+A numeric character
+\D
+A non-numeric character
+\s
+Any space that can be same as [ \t\n\r\f]
+\S
+A non space character
+
+Metacharacter viz. \w, \d and \s can also be used within custom character classes.
+
+The following table enumerates some instances of usage of the predefined classes:
+
+tentat\dve Matches strings like tentat1ve, tentat6ve etc, but not 'tentative', 'tentatuve etc.
+tentat[\w\s]ve Matches strings like 'tentative', 'tentat ve', ' tentatuve' etc, but definitely not
+'tentat5ve' or tentat=ve etc.
+Metacharacters - word boundaries
+
+A word boundary (\b) is a spot between two characters that has a \w (an alphanumeric
+character) on one side of it and a \W (non-alphanumeric character) on the other side, in
+any order. While \b matches a word boundary, \B matches a non-\b.
+
+Metacharacters - iterators
+
+As hinted from the name itself, iterator metacharacters relate to occurrences. To define
+their role, iterator Metacharacters specify the number of occurrences of the previous
+character that may be either a literal character or a metacharacter or a group of
+metacharacters forming a sub-expression. The iterators can be greedy or non-greedy.
+
+Greedy Iterators make up those regular expressions that match as many equivalents as
+possible; in other words, they match the maximum available! The results of greedy regular
+expressions can be very problematic, considering the exhaustive nature of results that are
+most prone to consist of majority of useless identifications.
+
+On the other hand, non-greedy iterators form those regular expressions that grab as little
+as possible in terms of target matches, instead of as much as possible. Non-greedy
+iterators are simply greedy iterators followed by a question mark ('?') quantifier to limit
+their search pattern to the most relevant of results.
+
+For instance, for as string "dooooggy", o+ and g* shall return "oooo" and "gg" respectively.
+On the other hand, for the same string, non-greedy expression o+? will return 'o' and g*?
+will return an empty string.
+
+Following table enlists some iterators that have been marked as greedy or non-greedy, for
+your convenience and help:
+*
+Matches zero or more. "Greedy" in nature and is similar to {0,}
++
+Matches one or more. "Greedy" in nature and is similar to {1,}
+?
+Matches zero or one. "Greedy" in nature and is similar to {0,1}
+{n}
+Matches exactly n times. "Greedy" in nature.
+{n}
+Matches at least n times. "Greedy" in nature.
+{n,m}
+Matches at least n but not more than m times. "Greedy" expression
+*?
+Matches zero or more. "Non-greedy" in nature and is similar to {0,}?
++?
+Matches one or more. "Non-greedy" in nature and is similar to {1,}?
+??
+Matches zero or one. "Non-greedy" in nature and is similar to {0,1}?
+{n}?
+Matches exactly n times. "Non-greedy" in nature.
+{n,}?
+Matches at least n times. "Non-greedy" in nature.
+{n,m}?
+Matches at least n but not more than m times. "Non-greedy" expression.
+
+Hence, curly brackets ({ }) are useful in quantifying the minimum and maximum number
+of times to match an expression, by specifying digits in curly brackets in the form {n,m}.
+While n indicates the minimum number of times to match an expression, m specifies the
+maximum number of times. The form {n} is as good as (n,n} implying exactly n number
+of times. An open-ended form {n, } leaves room for the maximum possible number of
+time to match an expression, while the minimum remains at least n number of times.
+One must always be wary of the repercussions of using large n or m values as large
+numbers consume more memory and in effect slow down the regex.
+
+If a curly bracket occurs in any other context, it is treated as a regular character.
+
+Let us examine some relevant examples of iterators to grasp the concept better.
+
+Starting with some instances of greedy expressions:
+Tentat.*ve will match strings like 'Tentative', 'Tentative', 'Tentatsjgkve', 'Tentatve' etc.
+Tentat.+ve will match all the matches of 'Tentat.*ve' except for 'Tentatve'.
+Tentat.?ve will match strings like 'Tentative', 'Tentative', 'Tentatve' but not
+'Tentatsjkshgve' etc.
+Tentati{2}ve will match 'Tentatiive'.
+Tentati{2,3}ve will match all results of 'Tentatiive' and 'Tentatiiive'.
+Tentati{2, }ve will match 'Tentatiive', 'Tentatiiive', 'Tentatiiiiive', 'Tentatiiiiiiiive' etc.
+
+Switching to non-greedy examples of the above regular expressions, the
+output will be as follows:
+Tentat.*?ve will match 'Tentatve'.
+Tentat.+?ve will match 'Tentative', 'Tentatove' etc.
+Tentat.??ve will match 'Tentatve'.
+Tentati{2}?ve will match 'Tentatiive'.
+Tentati{2,3}?ve will match 'Tentatiive'.
+Tentati{2, }?ve will match 'Tentatiive'.
+
+The reason between the difference of output can be understood by reading the following
+more explicit examples.
+
+For a string "Grrreaaat!", a non-greedy expression a{2,3}? shall return "aa", while greedy
+expression a{2,3} shall also return "aaa". To put it more explicitly, the non-greedy
+expression shall return the minimum limit set by the regex. Therefore, a regex r*? shall
+return an empty string as the syntax in effect means r{0,}?, the minimum limit being zero.
+
+Regex /D[A-Z]*?G/ is a non-greedy regular expression, which matches a 'D', followed by
+only as many capital letters as are needed to find a 'G'.
+
+You can switch all iterators into "non-greedy" mode using modifier /g.
+Metacharacters - alternatives
+
+There are times when you need to find a series of alternatives in a pattern. There may be
+strings or codes or expressions that may have variable pattern inside with identical outside
+pattern. In such cases you are offered to use alternative metacharacter - the pipe symbol
+or '|'. The symbol enables you to specify a series of alternatives to match in the target
+alphanumeric or otherwise text. For example, suppose your target strings are 'the', 'thy',
+'thee' and 'this'. You can use the pipe (|) in regex to specify the target string, like,
+the|thy|thee|this or alternatively you can use th(e+|y|is). The use of parenthesis is
+important because otherwise the expression seems rather cluttered. The parentheses
+minimize the confusion in a regular expression with respect to the starting and ending of
+the alternatives.
+
+Further, alternative metacharacters are attempted from left to right to match the first
+wholesome instance. In other words, the alternative metacharacters are not compulsorily
+greedy in nature. For example, while matching th(e|ei)r against "their", the
+metacharacter will match 'e' part only as the same being the precedent in the group, as
+well as, 'd' matches the entire string successfully.
+
+Another noteworthy point about alternative metacharacter (|) is that it is interpreted literally
+when enclosed within square brackets. So if you write an expression [ee|y|is], you are
+actually matching [eyis|].
+
+Citing a couple of examples of alternative metacharacters:
+
+- Tentat(ive|ool) matches strings "Tentative" or "Tentatool".
+
+- Th(is|ei|ee)r? matches "This", "Their" and "Thee".
+Metacharacters - backreferences
+
+Metacharacters \1 through \9 are interpreted as back-references. Back-references match
+previously matched sub-expression, for example, syntax (.)\1+ matches more than one
+repeat occurrence of any character like "cccc" or "dd". Citing another example, the syntax
+(.+)\1+ also matches repeat occurrences like "cdcd" and "245245", besides the matches
+of the syntax (.)\1+. Another syntax (["']?)(\d+)\1 matches numbers within double
+quotes, single quotes and without quotes like "24", '7' or 88.
+
+Backreference is a powerful tool as it helps you exercise the option of creating search
+patterns that specifies to back reference, that is, a sub-expression that has already been
+matched earlier in a regular expression to be matched again later in the expression. The
+numbers 1 through 9, preceded by the backslash ('\') escape character constitute the
+naming pattern of exhaustive backreference metacharacters. Thus named, the
+backreferences actually refer to each successive group in the match pattern, as in (abcd)
+(efgh) \1 \2, 'abcd' refer to \1 and 'efgh' refers to \2.
+
+What is noteworthy here that what gets matched by a backreference is the same literal
+string matched the first time, even if the pattern that matched the string could have
+matched other strings. Thus, backreference starkly differs from simply repeating the same
+grouped subexpression later in the regular expression, as it does not match the same
+targets as using a backreference. To elucidate further, lets say you have the following
+string to search:
+
+"fox rabbit forest
+fox forest rabbit
+fox forest forest
+fox rabbit rabbit"
+
+Now a backreference expression like (rabbit|forest) \1, which will result in
+identification of "forest forest rabbit rabbit".
+
+On the other hand, if the subexpression is simply repeated within the regular expression
+(rabbit|forest) (rabbit|forest), the results will be:
+
+"rabbit forest
+forest rabbit
+forest forest
+rabbit rabbit."
+
+When you ever need to insert a fixed string everywhere a pattern occurs in the target text,
+you may instantly recall the use of 'replace all' utility of any application. But such a
+replacement is not context sensitive. What if you need to insert a string bearing much
+more relation to the matched patterns? Sounds impossible? Well, not really.
+Backreferences are a power tool in such replacement patterns. Replacement
+backreferences allow you to pick and choose from the matched patterns to use just the
+parts you need. For example, say the target string is:
+"C42 E9 F112 G96670 E6658 AAA" The replacement backreferences syntax is:
+
+s/ ([A-Z]) ([0-9] {2,4}) / \2:\1 /g
+then the output of replacement pattern will be:
+"42:A E9 112:F G96670 6658:E AAA"
+
+Further, it is always advisable to refer to the parts of replacement pattern in a sequential
+order to keep it readable and uncluttered. This can be achieved using "grouping without
+backreferencing", allowed by some regular expression tools. Accordingly, if a question
+mark colon (?:) pattern precedes a group, the group is not treated as a backreference.
+You can use ?: syntax even when your backreferences are in the search pattern itself. For
+example:
+
+Say the target string is:
+"C-abc-42 # E:efgh:597 # E-ijk-11 # G-lmn-47"
+and regular expression including the ?: pattern is:
+s/ ([A-Z]) (?:-[a-z]{3}-) ([0-9]*)/\1\2/g
+the output shall be:
+"C42 # E:efgh:597 # E11 # G47"
+wherein the second grouping in the search pattern has been ignored as a backreference in
+the target string due to use of ?: pattern.
+Conclusion
+
+In essence, regular expressions make you the master of your data to specify it, regulate it,
+manipulate it, replace it and put it to work.
+An extremely powerful tool to handle magnanimous expanse of data irrespective of data
+types, technical or non-technical, the pertinence of regular expressions is explicated by its
+prevalence across tools, viz. editors, word processors, system tools, database designs, et
+al, and programming languages including Java, Jscript, Visual Basic, VB Script,
+JavaScript, ECMAScript, C, C++, C#, elisp, Perl, Python, Tcl, Ruby, PHP, sed and awk.
+To be bare, regular expressions are the very heart of many programs written in some of
+these languages, speaking loads about the extreme power enjoyed by the programming
+tots. To conclude, regular expressions are indispensable bounty of theoretical computer
+science.

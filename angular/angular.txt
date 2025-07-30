@@ -1,0 +1,13 @@
+
+ERROR in components/shared/constants.ts(1,26): error TS2307: Cannot find module 'angular'.
+
+
+npm install @types/angular
+
+https://medium.com/@rubenvermeulen/using-an-svg-sprite-icon-system-in-angular-9d4056357b60
+
+npm install -g @angular/cli
+
+ng new angular-svg-sprite-icon-set --scss
+
+

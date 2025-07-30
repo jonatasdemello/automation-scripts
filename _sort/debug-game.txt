@@ -1,0 +1,117 @@
+IP
+	^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$
+	'\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b'
+
+MAC
+	^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$
+
+
+$ curl machine.corp.yourcompany.com:1234
+
+sudo tcpdump -i any port 1234
+
+These packets are all SYN packets. A SYN packet is the first packet sent in any TCP connection. The way you can tell they're SYN packets is from the Flags [S] in this tcpdump line:
+
+17:33:01.563903 lo In IP 192.168.1.121.38002 > 12.3.2.5.1234: Flags [S], seq 596753197, win 65495
+
+DNS
+One way is to use dig to query the AWS DNS servers directly.
+dig neopets.com
+
+DNS servers usually use port 53, so you just look for traffic on port 53.
+
+$ sudo tcpdump -n -i any port 53
+
+tcpdump: data link type LINUX_SLL2
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes
+
+tcpdump
+
+wlp3s0 Out IP 192.168.1.121.38308 > 192.168.1.1.53: 49281+ AAAA? fonts.gstatic.com. (35)
+
+192.168.1.1.53 means the server's IP is 192.168.1.1 and the port is 53.
+
+You can use whois to find the authoritative nameservers for a domain.
+You run whois examplecat.com
+
+
+
+Here's a little Javascript program that reproduces the problem.
+It's called slow.js. After the request finishes, it prints out the time elapsed in milliseconds.
+
+ const http = require('http')
+ const fs = require('fs').promises
+
+ var start;
+
+ async function uploadFile(filename) {
+     const req = http.request({ hostname: 'mysterybox.local', port: 8000, method: 'POST'}, res => {
+         console.log("Time elapsed:", new Date() - start, "milliseconds");
+     })
+     const stats = await fs.stat(filename)
+     start = new Date();
+     req.setHeader('Content-Type', 'text/plain');
+     req.setHeader('Content-Length', stats.size);
+     req.flushHeaders();
+     const data = await fs.readFile(filename, 'utf8');
+     await new Promise(resolve => {req.write(data, resolve)});
+ }
+
+ uploadFile("test.txt")
+
+
+ $ time curl -d 'buy some milk' http://mysterybox:8000
+ a
+ real	0m0.018s
+ user	0m0.007s
+ sys	0m0.010s
+
+You know that the -t flag will show you the timestamp for every system call, so you strace -t the slow program.
+
+Your goal here is to identify the system requests where it's making the HTTP request and getting the response. It's a POST request
+
+ $ strace -tt node slow.js
+
+$ sudo tcpdump -i any port 8000
+
+The -A flag to tcpdump shows you the content of each packet.
+
+ $ sudo tcpdump -A -i any port 8000
+
+ $ sudo termshark -f 'port 8000'
+to capture all traffic on port 8000. You then run node slow.js in a separate terminal, and here's what you see:
+
+
+You decide to fix this by disabling Nagle's algorithm. You look up "disable nagle node js" and find out that you need to set the TCP_NODELAY socket option.
+
+You just add one line of code to your test script:
+
+ req.setNoDelay(true);
+
+
+You decide to fix this by disabling delayed ACKs on the server. You google "disable delayed ACKs" and you see that setting the TCP_QUICKACK socket option to 1 will disable delayed ACKs, but also some people are saying that the Linux TCP stack will sometimes turn off that setting, so it's not reliable.
+
+You spend another ten minutes Googling and trying to figure out how to disable delayed ACKs but it doesn't seem that clear how to do it.
+
+
+One way to look at this is that this problem is happening because the client is splitting its POST request into 2 parts — if it were only sending 1 packet, then it wouldn't have to wait for the second part to get sent.
+
+This headers are being sent in a separate packet because of the req.flushHeaders() line in the uploadFile function — it forces the headers to be sent right away.
+
+ async function uploadFile(filename) {
+     const req = http.request({ hostname: 'mysterybox.local', port: 8000, method: 'POST'}, res => {
+         console.log("Time elapsed:", new Date() - start, "milliseconds");
+     })
+     const stats = await fs.stat(filename)
+     start = new Date();
+     req.setHeader('Content-Type', 'text/plain');
+     req.setHeader('Content-Length', stats.size);
+     req.flushHeaders();
+     const data = await fs.readFile(filename, 'utf8');
+     await new Promise(resolve => {req.write(data, resolve)});
+ }
+
+ uploadFile("test.txt")
+
+You remove the req.flushHeaders() line and try running the code again.

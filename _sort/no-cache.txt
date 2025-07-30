@@ -1,0 +1,102 @@
+# NO Cache
+https://stackoverflow.com/questions/49547/how-do-we-control-web-page-caching-across-all-browsers
+
+
+How to set it?
+
+Using PHP:
+
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
+
+Using Java Servlet, or Node.js:
+
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+response.setHeader("Expires", "0"); // Proxies.
+
+Using ASP.NET-MVC
+
+Response.Cache.SetCacheability(HttpCacheability.NoCache);  // HTTP 1.1.
+Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+Response.AppendHeader("Pragma", "no-cache"); // HTTP 1.0.
+Response.AppendHeader("Expires", "0"); // Proxies.
+
+Using ASP.NET Web API:
+
+// `response` is an instance of System.Net.Http.HttpResponseMessage
+response.Headers.CacheControl = new CacheControlHeaderValue
+{
+    NoCache = true,
+    NoStore = true,
+    MustRevalidate = true
+};
+response.Headers.Pragma.ParseAdd("no-cache");
+// We can't use `response.Content.Headers.Expires` directly
+// since it allows only `DateTimeOffset?` values.
+response.Content?.Headers.TryAddWithoutValidation("Expires", 0.ToString());
+
+Using ASP.NET:
+
+Response.AppendHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+Response.AppendHeader("Pragma", "no-cache"); // HTTP 1.0.
+Response.AppendHeader("Expires", "0"); // Proxies.
+
+Using ASP.NET Core v3
+
+// using Microsoft.Net.Http.Headers
+Response.Headers[HeaderNames.CacheControl] = "no-cache, no-store, must-revalidate";
+Response.Headers[HeaderNames.Expires] = "0";
+Response.Headers[HeaderNames.Pragma] = "no-cache";
+
+Using ASP:
+
+Response.addHeader "Cache-Control", "no-cache, no-store, must-revalidate" ' HTTP 1.1.
+Response.addHeader "Pragma", "no-cache" ' HTTP 1.0.
+Response.addHeader "Expires", "0" ' Proxies.
+
+Using Ruby on Rails, or Python/Flask:
+
+headers["Cache-Control"] = "no-cache, no-store, must-revalidate" # HTTP 1.1.
+headers["Pragma"] = "no-cache" # HTTP 1.0.
+headers["Expires"] = "0" # Proxies.
+
+Using Python/Django:
+
+response["Cache-Control"] = "no-cache, no-store, must-revalidate" # HTTP 1.1.
+response["Pragma"] = "no-cache" # HTTP 1.0.
+response["Expires"] = "0" # Proxies.
+
+Using Python/Pyramid:
+
+request.response.headerlist.extend(
+    (
+        ('Cache-Control', 'no-cache, no-store, must-revalidate'),
+        ('Pragma', 'no-cache'),
+        ('Expires', '0')
+    )
+)
+
+Using Go:
+
+responseWriter.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
+responseWriter.Header().Set("Pragma", "no-cache") // HTTP 1.0.
+responseWriter.Header().Set("Expires", "0") // Proxies.
+
+Using Apache .htaccess file:
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</IfModule>
+
+Using HTML:
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+
+

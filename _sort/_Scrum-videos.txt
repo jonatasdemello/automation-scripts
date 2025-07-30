@@ -1,0 +1,56 @@
+Hi guys,
+Here is the document about the bugs:
+https://docs.google.com/document/d/10zRUqhlVQQAm6M0BI05mVdsGkmDvVqoVdt1wa9_UJNU/edit?usp=sharing
+and the videos:
+Most important - look at the "Walk the board" video
+
+
+How To Run A Perfect Daily Scrum?
+    https://www.youtube.com/watch?v=HlnnnPvN-3A
+
+What Daily Scrum is NOT | 5 anti-patterns
+    https://www.youtube.com/watch?v=es6d8wjQ6hk
+
+Scrum With Kanban | Walk The Board On Daily Scrum
+    https://www.youtube.com/watch?v=TOIccUxlqF0
+
+Essential Kanban Condensed
+David jH Anderson & Andy Carmchael
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Scrum With Kanban | Walk The Board On Daily Scrum
+    https://www.youtube.com/watch?v=TOIccUxlqF0
+
+-------------------------------------------------------------------------------------------------------------------------------
+Our current goal is:
+	"Being able to demo everything that's been done in terms of creating a plan."
+
+So, ask yourself: Am I contributing to the Sprint Goal?
+if the answer is no, let's focus on the result.
+
+Remember one important Kanban Principle:
+	*** Stop starting, Start finishing ***
+
+Let's focus on Finishing => moving tickets to DONE column.
+"in progress", "waiting for PR", "waiting for QA" are NOT Done.
+
+
+
+.
+Scrum With Kanban | Walk The Board On Daily Scrum
+    https://www.youtube.com/watch?v=TOIccUxlqF0
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+How I figured out the Achilles heel of Vladimir Putin | William Browder | TEDxBerlin
+https://www.youtube.com/watch?v=BT254smRufA
+
+Why do Trump and Putin get along so well? | Michael McFaul | TEDxStanford
+https://www.youtube.com/watch?v=8bwKjO9hauw
+
+
+

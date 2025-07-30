@@ -1,0 +1,247 @@
+Install xrdp on Ubuntu
+
+xrdp is an RDP server for Linux that listens for and accepts RDP connections from clients. Ubuntu systems typically do not have xrdp installed by default.
+
+To install xrdp on Ubuntu 22.04:
+
+1. Access the command line and update the Ubuntu packages list:
+
+sudo apt update
+
+2. Install xrdp using the following command:
+
+sudo apt install xrdp -y
+
+Install xrdp server on Ubuntu.
+
+3. Check the status of the xrdp server:
+
+sudo systemctl status xrdp
+
+Check status of xrdp server in Ubuntu.
+
+The output confirms the xrdp server is active.
+Configure xrdp Port (Optional)
+
+The <strong>xrdp</strong> server listens for incoming RDP connections on port number 3389. Using a non-standard port for RDP connection is a form of protection through obscurity. It is not a robust security measure, but can protect a system from rudimentary brute-force attacks.
+
+To instruct xrdp to listen on a different port:
+
+1. Use a text editor, like nano, to edit the xrdp configuration file, xrdp.ini:
+
+sudo nano /etc/xrdp/xrdp.ini
+
+2. Locate the port directive in the [Globals] section and set the desired value. In this example, the RDP port is 49952:
+
+port=49952
+
+Set xrdp port number in xrdp configuration file in Ubuntu.
+
+3. Press Ctrl+X, followed by y, and then Enter to save the changes and exit the file.
+
+4. Restart the xrdp server to apply the changes:
+
+sudo systemctl restart xrdp
+
+There is no confirmation message or output after the server is restarted.
+
+---------------------------------------------------------------------------------------------------
+
+How to Set Up RDP on Ubuntu 24.04 for Remote Access
+
+High-level Steps
+
+To set up RDP access, you’ll perform these main steps:
+
+    Update your server to ensure all packages are up-to-date.
+    Install a desktop environment (GNOME, KDE Plasma, or Xfce).
+    Install and configure XRDP to enable RDP support.
+    Adjust firewall settings to allow RDP traffic.
+    Connect to your Ubuntu desktop using an RDP client.
+
+Desktop Options on Ubuntu
+
+Ubuntu servers come without a graphical user interface, so you’ll need to install one. Here are three popular desktop environments for Ubuntu:
+
+    GNOME: The default environment for Ubuntu, known for its clean design and usability.
+    KDE Plasma: A customizable and visually appealing option, though resource-intensive.
+    Xfce: Lightweight and fast, ideal for remote access due to low resource requirements.
+
+Why GNOME Desktop?
+
+GNOME is the default choice for Ubuntu and offers a balance between functionality and resource usage. It provides a user-friendly interface with intuitive design and regular updates. While KDE and Xfce are also viable options, GNOME is often favored for its simplicity and integration with Ubuntu’s ecosystem.
+Additional Tools to Access Ubuntu Desktop Remotely
+
+Apart from XRDP, other tools like VNC (Virtual Network Computing) and TeamViewer also allow remote desktop access on Linux servers. However, XRDP is particularly beneficial because it’s compatible with Microsoft Remote Desktop Protocol, making it easy to connect from a Windows machine without additional client software.
+Why XRDP?
+
+XRDP is an open-source RDP server that provides compatibility with Microsoft’s RDP protocol. It’s lightweight, easy to install, and works seamlessly with Ubuntu. XRDP also allows users to switch between different desktop environments if multiple are installed on the server.
+Step-by-Step Guide to Enable RDP Access
+
+Follow these detailed steps to set up RDP access on your Ubuntu 24.04 server.
+
+1. Update Your System
+
+Start by updating your system’s package lists and upgrading any outdated packages. This ensures a smooth installation of the desktop environment and XRDP.
+
+sudo apt update && sudo apt upgrade -y
+
+Update and Upgrade Ubuntu Server
+
+2. Install a Desktop Environment
+
+Choose and install a desktop environment. Below are commands to install GNOME, KDE Plasma, and Xfce. GNOME is recommended for most use cases, while Xfce is ideal if you’re prioritizing performance.
+
+    GNOME (recommended):
+
+sudo apt install ubuntu-gnome-desktop -y
+
+    KDE Plasma:
+
+sudo apt install kde-plasma-desktop -y
+
+    Xfce (lightweight option):
+
+sudo apt install xfce4 xfce4-goodies -y
+
+Note: Installing a full desktop environment may include additional applications. For a more minimal setup, look for “core” packages of the environment.
+Install GNOME Desktop on Ubuntu Server
+
+3. Install and Configure XRDP
+
+XRDP allows remote connections via the RDP protocol, making it simple to access your server’s desktop environment.
+
+    Install XRDP:
+
+sudo apt install xrdp -y
+
+    Add XRDP User to ssl-cert Group: This is necessary for secure connections.
+
+sudo adduser xrdp ssl-cert
+
+Install XRDP on Ubuntu Server
+
+4. Configure the Firewall
+
+Ensure that your server’s firewall allows traffic on port 3389, which XRDP uses.
+
+sudo ufw allow 3389/tcp
+sudo ufw reload
+
+This will enable RDP traffic to reach your server. Always remember to keep your firewall secure by only allowing necessary ports.
+
+5. Validating the RDP Port with Telnet
+
+5.1. Open a Command Prompt or Terminal on your client machine.
+
+    In the demo I am using terminal from Mac. I have used exit command to come out of Ubuntu server to my Mac.
+
+5.2. Use the following command to attempt a connection to the server’s IP address on port 3389:
+
+telnet <Your_Server_IP> 3389
+
+Replace <Your_Server_IP> with the actual IP address of your Ubuntu server.
+Validate XRDP using Terminal
+
+5.3. Interpret the Results:
+
+    Successful Connection: If telnet connects and the screen clears, this indicates that port 3389 is open and accessible. You can proceed with the RDP connection.
+    Connection Failed: If you see a “Connection refused” or “Unable to connect” message, the port may be blocked by the firewall, or XRDP might not be running.
+
+5.4. Troubleshoot if Necessary:
+
+    Ensure XRDP is running: Run sudo systemctl status xrdp on your server to check if XRDP is active. If not, start it with sudo systemctl start xrdp.
+    Review firewall settings: Verify that port 3389 is allowed in your firewall settings with sudo ufw status on the server.
+
+    This quick telnet test helps confirm that your server is ready for RDP access. Once validated, you can connect using your RDP client.
+
+6. Create a New User for RDP Access
+
+To securely access your server via RDP, it’s recommended to create a dedicated user. Here, we’ll create a user named itversity with a password for RDP access. Note: SSH login using a password will not work for this user, as password login is disabled via SSH.
+
+Steps to Create and Configure the User:
+
+6.1. Create the New User with a Home Directory and Bash Shell:
+
+Use the following command to create the itversity user with a home directory and set /bin/bash as the default shell:
+
+sudo useradd -m itversity --shell /bin/bash
+
+    You might be prompted to set a password for the itversity user and fill in additional information (e.g., Full Name, Room Number). You can press Enter to skip any fields you don’t want to fill.
+
+6.2. Set a Password for the New User:
+
+Assign a password to the itversity user to enable RDP login:
+
+sudo passwd itversity
+
+6.3. Grant Sudo Access to the New User (Optional):
+
+If you want the itversity user to have administrative privileges, add them to the sudo group:
+
+sudo usermod -aG sudo itversity
+
+This user will now have sudo access, but only through RDP or direct login — not via SSH with a password.
+
+This approach provides secure, password-based access for RDP while maintaining SSH security. You can now log into your server as itversity using the Microsoft Remote Desktop client.
+Create Additional User for RDP
+Overview of Microsoft Remote Desktop
+
+Microsoft Remote Desktop (RDP) is a popular protocol for connecting to and managing remote computers. Built into Windows, it also offers dedicated client applications for macOS, iOS, Android, and Linux, allowing users to connect to their remote desktops from various devices. With XRDP installed on your Ubuntu server, you can use Microsoft Remote Desktop to access the graphical environment, making it easy to perform tasks and manage your server visually.
+
+    For Mac users, the Microsoft Remote Desktop app is available for free in the Mac App Store.
+
+Once installed, it allows you to add and configure remote PCs or servers by entering your server’s IP address and login credentials. With this setup, you can enjoy a full desktop experience on your Ubuntu server, accessible from your Mac or any compatible device with RDP support.
+Launch Microsoft Remote Desktop on Mac
+Access Ubuntu Desktop via Microsoft RDP
+
+Once your setup is complete, follow these steps to connect to your Ubuntu desktop from a Windows machine:
+
+    Open the Microsoft Remote Desktop Client (Remote Desktop Connection on Windows).
+    Enter your Server’s IP Address: Type the IP address of your Ubuntu server and select “Connect.”
+    Log in with Your Username and Password: Enter your Ubuntu credentials when prompted.
+    Select Desktop Environment (if applicable): If you have multiple desktop environments installed, XRDP lets you choose one during the session.
+
+Connect to Ubuntu Desktop using Microsoft Remote Desktop
+
+You should now have access to your Ubuntu desktop over RDP. If performance is slow, try using a lightweight environment like Xfce.
+Initial Ubuntu Desktop Configuration
+
+Once you’ve set up a desktop environment and configured RDP on your Ubuntu server, you’re ready to access the graphical interface through Remote Desktop. On your first login, you may be prompted to complete some initial configuration steps based on the desktop environment you’ve chosen (GNOME, KDE, or Xfce). Here’s a guide to make your first login smooth and efficient.
+Language and Region Setup
+
+On your first login, the GNOME desktop environment may prompt you to configure language and region settings:
+
+    Language and Region: GNOME may ask you to confirm your preferred language, region, and keyboard layout. Select your preferences and proceed.
+
+After this, you’ll see a button labeled Start using Ubuntu. Click this to begin using the Ubuntu desktop environment via RDP.
+Update and Reboot
+
+Once you’ve accessed the desktop, it’s a good idea to install any available updates to ensure the system is secure and fully up-to-date.
+
+    Open Software Updater: Go to Activities in the top left corner and type Software Updater. Click to launch it.
+    Install Updates: The updater will check for available updates. When prompted, use the password you set while creating the user (e.g., itversity password) to authorize the update installation.
+    Reboot After Installation: Once updates are installed, you may be prompted to reboot the server. You can click Restart Now from within the desktop environment to reboot.
+
+Log Back In and Validate Setup
+
+After the reboot, log back in via Remote Desktop using the itversity user and password.
+
+To validate that the updates were applied successfully and that the desktop environment is functioning correctly:
+
+1. Open the Terminal: Go to Activities, search for Terminal, and launch it.
+
+2. Check System Info (optional): In the terminal, you can check the system version or other info using commands like:
+
+lsb_release -a
+
+By following these steps, you’ll have an updated, fully functional Ubuntu desktop environment accessible via RDP, ready for use and further customization.
+Initial Ubuntu Desktop Configuration
+Conclusion
+
+Setting up RDP access on an Ubuntu server is straightforward and enhances accessibility by providing a graphical interface. With XRDP and your preferred desktop environment, you can efficiently manage your server remotely. GNOME offers a balance of usability and resource usage, but Xfce is a great alternative for those prioritizing speed.
+
+In this guide, you’ve learned how to install a desktop environment, configure XRDP, and access your Ubuntu server using Microsoft Remote Desktop. With this setup, you’ll have a robust, remote desktop experience to streamline server management and application access. Stay tuned for further customization tips and optimization guides for your Ubuntu environment!
+
+    I have more than 20+ years of experience in IT and would like to share my experiences. Please comment on what topics you would like me to contribute to. Don’t forget to Clap and Comment, if the instructions in this article helped you in setting up Ubuntu Desktop on Remote Server and access using Microsoft’s RDP.
+

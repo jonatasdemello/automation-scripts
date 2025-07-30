@@ -1,0 +1,46 @@
+Restart WSL from CMD
+
+WSL (Windows Subsystem for Linux) is an indispensable component of Windows 10/11. It is dedicated to providing virtualization solutions for Windows users while sometimes, it will become the culprit of vmmem high usage issue due to unsmooth operation. Restarting it is an effective way to revert it to a normal state.
+
+Step 1. Type cmd in the search bar to locate Command Prompt and right-click it to choose Run as administrator.
+
+Step 2. Copy & paste the following command and hit Enter to shut down WSL.
+
+wsl --shutdown
+
+Step 3. If the command doesn’t work, you can head to the next location by pasting it to the navigation bar in File Explorer.
+
+C:\Users\your-username\.wslconfig
+
+Step 4. Now add the following code to your Notepad and save it.
+
+[wsl2]
+
+guiApplications=false
+
+Step 5. After rebooting your PC, check how much RAM vmmem takes up in Task Manager.
+
+Step 6. In case you need to use the utility of Linux, you’d better restart the WSL service. Search Windows PowerShell in the Windows start menu and run it as an administrator.
+
+Step 7. Type the following command and hit Enter to restart the WSL service.
+
+Restart-Service LxssManager
+Adjust the Allotted Memory of Your Virtual Machine
+
+The direct reason for vmmem high CPU usage and high memory usage is that you may allow the virtual machine to use a lot of RAM without your knowledge. In this condition, the best way is to adjust your virtual machine hence avoiding taking tons of system resources.
+Disable the Running Virtual Machine
+
+If none of the methods above work for you to address vmmem Windows 10 high memory usage, you can try terminating the running virtual machine.
+
+Step 1. Type powershell in the search bar to find Windows PowerShell and run it as an administrator.
+
+Step 2. Type the following code in the command line and hit Enter. This action will show you a list of all running virtual machines on Windows 10.
+
+wsl -l -v
+
+show the names of all the running virtual machine
+
+Step 3. Close those running virtual machines by employing the following command:
+
+wsl -t kali-linux
+

@@ -1,0 +1,59 @@
+Open the Run dialog box by pressing the Windows key and the R key together.
+
+Type GPEDIT.MSC and hit the Enter key.
+
+Go to Computer Configuration -> Administrative Templates -> System -> Logon.
+
+On the right side, double click on Turn on PIN sign-in and select Disabled.
+
+Similarly disable the other Windows Hello options if any.
+
+Exit the Group policy editor and reboot the computer.
+
+
+
+
+Open the Run dialog box by pressing the Windows key and the R key together.
+
+Type Regedit and hit the Enter key.
+
+When the Registry Editor opens, navigate to the following location:
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Settings\AllowSignInOptions.
+
+In the right pane, double click on the DWORD entry named value set it to 0.
+
+The above method will disable Windows Hello for all user accounts. If you want to re-enable
+
+it, change the DWORD entry Value back to 1.
+
+
+
+
+Login:
+	https://answers.microsoft.com/en-us/windows/forum/all/windows-hello-pin-loop/05ab5492-19c7-4d44-b762-d93b44a9cf65
+	https://www.top-password.com/knowledge/set-default-sign-in-option-in-windows-10.html
+
+wmic useraccount get name,sid
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\UserTile
+
+GUID for each sign-in option:
+PIN: {D6886603-9D2F-4EB2-B667-1971041FA96B}
+Picture Logon: {2135F72A-90B5-4ED3-A7F1-8BB705AC276A}
+Password: {60B78E88-EAD8-445C-9CFD-0B87F74EA6CD}
+Microsoft Account: {F8A0B131-5F68-486C-8040-7E8FC3C85BB6}
+Fingerprint Logon: {BEC09223-B018-416D-A0AC-523971B639F5}
+
+
+S-1-12-1-1351206125-1341664616-4141055897-2066235944 	{60B78E88-EAD8-445C-9CFD-0B87F74EA6CD}
+
+
+PS C:\Users\jonatas> wmic useraccount get name,sid
+Name                SID
+Administrator       S-1-5-21-808448119-1420705690-2845001779-500
+DefaultAccount      S-1-5-21-808448119-1420705690-2845001779-503
+Guest               S-1-5-21-808448119-1420705690-2845001779-501
+WDAGUtilityAccount  S-1-5-21-808448119-1420705690-2845001779-504
+
+

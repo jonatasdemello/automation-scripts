@@ -1,0 +1,11 @@
+
+TortoiseGit + DiffMerge
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+first
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+second
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+merge tool
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+

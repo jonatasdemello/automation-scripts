@@ -1,0 +1,14 @@
+Set echo on/off
+
+set -x or set -o xtrace expands variables and prints a little + sign before the line.
+
+set -v or set -o verbose does not expand the variables before printing.
+
+Use set +x and set +v to turn off the above settings.
+
+On the first line of the script, one can put #!/bin/sh -x (or -v) to have the same effect as set -x (or -v) later in the script.
+
+#!/bin/bash
+set -e # exit on first error
+set -x #echo on
+

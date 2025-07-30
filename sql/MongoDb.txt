@@ -1,0 +1,235 @@
+
+# Install MongoDB
+sudo apt-get update && sudo apt-get install -y mongodb
+
+# sudo apt-get remove -y mongodb-database-tools && sudo apt-get install -y mongodb
+
+service --status-all
+
+# start mongodb
+sudo systemctl status mongodb
+sudo systemctl status mongodb | head -n 20
+
+# or
+service mongodb status
+sudo service mongodb start
+sudo service mongodb status | head -n 20
+
+
+mongo
+	mongodb://127.0.0.1:27017
+
+# add data
+
+mongo --eval "use octofit_db; db.createCollection('users'); db.createCollection('teams'); db.createCollection('activity'); db.createCollection('leaderboard'); db.createCollection('workouts'); db.users.createIndex({ 'email': 1 }, { unique: true });"
+mongo --eval "use octofit_db; db.createCollection('users'); db.createCollection('teams'); db.createCollection('activity'); db.createCollection('leaderboard'); db.createCollection('workouts'); db.users.createIndex({ email: 1 }, { unique: true });"
+
+
+mongo --eval "db.getCollectionNames();"
+mongo --eval "printjson(db.getCollectionNames());"
+mongo --eval "printjson(db.serverStatus())"
+mongo --eval "show collections"
+
+mongo octofit_db --eval "use octofit_db; db.createCollection('users'); db.createCollection('teams'); db.createCollection('activity'); db.createCollection('leaderboard'); db.createCollection('workouts'); db.users.createIndex({ 'email': 1 }, { unique: true }); db.getCollectionNames();"
+mongo --eval "use octofit_db; db.createCollection('users'); ; db.users.createIndex({ 'email': 1 }, { unique: true }) db.createCollection('teams'); db.createCollection('activity'); db.createCollection('leaderboard'); db.createCollection('workouts');"
+mongo --eval "use octofit_db;"
+
+
+mongo YOUR_DB_NAME --eval "printjson(db.getCollectionNames())"
+
+
+db.users.find({}).limit(10)
+db.users.find({}).sort({age: -1}).limit(10)
+
+mongo < db.js
+
+
+
+# check
+mongod --version
+service mongod status
+
+---------------------------------------------------------------------------------------------------
+JavaScript (shell):
+	db.getCollectionNames()
+
+Node.js:
+	db.listCollections()
+
+Non-JavaScript (shell only):
+	show collections
+
+The reason I call that non-JavaScript is because:
+
+$ mongo prodmongo/app --eval "show collections"
+MongoDB shell version: 3.2.10
+connecting to: prodmongo/app
+2016-10-26T19:34:34.886-0400 E QUERY    [thread1] SyntaxError: missing ; before statement @(shell eval):1:5
+
+$ mongo prodmongo/app --eval "db.getCollectionNames()"
+MongoDB shell version: 3.2.10
+connecting to: prodmongo/app
+[
+    "Profiles",
+    "Unit_Info"
+]
+
+---------------------------------------------------------------------------------------------------
+
+1. How to query MongoDB with “like”?
+
+db.users.find({"name": /.*m.*/})
+db.users.find({'name': {'$regex': 'sometext'}})
+
+2. How to drop a MongoDB database from the command line?
+
+mongo <dbname> --eval "db.dropDatabase()"
+
+3. How to list all collections in the MongoDB shell?
+
+> use mydb;
+> db.dropDatabase();
+
+JavaScript (shell):
+	db.getCollectionNames()
+
+Node.js:
+	db.listCollections()
+
+Non-JavaScript (shell only):
+	show collections
+
+
+
+$ mongo prodmongo/app --eval "show collections"
+
+	MongoDB shell version: 3.2.10
+	connecting to: prodmongo/app
+	2016-10-26T19:34:34.886-0400 E QUERY    [thread1] SyntaxError: missing ; before statement @(shell eval):1:5
+
+$ mongo prodmongo/app --eval "db.getCollectionNames()"
+
+	MongoDB shell version: 3.2.10
+	connecting to: prodmongo/app
+	[
+		"Profiles",
+		"Unit_Info"
+	]
+
+$ mongo prodmongo/app --eval "db.getCollectionNames().join('\n')"
+
+	MongoDB shell version: 3.2.10
+	connecting to: prodmongo/app
+	Profiles
+	Unit_Info
+
+# other methods
+
+	show collections
+	show tables
+	db.getCollectionNames()
+
+To list all databases:
+	show dbs
+
+To enter or use a given database:
+	use databasename
+
+To list all collections:
+	show collections
+
+	show tables
+	use collectionname
+
+	db.getCollectionNames()
+
+To enter or use given collection
+
+	use collectionname
+
+5. How to get the last N records in MongoDB?
+
+db.foo.find().sort({x:1});
+
+The 1 will sort ascending (oldest to newest) and -1 will sort descending (newest to oldest.)
+If you use the auto-created _id field it has a date embedded in it, so you can use that to order by:
+
+db.foo.find().sort({_id:1});
+
+db.foo.find().sort({$natural:1});
+
+db.foo.find().sort({_id:1}).limit(50);
+or
+db.foo.find().sort({$natural:1}).limit(50);
+
+6. Is there a way to tell Mongo to pretty print output?
+
+db.collection.find().pretty()
+
+DBQuery.prototype._prettyShell = true
+add to your file in $HOME/.mongorc.js to enable pretty print globally by default.
+
+You can just do this on the CLI:
+
+echo DBQuery.prototype._prettyShell = true >> ~/.mongorc.js
+
+7. How to find MongoDB records where array field is not empty?
+
+If you have documents that don’t have the key, you can use:
+ME.find({ pictures: { $exists: true, $not: {$size: 0} } })
+MongoDB don’t use indexes if $size is involved, so here is a better solution:
+ME.find({ pictures: { $exists: true, $ne: [] } })
+Since MongoDB 2.6 release, you can compare with the operator $gt but could lead to unexpected results.
+ME.find({ pictures: { $gt: [] } }
+You can also do as given below:
+ME.find({pictures: {$exists: true, $not: {$size: 0}}})
+
+8. How to find document with array that contains a specific value?
+
+As favouriteFoods is a simple array of strings, you can just query that field directly:
+
+PersonModel.find({ favouriteFoods: "sushi" }, ...);
+But it is also recommended to make the string array explicit in your schema:
+
+person = {
+    name : String,
+    favouriteFoods : [String]
+}
+
+9. How do you rename a MongoDB database?
+
+show dbs;
+db.copyDatabase("db_to_rename","db_renamed","localhost")
+use db_to_rename
+db.dropDatabase();
+
+10. How to fix error “sudo chown mongod:mongod /data/db“?
+
+sudo mkdir -p /data/db
+drwxr-xr-x 4 mongod mongod 4096 Oct 26 10:31 /data/db/
+
+If your ‘/data/db’ directory doesn’t have the permissions and ownership above, do this:
+
+First, check what user and group your mongo user have:
+
+# grep mongo /etc/passwd
+mongod:x:498:496:mongod:/var/lib/mongo:/bin/false
+You should have an entry for mongod in /etc/passwd , as it’s a daemon.
+
+sudo chmod 0755 /data/db
+sudo chown -R 498:496 /data/db    # using the user-id , group-id
+You can also use the user-name and group-name, as follows: (they can be found in /etc/passwd and /etc/group )
+
+sudo chown -R mongod:mongod /data/db
+that should make it work.
+
+Some people use this:
+
+sudo chown -R `id -u` /data/db
+sudo chmod -R go+w /data/db
+or
+
+sudo chown -R $USER /data/db
+sudo chmod -R go+w /data/db
+The disadvantage is that $USER is an account that has a login shell. Daemons should ideally not have a shell for security reasons, that’s why you see /bin/false in the grep of the password file above.
+

@@ -1,0 +1,36 @@
+Step 1: Enable Windows Subsystem for Linux (WSL)
+Open the Windows Terminal or Powershell, and type the following command to enable WSL:
+
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+Step 2: Enable Windows Virtual Machine Platform
+In the Windows Terminal or Powershell, type the following command to enable Windows Virtual Machine Platform:
+
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+Step 3: Update the Linux kernel to the latest version
+This requires you to download the WSL2 Linux kernel update MSI package, choose the appropriate version from below, and install it. 1. WSL2 Linux kernel update MSI package for x64 systems 2. WSL2 Linux kernel update MSI package for ARM64 systems
+
+Step 4: Set WSL2 as the default version
+Installing WSL2 in Step #3 doesn't change the default version of WSL from 1 to 2. To change the default version of WSL, you must run the following command in terminal or powershell:
+
+wsl --set-default-version 2
+Step 6: Install your preferred Linux distribution
+You can choose from 10+ distributions available on Microsoft Store. To install, open Microsoft Store, and search for the Linux distribution you want to install then click on the Get button.
+
+wsl --list --online
+The following is a list of valid distributions that can be installed.
+Install using 'wsl --install -d <Distro>'.
+
+wsl --install -d Ubuntu-20.04
+
+
+
+https://www.hanselman.com/blog/cool-wsl-windows-subsystem-for-linux-tips-and-tricks-you-or-i-didnt-know-were-possible
+11:37
+https://www.hanselman.com/blog/web-development-and-advanced-techniques-with-linux-on-windows-wsl
+https://www.hanselman.com/blog/googleresults.html?&sa=Search&domains=www.hanselman.co[…]000%3BGFNT%3AA9501B%3BGIMP%3AA9501B%3BFORID%3A11&hl=en&q=wsl
+
+
+Developing for Linux on Windows - Scott Hanselman - NDC Porto 2022
+
+https://www.youtube.com/watch?v=tuhzVDc0Slg&ab_channel=NDCConferences
+

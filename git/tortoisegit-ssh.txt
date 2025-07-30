@@ -1,0 +1,7 @@
+This should be
+
+C:\Program Files\Git\usr\bin\ssh.exe
+
+in latest version of Git as mentioned by Aleksey Kontsevich in the comments.
+
+C:\Program Files\TortoiseGit\bin\TortoiseGitPlink.exe

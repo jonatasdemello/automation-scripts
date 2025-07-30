@@ -1,0 +1,18 @@
+tag:
+
+The tag must be valid ASCII and can contain lowercase and uppercase letters, digits, underscores, periods, and hyphens.
+It can't start with a period or hyphen and must be no longer than 128 characters.
+If you don't specify a tag, the command uses latest by default.
+
+name:
+
+Docker container names are case-sensitive with limitations on only using
+uppercase, lowercase letters, digits, hyphens, underscores, and dots.
+
+
+    numbers 0-9
+    lowercase letters a-z
+    uppercase letters A-Z
+    underscore _
+    point .
+    hyphen -

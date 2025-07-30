@@ -1,0 +1,47 @@
+
+bash - Movement
+Ctrl + a	;	go to the start of the command line
+Ctrl + e	;	go to the end of the command line
+Ctrl + xx	;	(toggle) beginning of line/c­ursor position
+Alt + b		;	previous word begin
+Alt + f		;	next word end
+Ctrl + f	;	forward one character
+Ctrl + b	;	back one character
+
+bash - Manipulation
+Alt + c		;	from cursor, capitalize to end of word
+Alt + u		;	from cursor, uppercase to end of word
+Alt + l		;	from cursor, lowercase to end of word
+Alt + t		;	transpose word with previous word
+Ctrl + t	;	transpose character with previous character
+
+bash - Command Control
+Ctrl + l	;	clear screen
+Ctrl + s	;	stops screen output (for verbose commands)
+Ctrl + q	;	allow screen output (undo Ctrl+S)
+Ctrl + c	;	terminate command
+Ctrl + z	;	suspend comman­d/send to background (use fg to bring forward)
+
+bash - Command Recall
+Ctrl + r	;	search history backward
+Ctrl + g	;	escape from history search mode
+Ctrl + p	;	previous command in history (walk back)
+Ctrl + n	;	next command in history (walk forward)
+Alt + .		;	last word of previous command
+
+bash - Cut/Paste/Delete
+Ctrl + u	;	from cursor, delete to start of line
+Ctrl + k	;	from cursor, delete to end of line
+Ctrl + w	;	from cursor, delete to start of word
+Alt + d		;	from cursor, delete to end of word
+Ctrl + d	;	delete character under cursor
+Ctrl + h	;	delete character before cursor
+Ctrl + y	;	after cursor, paste cut/de­leted text
+
+bash - Bang (!) Commands
+!!		;	run last command
+!foo	;	run most recent command starting with 'foo'
+!foo:p	;	print most recent command starting with 'foo'
+!$		;	last word of previous command (Alt + .)
+!*		;	previous command without last argument
+!*:p	;	print previous command without last argument

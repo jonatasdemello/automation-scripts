@@ -1,0 +1,7 @@
+Git Rebuild:
+	git commit --allow-empty
+	git commit --allow-empty -m "trigger build"
+
+
+Github Rebuild:
+	git commit --allow-empty -m "trigger build"

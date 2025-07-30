@@ -1,0 +1,177 @@
+dir | Unblock-File
+
+
+DISM /Online /Cleanup-Image /RestoreHealth /Source:C:\RepairSource\Windows /LimitAccess
+
+sfc /scannow
+
+
+
+Add-AppxPackage -register "C:\Program Files\WindowsApps\PackageFullName\appxmanifest.xml" -DisableDevelopmentMode
+
+Add-AppxPackage -DisableDevelopmentMode -register
+
+Add-AppxPackage -Path "C:\Path\filename.Appx"
+
+
+WindowsStore
+
+	Get-AppXPackage | Remove-AppxPackage
+
+	wsreset.exe
+
+	Get-AppxPackage -allusers Microsoft.WindowsStore | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+	Get-AppxPackage -allusers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+
+# Restore Windows Store using Add-AppxPackage command
+
+# If you wish to reinstall or restore all the built-in Windows 10 apps (including Microsoft Store), use this command:
+
+	Get-AppXPackage -allusers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+However, for some users, the above commands may throw one of the following errors, and Store does not get reinstated:
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Method 2: Download the Microsoft Store installer (Appx package)
+
+You can download the Microsoft Store app and its dependencies in the form of .Appx and .AppxBundle package or installers from Microsoft’s servers. Follow these steps to do so:
+
+    Visit the following website:
+
+    https://store.rg-adguard.net/
+
+    The above third-party site can generate download links (to app installers) for the chosen app. These are direct download links pointing at the official Microsoft servers.
+    On the above page, paste the following link in the URL text box. The following is the Microsoft Store app’s official link.
+
+    https://www.microsoft.com/en-us/p/microsoft-store/9wzdncrfjbmp
+
+    Select Retail (or the appropriate branch accordingly), and click the generate button.
+
+	Run each .appx installers first, as they’re the dependencies of Microsoft Store. Alternatively, you can use PowerShell to install each package. The PowerShell command-line syntax is below:
+
+Add-AppxPackage -Path "C:\Path\filename.Appx"
+
+
+Also, you can run the following command to check if an app package is already installed or not:
+
+get-appxpackage | sort-object -Property PackageFullName | select packagefullname | out-gridview
+
+
+Finally, run the Windows Store .appxbundle file and complete the process.
+
+
+Verify the Microsoft Store app info using PowerShell (Optional)
+
+After installing the Microsoft Store appx package, it would have restored the following folders under the
+C:\wProgram Files\WindowsApps folder:
+
+Microsoft.WindowsStore_nnnnn.nnnn.nnn.n_neutral_~_8wekyb3d8bbwe
+Microsoft.WindowsStore_nnnnn.nnnn.n.n_x64__8wekyb3d8bbwe
+Microsoft.WindowsStore_nnnnn.nnnn.n.n_neutral_split.scale-100_8wekyb3d8bbwe
+
+Optionally, to verify the Microsoft Store app info, open the PowerShell (administrator) window and run the following command:
+
+Get-AppxPackage -allusers Microsoft.WindowsStore
+
+
+
+
+msconfig
+
+reetings,
+
+My name is Rhaine, I'm Independent Community Volunteer. I’m so glad assisting you today
+I am also using Windows 10. Let us work together to sort this out.
+
+Are you experiencing delayed with the start menu or delayed? I tried to run with same pc and I got the same prompt with the Powershell.
+
+If you are getting those errors with the Powershell command it is fine because there are apps running in the background.
+
+You can perform a cleanboot in your device.
+
+- This process will eliminate 3rd party application running in the background of your computer along with services that are not needed to run windows. If there's any conflicting 3rd party application that causes the issue on your computer, this process will stop it.
+
+
+1. Open the run box by pressing the Windows Key + R and type msconfig
+
+2. System Configuration Utility box will open and by default you are on general tab.
+
+3. On the General tab, click the selective startup and make sure that load system service and load startup items both have checked mark.
+
+4. Click on services tab
+
+5. Put a check mark on Hide All Microsoft Services > This is a very important part as if you miss to click on this, computer might not boot properly or permanently and will end up on clean installation.
+
+6. Once Hide all Microsoft Services have checked mark on it, click on Disable All
+
+7. Click on the Startup Tab and click open task manager. This will open another window which contains all your startup applications on the administrator account.
+
+8. Disable all application that you're not using. You can simply just click on them and select disable.
+
+9. Click OK , Apply and close the configuration utility
+
+10. Restart your pc.
+
+Once done restarting your pc go to powershell.
+
+1. Press Windows Key + R
+2. Type powershell right click and run it as administrator
+3. Copy and paste this command
+
+Get-AppXPackage -AllUsers |Where-Object {$_.InstallLocation -like "*SystemApps*"} | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+4. Wait until it finishes.
+5. Once done your start menu should not be delayed anymore.
+
+I hope that the information above helps. Have a nice day ahead and be safe.
+Please let me know how it goes.
+
+
+Warm Regards,
+Rhaine C.
+
+
+https://answers.microsoft.com/en-us/windows/forum/all/how-to-perform-a-repair-upgrade-using-the-windows/35160fbe-9352-4e70-9887-f40096ec3085
+
+OS Version:
+shell:::{bb06c0e4-d293-4f75-8a90-cb05b6477eee}
+dxdiag.exe
+wmic os get BuildNumber
+wmic os get Caption, Version, BuildNumber, OSArchitecture
+
+C:\Program Files\WindowsApps
+
+Add-AppxPackage
+   [-Path] <String>
+   [-DependencyPath <String[]>]
+   [-Register]
+   [-DisableDevelopmentMode]
+   [-ForceApplicationShutdown]
+   [-ForceTargetApplicationShutdown]
+   [-ForceUpdateFromAnyVersion]
+   [-InstallAllResources]
+   [-ExternalLocation <String>]
+   [-WhatIf]
+   [-Confirm]
+   [<CommonParameters>]
+
+-ForceApplicationShutdown
+-ForceTargetApplicationShutdown
+-ForceUpdateFromAnyVersion
+
+Add-AppxPackage -Path "C:\Tools\Store\"
+
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.Appx"
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.Appx"
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.UI.Xaml.2.7_7.2109.13004.0_x64__8wekyb3d8bbwe.Appx"
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.VCLibs.140.00_14.0.30704.0_x64__8wekyb3d8bbwe.Appx"
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.WindowsStore_22202.1402.2.0_neutral_~_8wekyb3d8bbwe.Msixbundle"
+Add-AppxPackage -Path "C:\Tools\Store\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+
+
+https://docs.microsoft.com/en-us/powershell/module/appx/add-appxpackage?view=windowsserver2022-ps

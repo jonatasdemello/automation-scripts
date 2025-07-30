@@ -1,0 +1,27 @@
+# nuget packages
+
+global-packages: 	D:\jonatasd\.nuget\packages
+temp: 				C:\Users\jonatas\AppData\Local\Temp\NuGetScratch
+http-cache: 		C:\Users\jonatas\AppData\Local\NuGet\v3-cache
+plugins-cache: 		C:\Users\jonatas\AppData\Local\NuGet\plugins-cache
+
+
+.\nuget.exe locals all -list
+.\nuget.exe locals all -clear
+
+nuget locals all -list
+nuget locals all -clear
+
+del %LOCALAPPDATA%\NuGet\Cache\*.nupkg /q
+%userprofile%\.nuget\packages
+
+dnu clear-http-cache
+
+You can use PowerShell too (same as me).
+
+rm $env:LOCALAPPDATA\NuGet\Cache\*.nupkg
+
+Or 'quiet' mode (without error messages):
+
+rm $env:LOCALAPPDATA\NuGet\Cache\*.nupkg 2> $null
+

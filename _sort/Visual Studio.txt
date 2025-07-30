@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------------------------------
+Visual Studio
+---------------------------------------------------------------------------------------------------
+
+devenv.exe /Resetuserdata
+devenv.exe /ResetSettings
+
+VS2019 is in our shared drive in our IT folder.
+\\192.168.50.14\share\Shared\IT\VS2019
+this key should work for Vs2019 Pro/Enterprise (iirc its our vol lic key).
+	PQ79N-KTTGD-JCV7Y-697FW-PKFDF (edited)
+
+
+Visual Studio
+its in our shared drive in our IT folder.
+\\192.168.50.14\share\Shared\IT\VS2019
+this key should work for Vs2019 Pro/Enterprise
+	PQ79N-KTTGD-JCV7Y-697FW-PKFDF
+
+ok I've put Visual Studio 2022 installer and the VL key in :
+\\192.168.50.14\share\Shared\IT\VS2022 (edited)
+
+2019
+	GPCHV-NH7MB-WRBBD-KCJM6-P7MQY - Professional
+	6FNK8-CM964-8FD6V-DG44Y-3GRDF - Enterprise
+2022
+	WR24N-C6RDR-TC9GD-HYQ72-DDFB8

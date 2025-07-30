@@ -1,0 +1,439 @@
+EXPRESSOES REGULARES
+====================
+	http://regexpal.com
+	http://aurelio.net/regex
+
+Greedy   Not-Greedy  Quantidade
+---------------------------------------
+*        *?          zero ou mais
++        +?          um ou mais
+?        ??          zero ou um
+{n,m}    {n,m}?      mínimo N, máximo M
+
+.		any character, except \r \n
+*		preceding character, 0 or +
++		preceding character, 1 or +
+?		preceding character, 0 or 1 (optional)
+
+^		beginning of line
+$		end of line
+|		or
+[]		list
+{}		repetition
+{n}		preceding character, n times
+{n,m}	preceding character, from n to m times
+
+\b		word boundary:  \bh matches "h" in "house"
+\B		anything other than a word boundary:  \Bh matches "h" in "chase"
+\d		any digit [0-9]
+\D		any non digit [^0-9]
+
+\f		form feed
+\n		new line
+\r		carriage return
+\t		tab
+
+\s		single space (including tab, form feed or new line)
+\S		non-white-space caracter
+
+\w		alphabetic caracter [A-Za-z0-9_]
+\W		non alphabetic character [^A-Za-z0-9_]
+
+
+SPACES / EMPTY LINE
+---------------------------------------------------------------------------------------------------
+\s+			um ou mais espacos
+ +$			espaços desnecessários
+[ ]{2,}		remove duplicate spaces
+
+[ \t]+$				trim trailing spaces
+^[ \t]+|[ \t]+$		Regex to find trailing and leading whitespaces
+
+\r\n\r\n	blank lines
+
+^\s*[\r\n]+ 			Replace: \n
+^[\s]*(.*?)[\s]*$		trim spaces
+^(\t+ | +\t)|[\t ]+$	espaços e tabs no início da linha, ou no final das linha
+
+
+QUOTES
+---------------------------------------------------------------------------------------------------
+"[^"]*"							qqr coisa entre aspas
+".*?"	 						qqr coisa entre aspas
+"[^"\n\r]*" 					qqr coisa entre aspas sem quebra linha
+"[^"\\]*(\\.[^"\\]*)*"			qqr coisa entre \" com quebra de linha
+"[^"\\\r\n]*(\\.[^"\\\r\n]*)*"	qqr coisa entre \" sem quebra de linha
+
+
+""[^"\r\n]*""  						matches a single-line string that does not allow the quote character to appear inside the string.  Using the negated character class is more efficient than using a lazy dot. ""[^"]*""  allows the string to span across multiple lines.
+""[^"\\\r\n]*(\\.[^"\\\r\n]*)*""  	matches a single-line string in which the quote character can appear if it is escaped by a backslash.  Though this regular expression may seem more complicated than it needs to be, it is much faster than simpler solutions which can cause a whole lot of backtracking in case a double quote appears somewhere all by itself rather than part of a string. ""[^"\\]*(\\.[^"\\]*)*""  allows the string to span multiple lines.
+
+You can adapt the above regexes to match any sequence delimited by two (possibly different) characters.  If we use "b" for the starting character, "e" and the end, and "x" as the escape character, the version without escape becomes "b[^e\r\n]*e", and the version with escape becomes "
+b[^ex\r\n]*(x.[^ex\r\n]*)*"".
+
+
+STRINGS
+---------------------------------------------------------------------------------------------------
+
+.*			qqr coisa
+.$			ultimo caracter da linha
+^$			uma linha vazia
+^.{20,60}?	uma linha com 20 a 60 caracteres
+#.*$		o caracter # até o final da linha
+
+.*\.com		is equivalent to *.com
+.*\(		qqr coisa até o (
+[!].*		linhas começando com !
+(.{10}) 	encontra os 10 primeiros caracteres da linha
+(\**\*)		line of *
+
+^((?!_).)*$		linha sem _
+^((?!xxx).)*$	linha sem xxx
+
+^[^(]*\(		tudo do começo da linha até o (
+^[^\(].*\(		tudo do começo da linha até o (
+^.*?,			todos os espacos do começo da linha até a , virgula
+
+"(?!.*").*		Last "
+foo(?!.*foo)	Last foo
+
+^.*Text\(([0-9]{1,5}).*$		Extract Text(000) replace: Text: \1
+
+
+[bo]+	 		qqr combinacao de b e o como: b,o,bo,ob,bob,bboobb
+b[aei]d 		bad,bed,bid
+A[3-6] 			A2,A4,A5,A6
+fala[a!]?		falar,fala!,fala
+[A-Za-z]+		qqr serie de caracteres alfabeticos
+a[^a-z] 		a$,a@,a# ... qqr coisa que não seja letra depois do a
+(abc)+  		abc,abcabc,abcabcabc ...
+ab|cd			ab ou cd
+a(bb|cc)d		abbd ou accd
+ab?c			abc ou ac 	b é opcional
+ab(cd)?ef		abcdef ou abef
+ab*c			ac,abc,abbc,abbbc
+ab+c			abc,abbc,abbbc
+ab{3}c			abbbc
+ab{2,4}c		abbc,abbbc,abbbbc
+ab{1,}c 		o mesmo que ab+c
+ab{3,}c 		abbbc, abbbbc,  3 ou mais b's
+ab{0,2}c		ac,abc,abbc	até 2 b's
+^ *[0-9]+		qqr número no incio da linha, com ou sem espaços
+
+(quero)-\1		quero-quero
+([A-z]+)-\1		quero-quero, bate-bate, vai-vai, come-come
+([A-z]+)-?\1	bombom, lili, dudu
+\b([A-z]+) \1\b	palavras repetidas coisa coisa
+
+[^\x00-\x7F]+	search for non-ascii values:
+\[\d*[^\]]\] 	remove [999]
+\{\d*[^\}]\}  	remove {999}
+
+WORDS
+---------------------------------------------------------------------------------------------------
+"\b(first|second|third|etc)\b"	Reserved Words or Keywords
+
+
+HTML Tags
+---------------------------------------------------------------------------------------------------
+</?b>			remove a tag <b> e </b>
+<font [^>]*>	procura tag <font> com qqr parametro
+</?font[^>]*>	idem, + </font>
+<[^>]+>			replace all HTML tags
+\<[^\>]*\>		tags html
+<[^>]*>			tags html
+
+<tag [^>]*>(.*?)</tag>	procura uma tag inclusive o que esta dentro dela
+(class|style)="[^"]*"	retira atributos "class" e "style"
+
+<span>(.*?)</span>				remove tag
+<script [^>]*>(.*?)</script>	scripts
+
+
+<img [^>]*/>		images
+style="[^"]*"		style attribute
+style='[^']*'		style attribute
+href="[^"].*" 		match href="*"
+href="[^"]*" 		match href="*"
+attribute=(.[^ ]+)	attribute=value
+title="(.[^"]+)"	title="xxx"
+(?<=\btitle=")[^"]*	title="xxx"
+
+<h1(.*?)</h1>		Replace: <h2\1</h2>
+
+Fix html attibutes without =""
+	find 		([^%])=([^" ].*?)\s
+	replace		\1=\"\2\"
+	
+
+(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?
+Applied on:
+	<a href=test.html class=xyz>
+	<a href="test.html" class="xyz">
+	<a href='test.html' class="xyz">
+it would yield:
+	'href' => 'test.html'
+	'class' => 'xyz'
+
+
+^(\t+ | +\t)|[\t ]+$	espaços e tabs no início da linha, ou no final das linha
+
+
+LIMPAR HTML WORD:
+=================
+The first regular expression removes unwanted tags, and is broken down as follows:
+
+	<[/]?(font|span|xml|del|ins|[ovwxp]:\w+)[^>]*?>
+
+The second regular expression removes unwanted attributes, and is broken down as follows:
+
+	<([^>]*)(?:class|lang|style|size|face|[ovwxp]:\w+)=(?:'[^']*'|""[^""]*""|[^\s>]+)([^>]*)>
+
+
+In Notepad++ :
+<option value value='1' >A
+<option value value='2' >B
+<option value value='3' >C
+<option value value='4' >D
+
+	Find what: (.*)(>)(.)
+	Replace with: \3
+	Replace All
+A
+B
+C
+D
+
+
+CSV
+---------------------------------------------------------------------------------------------------
+
+(?:\s*(?:\"([^\"]*)\"|([^,]+))\s*,?)+?		csv
+
+
+
+STRINGS
+---------------------------------------------------------------------------------------------------
+""[^"\r\n]*""  matches a single-line string that does not allow the quote character to appear inside the string.  Using the negated character class is more efficient than using a lazy dot. ""[^"]*""  allows the string to span across multiple lines.
+""[^"\\\r\n]*(\\.[^"\\\r\n]*)*""  matches a single-line string in which the quote character can appear if it is escaped by a backslash.  Though this regular expression may seem more complicated than it needs to be, it is much faster than simpler solutions which can cause a whole lot of backtracking in case a double quote appears somewhere all by itself rather than part of a string. ""[^"\\]*(\\.[^"\\]*)*""  allows the string to span multiple lines.
+
+You can adapt the above regexes to match any sequence delimited by two (possibly different) characters.
+If we use "b" for the starting character, "e" and the end, and "x" as the escape character,
+the version without escape becomes "b[^e\r\n]*e", and the version with escape becomes "
+b[^ex\r\n]*(x.[^ex\r\n]*)*"".
+
+
+COMMENTS
+---------------------------------------------------------------------------------------------------
+
+
+/\*([^\*/])*\*/		comments /* ... */
+/<!--[\s\S]*?-->/g	comments <!-- .... -->
+
+(//[\t|\s|\w|\d|\.]*[\r\n|\n])|([\s|\t]*/\*[\t|\s|\w|\W|\d|\.|\r|\n]*\*/)|(\<[!%][ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t%]*)\>)
+(\/\*[\w\'\s\r\n\*]*\*\/)|(\/\/[\w\s\']*)|(\<![\-\-\s\w\>\/]*\>)
+[/][*]([^*]|[*]*[^*/])*[*]+[/]
+
+"#.*$" 		matches a single-line comment starting with a "#" and continuing until the end of the line.
+"//.*$"		matches a single-line comment starting with "//".
+"^#.*$" 	the comment must appear at the start of the line.
+"^\s*#.*$"	only whitespace is allowed between the start of the line and the comment.
+"/\*.*?\*/"	matches a C-style multi-line comment if you turn on the option for the dot to match newlines.
+
+---------------------------------------------------------------------------------------------------
+DUPLICATE LINES
+
+^(.*)(\r?\n\1)+$		remover linhas duplicadas - replace by:  \1
+^(.*)(\r?\n\1)+$		Deleting Duplicate Lines From a File
+(?<=,|^)([^,]*)(,\1)+(?=,|$)	remove subsequent duplicates from a comma-delimited list
+
+if the rows are immediately after each other then you can use a regex replace
+
+Search: ^(.*\n)\1	Replace with: \1
+
+Two step variant
+(?!^.*test.*$)^.+	replace test with your requested text
+[\r\n]{2,}			replace with \r\n
+
+Single step variant
+Use ^(?!<Path>).*\r\n to replace matches with empty string.
+Generalized version would be ^(?!.*?test).*\r\n.
+This won't remove empty line at the end of the file.
+All other lines are removed, including multiple consecutive empty lines.
+
+Explanation:
+(?!) is a negative look up. ^.*test.*$ selects the whole line that contains the requested text.
+
+[\r\n]{2,} matches any \r\n that occurs more then once this is Windows New line.
+if you have Linux or another operating system you might need to mess with this.
+the second is to replace it with one return line.
+
+---------------------------------------------------------------------------------------------------
+Put each "Item" on a new line:
+
+Find: (\+.*)(Item)		Replace with: \1\r\n\2
+
+	\+ finds the + character.
+	.* selects the text after the + up until the word "Item".
+	Item finds the string "Item".
+	() allow us to access whatever is inside the parentheses.
+	The first set of parentheses may be accessed with \1 and the second set with \2.
+	\1\r\n\2 will take + and whatever text comes after it, will then add a new line,
+	and place the string "Item" on the new line.
+
+Find: mork ([^A-Za-z]*)mork [^A-Za-z]*\,mork	Replace with: \1
+
+	A-Z 		finds all letters of the alphabet in upper case.
+	a-z 		finds all lower case letters.
+	A-Za-z 		find all alphabetic characters.
+	[^...] 		is the inverse
+	[^A-Za-z] 	finds any character except an alphabetic character.
+	Notice that only one of the [^A-Za-z] is in parentheses ().
+	This is recalled by \1 in the Replace with field.
+	The characters outside of the parentheses are discarded.
+
+
+^.*John.*$						match lines containing the word "John"
+^((?!regexp).)*$				line should not contain something
+^.*\b(one|two|three)\b.*$		matches a complete line of text that contains any of the words "one", "two" or "three".
+^.*?\b(one|two|three)\b.*$		then the backreference will contain the first (leftmost) word.
+
+^(?=.*?\bone\b)(?=.*?\btwo\b)(?=.*?\bthree\b).*$	matches a complete line of text that contains all of the words "one", "two" and "three".
+^(?=.*?\bmust-have\b)(?=.*?\bmandatory\b)((?!avoid|illegal).)*$ 	 positive and negative requirements as follows
+
+
+
+NUMBERS
+---------------------------------------------------------------------------------------------------
+
+[-+]?[0-9]*\.?[0-9]*		float point numbers
+"\b\d+\b" 					matches a positive integer number. Do not forget the word boundaries!
+"[-+]?\b\d+\b" 				allows for a sign.
+"\b0[xX][0-9a-fA-F]+\b"  	matches a C-style hexadecimal number.
+
+"((\b[0-9]+)?\.)?[0-9]+\b"  					matches an integer number as well as a floating point number with optional integer part.
+"(\b[0-9]+\.([0-9]+\b)?|\.[0-9]+\b)"  			matches a floating point number with optional integer as well as optional fractional part, but does not match an integer number.
+"((\b[0-9]+)?\.)?\b[0-9]+([eE][-+]?[0-9]+)?\b"  matches a number in scientific notation.  The mantissa can be an integer or floating point number with optional integer part.  The exponent is optional.
+"\b[0-9]+(\.[0-9]+)?(e[+-]?[0-9]+)?\b"  		also matches a number in scientific notation.  The difference with the previous example is that if the mantissa is a floating point number, the integer part is mandatory.
+
+
+If you read through the floating point number example,
+you will notice that the above regexes are different from what is used there.
+The above regexes are more stringent.
+They use word boundaries to exclude numbers that are part of other things like identifiers.
+You can prepend "[-+]?" to all of the above regexes to include an optional sign in the regex.
+I did not do so above because in programming languages, the + and - are usually considered operators rather than signs.
+
+
+
+EMAIL
+---------------------------------------------------------------------------------------------------
+
+\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b 	is valid email
+
+
+Getting back to the original question, I don't see a performance problem with either of those regexes. Aside from the nested-quantifiers anti-pattern cited in that BCL blog entry, you should also watch out for situations where two or more adjacent parts of the regex can match the same set of characters--for example,
+
+([A-Za-z]+|\w+)@ There's nothing like that in either of the regexes you posted. Parts that are controlled by quantifiers are always broken up by other parts that aren't quantified. Both regexes will experience some avoidable backtracking, but there are many better reasons than performance to reject them.
+
+EDIT: So the second regex is subject to catastrophic backtracking; I should have tested it thoroughly before shooting my mouth off. Taking a closer look at that regex, I don't see why you need the outer asterisk in the first part:
+
+[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])* All that bit does is make sure the first and last characters are alphanumeric while allowing some additional characters in between. This version does the same thing, but it fails much more quickly when no match is possible:
+
+[0-9a-zA-Z][-.\w]*[0-9a-zA-Z] That would probably suffice to eliminate the backtracking problem, but you could also make the part after the "@" more efficient by using an atomic group:
+
+(?>(?:[0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+)[a-zA-Z]{2,9} In other words, if you've matched all you can of substrings that look like domain components with trailing dots, and the next part doesn't look like a TLD, don't bother backtracking. The first character you would have to give up is the final dot, and you know [a-zA-Z]{2,9} won't match that.
+
+
+
+
+---------------------------------------------------------------------------------------------------
+password=[^;]*;
+
+---------------------------------------------------------------------------------------------------
+SET .+?(?=Created)	match from SET until Created
+SET (.*?)abc		adfasd SET whatever whatever abc something abc
+
+	/.+?(?=abc)/	Match any characters as few as possible until a "abc" is found, without counting the "abc".
+	/.+X/  ~ "abcXabcXabcX"        /.+/  ~ "abcXabcXabcX"
+			  ^^^^^^^^^^^^                  ^^^^^^^^^^^^
+	/.+?X/ ~ "abcXabcXabcX"        /.+?/ ~ "abcXabcXabcX"
+			  ^^^^                          ^
+
+	Following that we have (?={contents}), a zero width assertion, a look around.
+	This grouped construction matches its contents, but does not count as characters matched (zero width).
+	It only returns if it is a match or not (assertion).
+	Thus, in other terms the regex /.+?(?=abc)/ means:
+	Match any characters as few as possible until a "abc" is found, without counting the "abc".
+	If you're looking to capture everything up to "abc":
+
+whatever whatever something abc something abc
+
+/^(.*?)abc/		match anything until first "abc"
+/.+?(?=abc)/	Match any characters as few as possible until a "abc" is found, without counting the "abc".
+
+Explanation:
+
+( ) capture the expression inside the parentheses for access using $1, $2, etc.
+^ match start of line
+.* match anything, ? non-greedily (match the minimum number of characters required) - [1]
+[1] The reason why this is needed is that otherwise, in the following string:
+
+
+
+---------------------------------------------------------------------------------------------------
+insert text ever x lines
+
+find:		(.*\r?\n){5}\K
+replace:	GO\r\n
+
+
+VALIDATIONS
+---------------------------------------------------------------------------------------------------
+Regex para validar CEP:		/^[0-9]{5}-[0-9]{3}$/
+Regex para validar CPF:		/^([0-9]{3}\.){2}[0-9]{3}-[0-9]{2}$/
+Regex para validar Datas até 2099, no formato YYYYMMDD: 	/^20[0-9][0-9]([012][0-9]|[3][01])([0][0-9]|[1][012])$/
+Regex para validar MacAddress:  	/^(([0-9a-f]{2}):){5}([0-9a-f]{2})$/
+Regex para validar IP: 			/^(([1]?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}([1]?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$/
+Regex para validar Email: 		/^([[:alnum:]]{1,}|[[:punct:]]{1,})@[[:lower:]]+\.[[:lower:]]+$/
+Regex para remover tag’s HTML: 		“<[^>]*>”, “” ( substitui tags por nada)
+
+
+SIGIL
+---------------------------------------------------------------------------------------------------
+to change all level 1 headings to level 2 headings:
+
+Find: <h1(.*?)</h1>
+Replace: <h2\1</h2>
+
+where the Find command searches for any text between the h1 start and end tags, and using () to save the text. 
+(The start tag is left open in order to catch any class definitions, and the ? tells .* to do minimal matching). 
+The Replace command is used to replace the matched text with the saved text (indicated by \1) surrounded by the h2 start and end tags.
+
+
+When replacing text, one of the most useful features is to be able to use text that was matched by storing it in a group. 
+Once you have grouped text you can reference it in your replace command:
+
+\1 – use in Replace to retrieve the value of a saved group (use \2 for the second group, etc.)
+
+
+to put each "Item" on a new line:
+
+Find what: (\+.*)(Item)
+Replace with: \1\r\n\2
+
+	\+ finds the + character.
+	.* selects the text after the + up until the word "Item".
+	Item finds the string "Item".
+	() allow us to access whatever is inside the parentheses. The first set of parentheses may be accessed with \1 and the second set with \2.
+	\1\r\n\2 will take + and whatever text comes after it, will then add a new line, and place the string "Item" on the new line.
+
+Find what: mork ([^A-Za-z]*)mork [^A-Za-z]*\,mork
+Replace with: \1,
+
+	A-Z finds all letters of the alphabet in upper case.
+	a-z finds all lower case letters.
+	A-Za-z will find all alphabetic characters.
+	[^...] is the inverse. So, if we put these three together: [^A-Za-z] finds any character except an alphabetic character.
+	Notice that only one of the [^A-Za-z] is in parentheses (). This is recalled by \1 in the Replace with field. The characters outside of the parentheses are discarded.
+

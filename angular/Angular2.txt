@@ -1,0 +1,194 @@
+https://app.pluralsight.com/library/courses/angular-fundamentals/table-of-contents
+
+Course Overview
+	Getting Started with Angular
+	Creating and Communicating Between Angular Components
+	Exploring the Angular Template Syntax
+	Creating Reusable Angular Services
+	Routing and Navigating Pages
+	Collecting Data with Angular Forms and Validation
+	Communicating Between Components
+	Reusing Components with Content Projection
+	Displaying Data with Pipes
+	Understanding Angular's Dependency Injection
+	Creating Directives and Advanced Components in Angular
+	Communicating with the Server Using HTTP, Observables, and Rx
+	Unit Testing Your Angular Code
+	Testing Angular Components with Integrated Tests
+	Taking an Angular App to Production
+
+
+
+	Getting Started with Angular
+	Introduction
+
+	Practice Exercises
+
+	Introduction to TypeScript
+
+	Comparing Angular to AngularJS
+
+	A Conceptual Overview of Angular
+	Here's What We'll Be Building
+	Installing Git and Node
+	Getting Started with the Angular CLI
+	Bootstrapping an Angular App
+	A Brief Look at the App Module
+	Accessing Static Files
+	Summary
+	42s
+	Creating and Communicating Between Angular Components
+	Introduction
+	42s
+	Creating Your First Data-bound Component
+	Using External Templates
+	59s
+	Communicating with Child Components Using @Input
+	Communicating with Parent Components Using @Output
+	Using Template Variables to Interact with Child Components
+	Styling Components
+	Exploring Angular's CSS Encapsulation
+	Adding a Site Header
+	Summary
+	24s
+	Exploring the Angular Template Syntax
+	Introduction
+	Interpolation, Property Bindings, and Expressions
+	Event Bindings and Statements
+	Repeating Data with ngFor
+	Handling Null Values with the Safe-Navigation Operator
+	Hiding and Showing Content with ngIf
+	Hiding Content with the [Hidden] Binding
+	Hiding and Showing Content with ngSwitch
+	Styling Components with ngClass
+	Styling Components with ngStyle
+	Summary
+	39s
+	Creating Reusable Angular Services
+	Introduction
+	41s
+	Why We Need Services and Dependency Injection
+	Creating Your First Service
+	Wrapping Third Party Services
+	Summary
+	40s
+	Routing and Navigating Pages
+	Introduction
+	Adding Multiple Pages to Your App
+	Adding Your First Route
+	Accessing Route Parameters
+	Linking to Routes
+	Navigating from Code
+	Guarding Against Route Activation
+	Guarding Against Route De-activation
+	Pre-loading Data for Components
+	Styling Active Links
+	Lazily Loading Feature Modules
+	Organizing Your Exports with Barrels
+	Summary
+	38s
+	Collecting Data with Angular Forms and Validation
+	Introduction
+	45s
+	Using Models for Type Safety
+	Creating Your First Template-based Form
+	ed Form
+	Validating Template-based Forms
+	Creating Your First Reactive Form
+	Validating Reactive Forms
+	Using Multiple Validators in Reactive Forms
+	Diving Deeper into Template-based Forms
+	Editing Data with Two-way Bindings
+	Diving Deeper into Reactive Forms
+	Summary
+	24s
+	Communicating Between Components
+	Introduction
+	16s
+	Passing Data into a Child Component
+	Passing Data out of a Child Component
+	Summary
+	25s
+	Reusing Components with Content Projection
+	Introduction
+	Content Projection
+	Multiple Slot Content Projection
+	Summary
+	29s
+	Displaying Data with Pipes
+	Introduction
+	Using Built-in Pipes
+	Creating a Custom Pipe
+	Sorting and Filtering Overview
+	Creating a Filtering Display
+	Filtering Data
+	Sorting Data
+	Summary
+	40s
+	Understanding Angular's Dependency Injection
+	Introduction
+	46s
+	Using Third Party Global Services - The Problem
+	Angular Dependency Injection Lookup
+	Using Angular's InjectionToken
+	Using Angular's @Inject Decorator
+	The useClass Provider
+	The useExisting and useFactory Providers
+	Summary
+	49s
+	Creating Directives and Advanced Components in Angular
+	Introduction
+	Implementing the Session Search
+	Adding jQuery
+	Creating a Modal Component
+	Fixing Template Parse Errors
+	Creating Directives - The Trigger Directive
+	Binding an ID
+	Routing to the Same Component
+	Using the @ViewChild Decorator
+	Creating Settings on Components
+	Summary
+	16s
+	Introduction
+	36s
+	Creating a Voting Component
+	Adding Voting Functionality
+	Hiding Functionality Before Authentication
+	Using @Input Setters
+	Creating a Custom Validator
+	Adding a Validator to Angular's Validators
+	Implementing a Multi-field Validator
+	Summary
+	23s
+	Communicating with the Server Using HTTP, Observables, and Rx
+	Introduction
+	Preparing to Store Data on the Server
+	Moving Data Storage to the Server
+	Listening to Resolved Data Changes
+	Using POST and PUT
+	Using QueryString Parameters
+	Using DELETE
+	Integrating Authentication with the Server
+	Persisting Authentication Status Across Page Refreshes
+	Saving User Data to the Server
+	Implementing Logout
+	Summary
+	20s
+	Unit Testing Your Angular Code
+	Introduction
+	Installing Karma
+	Unit Testing Services
+	Testing Mock Calls
+	Testing Components with Isolated Tests
+	Summary
+	21s
+	Testing Angular Components with Integrated Tests
+	Introduction
+	Setting up for Integrated Tests
+	Testing Components with Deep Integrated Tests
+	Creating Mock Services
+	Using DebugElement
+	Testing Components with Shallow Integrated Tests
+	Summary
+	37s
+	Taking an Angular App to Production

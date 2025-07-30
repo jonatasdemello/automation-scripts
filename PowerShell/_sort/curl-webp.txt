@@ -1,0 +1,28 @@
+https://platform.cstatic-images.com/in/v2/stock_photos/cc1baad9-dec8-44a2-b11a-0b86e2d88d68/b57394a7-b82f-49d6-a8d9-00ba4038abea.png
+
+# cURL
+
+curl --output image.jpg --url https://domain.tld/image.jpg
+
+# PowerShell
+
+Invoke-WebRequest -OutFile image.jpg -Uri https://domain.tld/image.jpg
+
+# wget
+
+wget -r -c https://cdn.nohesi.gg/cars/
+
+---------------------------------------------------------------------------------------------------
+
+If you don't have either of them, you can do it directly in your browser. Looks harder than it is:
+
+Open a new tab / window and enter address about:blank to open an empty page
+Press F12 to open developer console, go to tab "Console", enter
+
+	document.write('<a href="https://domain.tld/image.jpg">download</a>');
+
+change https://domain.tld/image.jpg to the URL of the image you want to save and press enter
+Right-click on newly appeared link and click on "Save Link As..."
+to download the original image instead of the WEBP
+
+

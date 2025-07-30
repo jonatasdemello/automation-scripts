@@ -1,0 +1,223 @@
+Config:
+	System		C:\Program Files\Git\etc\gitconfig
+	Global		C:\Users\jonatas\.gitconfig
+
+git config --list --show-origin
+
+get:
+	git config --global core.autocrlf
+set:
+	git config --global core.autocrlf true
+	git config --global core.autocrlf input
+	git config --global core.autocrlf false
+
+	git config --global --edit
+
+-------------------------------------------------------------------------------------------------------------------------------
+- ("core.autocrlf" is set to "true")
+	Checkout Windows-style, commit Unix-style line endings
+	Git will convert LF to CRLF when checking out text files.
+	When committing text files, CRLF will be converted to LF.
+	For cross-platform projects, this is the recommended setting on Windows.
+
+- ("core.autocrlf" is set to "input")
+	Checkout as-is, commit Unix-style line endings
+	Git will not perform any conversion when checking out text files.
+	When committing text files, CRLF will be converted to LF.
+	For cross-platform projects this is the recommended setting on Unix.
+
+- ("core.autocrlf" is set to "false")
+	Checkout as-is, commit as-is
+	Git will not perform any conversions when checking out or committing text files.
+	Choosing this option is not recommended for cross-platform projects.
+
+-------------------------------------------------------------------------------------------------------------------------------
+AutoCrLf (false, true, input)
+	If set to "true":
+		makes git convert CRLF at the end of lines in text files to LF when reading from the filesystem,
+		and convert in reverse when writing to the filesystem.
+
+	If set to "input":
+		in which case the conversion happens only while reading from the filesystem
+		but files are written out with LF at the end of lines.
+
+		A file is considered "text" (i.e. be subjected to the AutoCrLf mechanism) based on the file's CRLF attribute, or if CRLF is unspecified, based on the file's contents.
+
+SafeCrLf (false, true, warn)
+	If true,
+		makes git check if converting CRLF as controlled by core.autocrlf is reversible.
+		Git will verify if a command modifies a file in the work tree either directly or indirectly.
+
+		For example, committing a file followed by checking out the same file should yield the original file in the work tree.
+		If this is not the case for the current setting of core.autocrlf, git will reject the file.
+
+		The variable can be set to "warn", in which case git will only warn about an irreversible conversion but continue the operation.
+
+core.eol
+
+    Sets the line ending type to use in the working directory for files that are marked as text (either by having the text attribute set, or by having text=auto and Git auto-detecting the contents as text).
+	Alternatives are lf, crlf and native, which uses the platform’s native line ending.
+	The default value is native. See gitattributes(5) for more information on end-of-line conversion. Note that this value is ignored if core.autocrlf is set to true or input.
+
+    core.eol = native The default.
+		When Git needs to change line endings to write a file in your working directory it will change them to whatever is the default line ending on your platform. For Windows this will be CRLF, for Unix/Linux/OS X this will be LF.
+    core.eol = crlf
+		When Git needs to change line endings to write a file in your working directory it will always use CRLF to denote end of line.
+    core.eol = lf
+		When Git needs to change line endings to write a file in your working directory it will always use LF to denote end of line.
+
+core.autocrlf
+
+    Setting this variable to "true" is the same as setting the text attribute to "auto" on all files and core.eol to "crlf".
+	Set to true if you want to have CRLF line endings in your working directory and the repository has LF line endings.
+	This variable can be set to input, in which case no output conversion is performed.
+
+
+    core.autocrlf = false
+		This is the default, but most people are encouraged to change this immediately. The result of using false is that Git doesn’t ever mess with line endings on your file. You can check in files with LF or CRLF or CR or some random mix of those three and Git does not care. This can make diffs harder to read and merges more difficult. Most people working in a Unix/Linux world use this value because they don’t have CRLF problems and they don’t need Git to be doing extra work whenever files are written to the object database or written out into the working directory.
+
+    core.autocrlf = true
+		This means that Git will process all text files and make sure that CRLF is replaced with LF when writing that file to the object database and turn all LF back into CRLF when writing out into the working directory. This is the recommended setting on Windows because it ensures that your repository can be used on other platforms while retaining CRLF in your working directory.
+
+    core.autocrlf = input
+		This means that Git will process all text files and make sure that CRLF is replaced with LF when writing that file to the object database. It will not, however, do the reverse. When you read files back out of the object database and write them into the working directory they will still have LFs to denote the end of line. This setting is generally used on Unix/Linux/OS X to prevent CRLFs from getting written into the repository. The idea being that if you pasted code from a web browser and accidentally got CRLFs into one of your files, Git would make sure they were replaced with LFs when you wrote to the object database.
+
+
+core.safecrlf
+
+	The next setting that was introduced is core.safecrlf which is designed to protect against these cases where Git might change line endings on a file that really should just be left alone.
+
+    core.safecrlf = true - When getting ready to run this operation of replacing CRLF with LF before writing to the object database, Git will make sure that it can actually successfully back out of the operation. It will verify that the reverse can happen (LF to CRLF) and if not the operation will be aborted.
+    core.safecrlf = warn - Same as above, but instead of aborting the operation, Git will just warn you that something bad might happen.
+
+
+
+    If true, makes Git check if converting CRLF is reversible when end-of-line conversion is active. Git will verify if a command modifies a file in the work tree either directly or indirectly. For example, committing a file followed by checking out the same file should yield the original file in the work tree. If this is not the case for the current setting of core.autocrlf, Git will reject the file. The variable can be set to "warn", in which case Git will only warn about an irreversible conversion but continue the operation.
+
+    CRLF conversion bears a slight chance of corrupting data. When it is enabled, Git will convert CRLF to LF during commit and LF to CRLF during checkout. A file that contains a mixture of LF and CRLF before the commit cannot be recreated by Git. For text files this is the right thing to do: it corrects line endings such that we have only LF line endings in the repository. But for binary files that are accidentally classified as text the conversion can corrupt data.
+
+    If you recognize such corruption early you can easily fix it by setting the conversion type explicitly in .gitattributes. Right after committing you still have the original file in your work tree and this file is not yet corrupted. You can explicitly tell Git that this file is binary and Git will handle the file appropriately.
+
+    Unfortunately, the desired effect of cleaning up text files with mixed line endings and the undesired effect of corrupting binary files cannot be distinguished. In both cases CRLFs are removed in an irreversible way. For text files this is the right thing to do because CRLFs are line endings, while for binary files converting CRLFs corrupts data.
+
+    Note, this safety check does not mean that a checkout will generate a file identical to the original file for a different setting of core.eol and core.autocrlf, but only for the current one. For example, a text file with LF would be accepted with core.eol=lf and could later be checked out with core.eol=crlf, in which case the resulting file would contain CRLF, although the original file contained LF. However, in both work trees the line endings would be consistent, that is either all LF or all CRLF, but never mixed. A file with mixed line endings would be reported by the core.safecrlf mechanism.
+
+
+core.fileMode
+
+    Tells Git if the executable bit of files in the working tree is to be honored.
+
+    Some filesystems lose the executable bit when a file that is marked as executable is checked out, or checks out a non-executable file with executable bit on. git-clone(1) or git-init(1) probe the filesystem to see if it handles the executable bit correctly and this variable is automatically set as necessary.
+
+    A repository, however, may be on a filesystem that handles the filemode correctly, and this variable is set to true when created, but later may be made accessible from another environment that loses the filemode (e.g. exporting ext4 via CIFS mount, visiting a Cygwin created repository with Git for Windows or Eclipse). In such a case it may be necessary to set this variable to false. See git-update-index(1).
+
+    The default is true (when core.filemode is not specified in the config file).
+
+
+One final layer on all this is that you can create a file called .gitattributes in the root of your repository and add rules for specific files. These rules allow you to control things like autocrlf on a per file basis. So you could, for instance, put this in that file to tell Git to always replace CRLF with LF in txt files:
+
+*.txt crlf
+
+Or you could do this to tell Git to never replace CRLF with LF for txt files like this:
+
+*.txt -crlf
+
+Or you could do this to tell Git to only replace CRLF with LF when writing, but to read back LF when writing the working directory for txt files like this:
+
+*.txt crlf=input
+
+-------------------------------------------------------------------------------------------------------------------------------
+Git EOL
+
+    text=auto Git will handle the files in whatever way it thinks is best. This is a good default option.
+
+    text eol=crlf Git will always convert line endings to CRLF on checkout. You should use this for files that must keep CRLF endings, even on OSX or Linux.
+
+    text eol=lf Git will always convert line endings to LF on checkout. You should use this for files that must keep LF endings, even on Windows.
+
+    binary Git will understand that the files specified are not text, and it should not try to change them. The binary setting is also an alias for -text -diff.
+
+
+git config --global core.autocrlf false
+
+git rm -rf --cached .
+git reset --hard HEAD
+
+git status
+
+
+$ git config --global core.autocrlf true
+# Configure Git to ensure line endings in files you checkout are correct for Windows.
+# For compatibility, line endings are converted to Unix style when you commit files.
+
+-------------------------------------------------------------------------------------------------------------------------------
+rem --------- this will delete uncommited/untracked files ---------
+
+git clean -fd
+git gc
+git maintenance run
+
+git checkout master
+git fetch
+git pull --progress -v --no-rebase --prune origin master
+
+git checkout -
+git merge master -m "merge from master"
+
+git push origin
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+CRLF
+
+git config core.autocrlf true
+
+git config core.ignorecase
+git config core.ignorecase true
+git config core.ignorecase false
+
+## Prevent auto replacing LF with CRLF
+
+git config --global core.autocrlf false
+
+http://www.stegriff.co.uk/upblog/gitattributes-error-is-not-a-valid-attribute-name
+https://stackoverflow.com/questions/21093479/openssl-is-not-a-valid-attribute-name-git-info-attributes5
+
+
+gitattributes error ' is not a valid attribute name'
+Instead of:
+	.htaccess merge = ours
+Consider:
+	.htaccess merge=ours
+
+
+
+https://git-scm.com/docs/gitattributes#_description
+
+End-of-line conversion
+
+While Git normally leaves file contents alone, it can be configured to normalize line endings to LF in the repository and, optionally, to convert them to CRLF when files are checked out.
+
+If you simply want to have CRLF line endings in your working directory regardless of the repository you are working with, you can set the config variable "core.autocrlf" without using any attributes.
+
+[core]
+	autocrlf = true
+
+This does not force normalization of text files, but does ensure that text files that you introduce to the repository have their line endings normalized to LF when they are added, and that files that are already normalized in the repository stay normalized.
+
+If you want to ensure that text files that any contributor introduces to the repository have their line endings normalized, you can set the text attribute to "auto" for all files.
+
+*	text=auto
+
+The attributes allow a fine-grained control, how the line endings are converted. Here is an example that will make Git normalize .txt, .vcproj and .sh files, ensure that .vcproj files have CRLF and .sh files have LF in the working directory, and prevent .jpg files from being normalized regardless of their content.
+
+*           text=auto
+*.txt		text
+*.vcproj	text eol=crlf
+*.sh		text eol=lf
+*.jpg		-text
+
+Note
+When text=auto conversion is enabled in a cross-platform project using push and pull to a central repository the text files containing CRLFs should be normalized.
+
+

@@ -1,0 +1,46 @@
+Remove Sensitive data from Git:
+
+https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository
+
+https://rtyley.github.io/bfg-repo-cleaner/
+
+
+
+
+git filter-branch --index-filter 'git rm -rf --cached --ignore-unmatch path_to_file' HEAD
+
+
+
+git filter-branch --tree-filter "rm -rf node_modules" --prune-empty HEAD
+git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+echo node_modules/ >> .gitignore
+git add .gitignore
+git commit -m 'Removing node_modules from git history'
+git gc
+git push origin master --force
+
+
+
+git filter-branch --tree-filter 'rm -rf node_modules' --prune-empty HEAD
+echo node_modules/ >> .gitignore
+git add .gitignore
+git commit -m 'Removing node_modules from git history'
+git gc
+git push origin master --force
+
+
+
+
+git filter-branch --tree-filter 'rm -rf node_modules' --prune-empty HEAD
+
+
+
+git clone --bare https://project/repository project-repository
+cd project-repository
+java -jar bfg.jar --delete-folders DIRECTORY_NAME
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+git push --mirror https://project/new-repository
+
+
+java -jar bfg.jar --delete-files *.pyc
+

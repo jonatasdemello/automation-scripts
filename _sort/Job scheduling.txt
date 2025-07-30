@@ -1,0 +1,10 @@
+Job scheduling
+
+https://temporal.io/pricing
+
+https://airflow.apache.org/
+
+https://www.hangfire.io/
+https://www.hangfire.io/overview.html
+
+https://www.quartz-scheduler.net/

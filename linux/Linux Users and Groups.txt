@@ -1,0 +1,208 @@
+# Linux Users and Groups
+
+sudo useradd -s /bin/bash -o -u `id -u` -g `id -g` USERNAME
+
+sudo useradd -s /bin/bash -m -g bitnami USERNAME
+id username
+
+# To allow the new user to execute commands as the root user,
+# add the new user account to the bitnami-admins group,
+# by executing the following command when logged in as the bitnami user:
+
+sudo usermod -aG bitnami-admins USERNAME
+
+# To delete the new user account, execute the following command:
+
+sudo userdel USERNAME -f
+
+
+cat /etc/group
+cat /etc/gshadow
+cat /etc/paswd
+
+
+ls -la /home/mktUser
+
+id -u username
+
+cat /etc/login.defs
+
+groups
+groups bitnami
+id groups
+id -nG
+
+# List All Members of a Group
+getent group developers
+
+less /etc/group
+getent group | awk -F: '{ print $1}'
+getent group | cut -d: -f1
+
+
+
+# List all Groups a User is a Member of
+
+# The primary user’s group is stored in the /etc/passwd file and the supplementary groups, if any, are listed in the /etc/group file.
+
+groups
+
+# To get a list of all groups a specific user belongs to, provide the username to the groups command as an argument:
+
+groups linuxize
+
+# The id command prints information about the specified user and its groups. If the username is omitted it shows information for the current user.
+
+id linuxize
+
+# The following command will print the names of the groups the current user is a member of:
+
+id -nG
+
+# List All Members of a Group
+
+getent group developers
+
+# List All Groups
+
+less /etc/group
+
+# Another option is to use the getent command which displays entries from databases configured in /etc/nsswitch.conf file including the group database which we can use to query a list of all groups.
+
+getent group
+getent group | awk -F: '{ print $1}'
+getent group | cut -d: -f1
+
+
+
+
+
+# Add an Existing User to a Group
+
+sudo usermod -a -G groupname username
+
+# For example, to add the user linuxize to the sudo group you would run the following command:
+
+sudo usermod -a -G sudo linuxize
+
+# Add an Existing User to Multiple Groups in One Command
+
+sudo usermod -a -G group1,group2 username
+
+# Remove a User From a Group
+
+sudo gpasswd -d username groupname
+
+# Create a Group
+
+sudo groupadd groupname
+
+# Delete a Group
+
+sudo groupdel groupname
+
+
+# Change a User’s Primary Group
+
+sudo usermod -g groupname username
+
+# In the following example, we are changing the primary group of the user linuxize to developers:
+
+sudo usermod -g developers linuxize
+
+# Create a New User and Assign Groups in One Command
+# The following useradd command creates a new user named nathan with primary group users and secondary groups wheel and developers.
+
+sudo useradd -g users -G wheel,developers nathan
+
+# Display User Groups
+
+id username
+
+# If you omit the username, the command will print the information about the currently logged in user. Let’s check the user linuxize:
+
+id linuxize
+
+# Use the groups command to display the user’s supplementary groups:
+
+groups linuxize
+
+
+# add user useradd Command
+
+useradd [OPTIONS] USERNAME
+
+sudo useradd username
+
+# When executed without any option, useradd creates a new user account using the default settings specified in the /etc/default/useradd file.
+# The command adds an entry to the /etc/passwd, /etc/shadow, /etc/group and /etc/gshadow files.
+# To be able to log in as the newly created user, you need to set the user password. To do that run the passwd command followed by the username:
+
+sudo passwd username
+
+# How to Add a New User and Create Home Directory
+# On most Linux distributions, when creating a new user account with useradd, the user’s home directory is not created.
+# Use the -m (--create-home) option to create the user home directory as /home/username:
+
+sudo useradd -m username
+
+# The command above creates the new user’s home directory and copies files from /etc/skel directory to the user’s home directory.
+# If you list the files in the /home/username directory, you will see the initialization files:
+
+ls -la /home/username/
+
+# Creating a User with Specific Home Directory
+
+sudo useradd -m -d /opt/username username
+
+# Creating a User with Specific User ID
+
+sudo useradd -u 1500 username
+id -u username
+
+# Creating a User with Specific Group ID
+
+sudo useradd -g users username
+id -gn username
+
+# Creating a User and Assign Multiple Groups
+
+sudo useradd -g users -G wheel,developers username
+id username
+
+
+
+. ~/.bashrc
+chmod 777 .bashrc
+
+chmod u=rwx,g=rx,o=r myfile
+chmod 754 myfile
+
+
+# The file is probably not owned by you. try
+
+sudo chmod og=rw bash.bashrc
+
+# You can see who owns it with
+
+ls -l
+
+# and you can change owner with
+
+sudo chown username:username bash.bashrc
+
+
+#  So, with this configuration, if you want a user to have sudo rights, you can just add them to the admin or sudo group, and don't need to edit sudoers at all. In this case, the command:
+
+usermod -aG sudo hope
+
+# Would grant sudo rights to the user hope next time they log in. For more information about how to use usermod to change a user's group membership, see the usermod command.
+
+# add user to sudoers file by inputting
+# put your username in place of username
+
+adduser username sudo
+
+#Set the correct permissions for sudoers file by inputting
+chmod  0440  /etc/sudoers
+

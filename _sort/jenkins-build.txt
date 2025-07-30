@@ -1,0 +1,38 @@
+Post build
+
+Project.Web.${BUILD_DISPLAY_NAME}
+
+${BUILD_URL}
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+to
+${BUILD_NUMBER}
+
+${BUILD_URL}
+
+-------------------------------------------------------------------------------------------------------------------------------
+Create a formatted version number
+
+Environment Variable Name
+	BUILD_NUMBER
+
+Version Number Format String
+	${MAJOR_BUILD_NUMBER}.${MINOR_BUILD_NUMBER}.${BUILDS_ALL_TIME}
+
+	${MAJOR_BUILD_NUMBER}.${MINOR_BUILD_NUMBER}.${BUILD_NUMBER}
+
+-------------------------------------------------------------------------------------------------------------------------------
+Set Build Name ?
+Build Name
+
+	${MAJOR_BUILD_NUMBER}.${MINOR_BUILD_NUMBER}.${BUILDS_ALL_TIME}
+
+
+
+
+Tag to push
+	${BUILD_NUMBER}
+
+	${BUILD_URL}

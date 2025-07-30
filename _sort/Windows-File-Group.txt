@@ -1,0 +1,53 @@
+Disable Windows 11 File Group
+
+https://lesferch.github.io/WinSetView/
+https://github.com/LesFerch/WinSetView
+
+IMPORTANT: The options below are intended for technical users (typically system administrators and desktop engineers).
+
+Option 1:
+
+    Use a VM to run WinSetView.
+    Copy the updated INI file (i.e. Win10.ini).
+    Then use the PowerShell script via the command line (as detailed in the manual) to apply the settings from that INI file to each user's profile. If you understand PowerShell, you can go through every single line of the script and see exactly what it does. That is, you can take ownership of that script and make it your own. For a pro, that's not a big deal.
+
+Option 2:
+
+    Use a VM to run WinSetView.
+    Capture the results to a REG file (see the manual for details).
+    Apply that REG file to all new user profiles.
+    For existing user profiles, you will need to also clear the user's saved views by deleting the BagMRU and Bags registry keys and then restart Explorer.
+
+Option 3:
+
+    In this registry key:
+    HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}\TopViews\{00000000-0000-0000-0000-000000000000}
+    Change the GroupBy value data from "System.DateModified" to "".
+    Note: The above key is protected. You will need to either change its permissions (not recommended) or access it using a tool that provides TrustedInstaller access, such as PowerRun or AdvancedRun, or set up the change via a Scheduled Task that runs as TrustedInstaller. If you don't know what you're doing, please do not attempt.
+    For existing user profiles, you will need to also clear the user's saved views by deleting the BagMRU and Bags registry keys and then restart Explorer.
+
+Option 4:
+
+    Run the following PowerShell script for each user (please see the comments):
+
+#-----------------------------------------------------------------------
+# This script will remove grouping from all possible views of the Downloads folder.
+# The change is applied to the current user's profile only.
+# Warning: ALL folder views (except Downloads grouping) will revert to Windows defaults!
+# This is a minimal solution. To set ALL default folder views, use the free tool WinSetView.
+
+$RegExe = "$env:SystemRoot\System32\Reg.exe"
+$File = "$env:Temp\Temp.reg"
+$Key = 'HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}'
+& $RegExe Export $Key $File /y
+$Data = Get-Content $File
+$Data = $Data -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER'
+$Data = $Data -Replace '"GroupBy"="System.DateModified"', '"GroupBy"=""'
+$Data | Out-File $File
+& $RegExe Import $File
+$Key = 'HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\Shell'
+& $RegExe Delete "$Key\BagMRU" /f
+& $RegExe Delete "$Key\Bags" /f
+Stop-Process -Force -ErrorAction SilentlyContinue -ProcessName Explorer
+#-----------------------------------------------------------------------
+

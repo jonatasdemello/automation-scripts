@@ -1,0 +1,168 @@
+**************************************************
+Find and Replace Regular Expression Examples SQL
+**************************************************
+
+Before we start explaining RegEx in detail, let's run through a few typical Search and Replace operations that can use regular expressions.
+
+To take out blank lines (as when you import code from Firefox sometimes) find
+
+\n @\n
+
+… and replace with
+
+\n
+
+To find all instances of INT that aren't commented out  try
+
+ ^~(:b*--).*:bINT>
+
+(this is an example of a good use for a negative look-behind to check that the line isn’t commented)
+
+To select up to the first hundred characters in a line
+
+^(.^100)|(.*)
+
+This will try to select 100 characters from the start of the line, and only if it fails, it will select all of them
+
+To insert a string at a particular column position
+
+^{.^100}
+
+And replace with..
+
+\1'I've inserted this'
+
+(or whatever!) This simply matches a line with 100 characters  and replaces the first hundred characters with the first hundred characters plus the string you want to insert.
+
+To delete ten columns after column 100 use this
+
+^{(.^100)}{.^10}
+
+Replace with
+
+\1
+
+What would happen if you used  \2\1? Yeah. Useful once in a while!
+
+To find either a quoted string or a delimited string, use
+
+("[^"]*")|(\[[^\[]*\])
+
+To replace all quoted strings with quoted delimiters, find
+
+("{[^"]*}")
+
+… and replace with
+
+\[\1\]
+
+This shows how to create a capturing group using {},  and use it in the replace expression. It can also be used in the find expression
+
+To remove inline comments that take the whole line,  find
+
+^:b*--.*$
+
+… and replace with nothing
+
+Here, we are using a greedy quantifier * to find the entire comment  line (line starting with --)
+
+To find any valid object name with delimiters
+
+\[{[A-Za-z_#@][A-Za-z0-9#$@_]*}\]
+
+to take out the quoted delimiters [ and ] where they aren't necessary, replace with
+
+\1
+
+This illustrates the use of character class definitions to determine whether the delimited strings contains only characters that are valid in a SQL identifier.
+
+To find 'tibbling' (use of tbl, vw, fn, or usp prefixes) use this
+
+<(tbl|vw|fn|usp)[A-Za-z0-9#$@_]*>
+
+Here we show one of the most useful of constructs, where alternative strings to search for are listed. It also shows how the special ‘<’and ‘>’ characters are used to delimit the start and end of a word.
+
+to de-tibblize code, us this
+
+<(tbl|vw|fn|usp){[A-Za-z0-9#$@_]*}>
+
+… and replace with …
+
+\1
+
+Here we add a capturing group (Microsoft calls them tags) to capture the word without the tibblizing prefix. (add your own to taste!)
+
+to match any word at least 3 characters long, you can use
+
+<:c^3:c*>
+
+This is one of the workarounds for the lack of proper range quantifying. It is the equivalent of  {n,} in normal RegEx
+
+to find multi-line comments using /* */ use this
+
+/\*(:Wh|[^:Wh])*\*/
+
+Normally, RegEx strings will stop searching at the end of the line if you use the standard wildcard. This RegEx uses a trick to get around that.
+
+To find a Title-cased word (word starting with a capital letter followed by lowercase)
+
+<:Lu:Ll[a-zA-Z0-9_$]*>
+
+Microsoft have some convenient shorthand characters to represent character classes. Here we illustrate their use with the :Lu:LI
+
+to take out the headers that SMO puts in like
+/****** Object:  StoredProcedure [dbo].[uspGetBillOfMaterials]    Script Date: 01/07/2011 19:03:05 ******/
+find this,
+
+/[\*]^6.*[\*]^6/
+
+replace with nothing
+
+This shows the simplest quantifier. We use the [\*]^6 to represent six stars ******
+
+to comment out lines, select the lines, Make sure you have ‘Look in selection’ and  find
+
+^
+
+ replace with
+
+--
+
+to un-comment out lines, select the lines, Make sure you have ‘Look in selection’ and  find
+
+ ^:b*--{.*}$
+
+replace with
+
+\1
+
+To find two words separated by up to three words (in this case FROM and AS) use
+
+<FROM(([^:a]+[:a]+)^1|([^:a]+[:a]+)^2|([^:a]+[:a]+)^3)[^:a]+AS>
+
+With normal syntax, you’d use \b FROM (?:\W+\w+){1,3}?\W+AS\b but we have no range quantifiers, so we are forced to use the ascending alternatives (descending if we want to be greedy rather than lazy). This becomes ridiculous if we want to specify the quantifiers for a complex expression. We’d have to duplicate the long expression.
+
+To find the first  object that is referenced by a FROM clause (doesn't successfully avoid strings or multiline comments), use
+
+^~(:b*--.*)<FROM>{(:Wh|[^:Wh])#}<(ON|CROSS|RIGHT|INNER|OUTER|LEFT|JOIN|WHERE|ORDER|GROUP|AS)>
+
+here you have something that is looking for a whole lot of different alternative keywords merely by grouping them and using the | character to .
+
+To find either an integer or a  floating point number, one can use the following RegEx which is a bit long but simple in structure
+
+~(\.)<([\+\-]@[0-9]@\.[0-9]*E[\+\-]*[0-9]*)|([\+\-]@[0-9]*\.[0-9]*)|([\+\-]@[0-9]+)
+
+This starts at a word boundary that is not preceded by a dot. It first looks for a floating point number in exponential notation. then it looks for a number in conventional notation before finally trying for an integer.
+
+The negative lookahead and negative lookbehind
+The idea of look-ahead and look-behind is slightly hard to understand.  The object of the mechanism is to do be able to specify what shouldn’t or should be next to the string you are trying to match, without including the characters you look at in the match. If you are ‘replacing all’, you may want to include what you’ve looked at ahead in the next match. You could well want to look behind at things that have already been inspected in a RegEx for a match.  Using the Find/Replace RegEx syntax, we can get somewhere close to a ‘negative’ check with a ‘prevent match’; in other words we can specify what should not precede, or follow, the match, but we can’t say what should  do so, even with a double negative.  If, for example, you are searching for words in the AdventureWorks database, you’ll have the word HumanResources appearing a great deal.
+
+~(Human)Resources  finds the word 'Resources', but not when immediately preceded by 'human' (negative lookbehind)
+
+Human~(Resources)  finds the word Human, but not when immediately followed by 'resources' (negative lookbehind)
+
+~(:b)Resources     finds the word Resources when not preceded by whitespace
+
+but the expression cannot, it seems, be persuaded to find a positive lookaround.  There are plenty of times that you’d want this. An example is using RegEx strings to tidy up a block of DECLARE statements into a single list, or if you want to select  a range of characters  based on column number
+
+

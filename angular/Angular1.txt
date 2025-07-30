@@ -1,0 +1,132 @@
+Angular
+	https://app.pluralsight.com/library/courses/angular-2-first-look/table-of-contents
+	https://app.pluralsight.com/library/courses/angular-fundamentals/table-of-contents
+	https://app.pluralsight.com/library/courses/mvc-angular-journey/table-of-contents
+
+
+https://app.pluralsight.com/library/courses/angular-2-first-look/table-of-contents
+
+Expand All
+Course Overview
+	Angular 2 in Action
+	Angular 2 Architecture, What's New and What's Different
+	Angular 2 Essentials: Components, Templates, Modules, and Metadata
+	Displaying Data: Data Binding, Directives, and Pipes
+	Services, Dependency Injection, and Lifecycle Hooks
+	Routing and HTTP
+	Routing
+	Angular Modules
+
+
+Course Overview
+	Course Overview
+
+Angular 2 in Action
+	Angular
+	What Can We Build?
+	Running the Samples
+
+Angular 2 Architecture, What's New and What's Different
+	Angular 2: What's New and What's Different
+	Language Choices
+	Angular 1's Impact
+	Angular Modules
+	First Look at NgModules
+	Controllers to Components
+	First Look at Components
+	Structural Directives
+	First Look at Structural Directives
+	Data Binding
+	First Look at Data Binding
+	Less Built-in Directives
+	First Look at HTML Element Property and Event Binding
+	Services
+	Dependency Injection
+	First Look at Services and Dependency Injection
+	Your Skills Translate
+	Putting It all Together in Context of an App
+	Angular 2 Resources
+
+Angular 2 Essentials: Components, Templates, Modules, and Metadata
+	Angular 2 Essentials
+	ES Modules
+	Angular Modules
+	Components
+	Defining a Component
+	Templates
+	Nested Components
+	Metadata
+	Examining the Component Decorator
+	Input and Output Decorators
+	Component Communication with Input and Output
+	Parent to Child Communication with ViewChild
+	Summary
+
+Displaying Data: Data Binding, Directives, and Pipes
+	Displaying Data
+	Data Binding
+	Interpolation
+	Property Binding
+	Adding Property Binding
+	Event Binding
+	Adding Event Binding
+	Two-way Binding
+	Adding Two-way Binding
+	Built-in Directives
+	Adding Attribute and Structural Directives
+	Pipes
+	Exploring Template Syntax in Storyline Tracker
+	Summary
+
+Services, Dependency Injection, and Lifecycle Hooks
+	Services, DI, and Lifecycle Hooks
+	Services
+	Refactoring for Services
+	Dependency Injection
+	Injectors
+	Changing Where the Services are Provided in Storyline Tracker
+	Component Lifecycle Hooks
+	Implementing Lifecycle Hooks and Their Interfaces
+	The Role of Lifecycle Hooks in Storyline Tracker
+	Summary
+
+Routing and HTTP
+	Getting Data with Http
+	Http
+	Using Http in Angular 2
+	Adding Exception Handling for Http
+	RxJs
+	Async Pipe
+	Adding an Async Pipe with an Observable
+	Promises with Http and the Async Pipe
+	Http in the Storyline Tracker
+	Putting It All Together
+	Routing
+	Introducing Routing
+	Routing Essentials
+	Essential Routing Code
+	Adding the Routing Module to an App
+	Adding Routing to Templates
+	Sending and Receiving Route Parameters
+	Subscribing to Route Parameters
+	Basics of Route Resolvers
+	Route Resolver in the Storyline Tracker
+	Route Guards
+	Applying Route Guards
+	Child Routes
+	What's Next with Routing
+
+Angular Modules
+
+	Types of Feature Modules
+	Eager Loading
+	Eagerly Loading Routed Modules
+	Lazy Loading
+	Lazily Loading Routed Modules
+	Defining Preload Strategies
+	Preload Strategies in the Storyline Tracker
+	Feature Module Types
+	Identifying Feature Modules
+	Feature Modules in the Storyline Tracker
+	Provider Tips
+	Wrap-up

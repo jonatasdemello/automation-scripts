@@ -1,0 +1,44 @@
+
+# https://docs.docker.com/get-started/02_our_app/
+
+git clone https://github.com/docker/getting-started-app.git
+
+cd \path\to\getting-started-app
+
+# create new dockerfile
+
+New-Item -Path . -Name Dockerfile -ItemType File
+
+-------------------------------------------------------------------------------------------------------------------------------
+# syntax=docker/dockerfile:1
+
+FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD ["node", "src/index.js"]
+EXPOSE 3000
+-------------------------------------------------------------------------------------------------------------------------------
+
+# build image
+
+cd /path/to/getting-started-app
+
+docker build -t getting-started .
+
+# -t tag
+# . look for dockerfile current dir
+
+# start container
+
+docker run -dp 127.0.0.1:3000:3000 getting-started
+
+# The -d flag (short for --detach) runs the container in the background.
+# The -p flag (short for --publish) creates a port mapping between the host and the container.
+# The -p flag takes a string value in the format of HOST:CONTAINER
+
+# check
+
+docker ps
+
+

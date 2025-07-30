@@ -1,0 +1,18 @@
+Incoming Mail (IMAP) Server
+	imap.gmail.com
+	Requires SSL: Yes
+	Port: 993
+
+Outgoing Mail (SMTP) Server
+	smtp.gmail.com
+	Requires SSL: Yes
+	Requires TLS: Yes (if available)
+	Requires Authentication: Yes
+	Port for SSL: 465
+	Port for TLS/STARTTLS: 587
+
+
+Gmail SMTP server address is smtp.gmail.com. It requires implicit SSL or explicit SSL (TLS) connection, and you should use your Gmail email address as the user name for ESMTP authentication.
+Server 	Port 	SSL/TLS
+smtp.gmail.com 	25, 587 	TLS
+smtp.gmail.com 	465 	SSL

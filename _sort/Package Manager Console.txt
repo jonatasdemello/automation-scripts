@@ -1,0 +1,37 @@
+Package Manager Console
+https://learn.microsoft.com/en-us/nuget/consume-packages/install-use-packages-powershell
+
+
+Find-Package elmah
+
+Find-Package <string> -StartWith
+
+Find-Package <keyword> -First 100
+
+Find-Package <PackageName> -AllVersions -ExactMatch
+
+
+Install-Package Elmah.MVC
+Install-Package Elmah.MVC -ProjectName UtilitiesLib
+
+
+
+Uninstall-Package <PackageName> -RemoveDependencies
+Uninstall-Package <PackageName> -Force
+
+
+To check if there are newer versions available for any installed packages:
+
+Get-Package -updates
+
+To update a specific package:
+
+Update-Package <PackageName>
+
+To update all packages in a project:
+
+Update-Package -ProjectName <ProjectName>
+
+To update all packages in the solution:
+
+Update-Package

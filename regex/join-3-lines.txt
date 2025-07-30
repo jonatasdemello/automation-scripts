@@ -1,0 +1,94 @@
+SEARCH (?-s)^(.+)\R(.+)\R(.+)\R
+REPLACE \1\2\3\r\n
+
+(?-s)^(.+)\R(.+)\R(.+)\R(.+)\R
+
+    The first part (?-s) means that any dot, in the regex, will stand for an unique standard character, exclusively
+    Then, the symbol ^ is an assertion, looking for a beginning of line
+    Next, the part (.+)\R, searches an entire, NON empty, line, with its End of Line characters, whatever they are and stored as group 1, due to the parentheses
+    Finally, the two next syntaxes (.+)\R look for the next two complete lines, stored as group 2 and group 3
+    In replacement, these three lines are re-written, one after another, on a same line, followed by the Windows End of Line characters. For Unix files, use the regex \1\2\3\n, instead
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Find what: (.+)\r\n(.+)\r\n(.+)
+Replace with: \1\t\2\t\3\t (the last \t is optional; you won't visually notice any difference if you remove it, unless you are expecting the line to end with a tab character)
+
+Replace \r\n in the "Find what:" with:
+
+    \n if you are editing a file with UNIX-style line endings (linefeed only)
+    \r\n if you are editing a file with Windows-style line endings (carriage return followed by line feed; in this case, you don't need to modify the original regex)
+    \r if you are editing a file with traditional Mac-style line endings (carriage return only)
+
+You can find out which line ending you're using by examining the status bar at the bottom of the Notepad++ window. It will say "Dos\Windows", etc.
+
+If your file has inconsistent line endings (which is a bad thing in general, but not impossible) and you want to replace all possible types of newlines in one go:
+
+Find what: (.+)(\r|\n)+(.+)(\r|\n)+(.+)
+Replace with: \1\t\3\t\5\t
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+Bash:
+	sed 'N;N;s/\n/ /g' file
+
+	awk '{ printf "%s", $0; if (NR % 3 == 0) print ""; else printf " " }' file
+
+
+ Join every 2 lines in a file
+
+
+  In this article, we will see the different ways in which we can join every two lines in a file. We will join them using comma as the delimiter.
+    Assume a file with the following contents as shown below. The file below shows stats for countries. The only issue in the file is: the stats are not directly against the country names, instead they are in the next line.
+
+$ cat file
+USA
+442
+India
+249
+UK
+50
+
+1. paste command can take standard input. Every "-" consumes one line. Two "-" consumes two lines, and -d to join them using comma.
+
+$ paste - - -d, < file
+USA,442
+India,249
+UK,50
+
+2. The traditional way of using paste command with "-s" option. "-d" in paste can take multiple delimiters. The delimiters specified here are comma and a newline character. This means while joining the first and second line use comma, and the second and third line by a newline character. And this repeats.
+
+$ paste -s -d",\n" file
+USA,442
+India,249
+UK,50
+
+3. The sed way. 'N' joins 2 lines. And we replace the newline with a comma.
+
+$ sed 'N;s/\n/,/' file
+USA,442
+India,249
+UK,50
+
+4.  Perl with "-p" option does default printing. All we do here is, if the line number is an odd line, replace the newline character with a comma.
+
+$ perl -pne 'if($.%2){s/\n/,/;}' file
+USA,442
+India,249
+UK,50
+
+5. In the different ways to display file contents article, we saw one way using xargs. The "-L" argument in xargs tells how many lines to join. No "-L" means all lines are joined. And awk puts the output field separator(OFS).
+
+$ xargs -L 2 < file | awk '$1=$1' OFS=,
+USA,442
+India,249
+UK,50
+
+6. awk method. Print the odd line using printf(no new line) with a comma, and do a normal print for the even line using print(which puts newline by default).
+
+$ awk 'NR%2{printf "%s,",$0;next}{print;}' file
+USA,442
+India,249
+UK,50
+

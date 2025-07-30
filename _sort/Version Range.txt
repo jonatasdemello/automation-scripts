@@ -1,0 +1,33 @@
+https://docs.microsoft.com/en-us/nuget/concepts/package-versioning
+
+When referring to package dependencies, NuGet supports using interval notation for specifying version ranges, summarized as follows:
+
+Version ranges
+Notation 	Applied rule 	Description
+1.0 	x ≥ 1.0 	Minimum version, inclusive
+(1.0,) 	x > 1.0 	Minimum version, exclusive
+[1.0] 	x == 1.0 	Exact version match
+(,1.0] 	x ≤ 1.0 	Maximum version, inclusive
+(,1.0) 	x < 1.0 	Maximum version, exclusive
+[1.0,2.0] 	1.0 ≤ x ≤ 2.0 	Exact range, inclusive
+(1.0,2.0) 	1.0 < x < 2.0 	Exact range, exclusive
+[1.0,2.0) 	1.0 ≤ x < 2.0 	Mixed inclusive minimum and exclusive maximum version
+(1.0) 	invalid 	invalid
+
+https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
+
+Version Range Specification
+
+The RequireMavenVersion and RequireJavaVersion rules use the standard Maven version range syntax with one minor change for ease of use (denoted with *):
+Range 	Meaning
+1.0 	x >= 1.0 * The default Maven meaning for 1.0 is everything (,) but with 1.0 recommended. Obviously this doesn't work for enforcing versions here, so it has been redefined as a minimum version.
+(,1.0] 	x <= 1.0
+(,1.0) 	x < 1.0
+[1.0] 	x == 1.0
+[1.0,) 	x >= 1.0
+(1.0,) 	x > 1.0
+(1.0,2.0) 	1.0 < x < 2.0
+[1.0,2.0] 	1.0 <= x <= 2.0
+(,1.0],[1.2,) 	x <= 1.0 or x >= 1.2. Multiple sets are comma-separated
+(,1.1),(1.1,) 	x != 1.1
+

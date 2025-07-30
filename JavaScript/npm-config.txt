@@ -1,0 +1,116 @@
+package.json
+
+At its simplest, a package.json file can be described as a manifest of your project that includes the packages and applications it depends on, information about its unique source control, and specific metadata like the project's name, description, and author.
+
+
+For example, to specify acceptable version ranges up to 1.0.4, use the following syntax:
+
+    Patch releases: 1.0 or 1.0.x or ~1.0.4
+    Minor releases: 1 or 1.x or ^1.0.4
+    Major releases: * or x
+
+--save-prod flag for dependencies (the default behavior of npm install)
+or the
+--save-dev flag for devDependencies.
+
+npm install <package-name> [--save-prod]
+npm install <package-name> [--save-dev]
+
+
+https://docs.npmjs.com/specifying-dependencies-and-devdependencies-in-a-package-json-file
+
+    "dependencies": Packages required by your application in production.
+    "devDependencies": Packages that are only needed for local development and testing.
+
+Second, it allows the separation of dependencies that are needed for production and dependencies that are needed for development.
+In production, you're likely not going to need a tool to watch your CSS files for changes and refresh the app when they change.
+But in both production and development, you'll want to have the modules that enable what you're trying to accomplish with your project - things like your web framework, API tools, and code utilities.
+
+npm install <module> # Where <module> is the name of the module you want to install
+npm i <module> # Where <module> is the name of the module you want to install - using the i alias for installation
+
+npm install <module> --global # Where <module> is the name of the module you want to install globally
+npm install <module> -g # Where <module> is the name of the module you want to install globally, using the -g alias
+
+
+
+
+# Taken from psake https://github.com/psake/psake
+
+<#
+.SYNOPSIS
+  This is a helper function that runs a scriptblock and checks the PS variable $lastexitcode
+  to see if an error occcured. If an error is detected then an exception is thrown.
+  This function allows you to run command-line programs without having to
+  explicitly check the $lastexitcode variable.
+.EXAMPLE
+  exec { svn info $repository_trunk } "Error executing SVN. Please verify SVN command-line client is installed"
+#>
+function Exec
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,
+        [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ($msgs.error_bad_command -f $cmd)
+    )
+    & $cmd
+    if ($lastexitcode -ne 0) {
+        throw ("Exec: " + $errorMessage)
+    }
+}
+
+https://stackoverflow.com/questions/20948802/psake-error-code-management
+In the function, set $global:LastExitCode to the desired value before it exits.
+
+
+http://192.168.11.22:8080
+Inbound agent connected from domain.local/192.168.11.18
+Remoting version: 3.4.1
+This is a Windows agent
+Agent successfully connected and online
+
+
+Import-Module csake
+Invoke-JenkinsBuildWithErrorEmails
+
+
+# jest
+https://jestjs.io/docs/en/cli.html#--silent
+
+# npm
+https://docs.npmjs.com/misc/config
+
+
+du 2> $null
+
+
+npm install || exit 1
+
+npm install --silent
+npm install --no-optional
+npm install --loglevel silent
+
+npm config list
+npm config get key
+npm config get audit
+npm config set audit false
+npm config set loglevel silent | notice | warn | info
+
+loglevel=notice
+
+
+
+Installing a single package§
+
+To turn off npm audit when installing a single package, use the --no-audit flag:
+
+	npm install example-package-name --no-audit
+
+Installing all packages§
+
+To turn off npm audit when installing all packages, set the audit setting to false in your user and global npmrc config files:
+
+	npm set audit false
+
+For more information, see the npm-config management command and the npm-config audit setting.
+

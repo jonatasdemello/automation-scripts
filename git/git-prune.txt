@@ -1,0 +1,48 @@
+git prune
+git remote prune origin
+git fetch --prune
+
+git branch -r
+
+ new branches you've created but never pushed to the server would be deleted, so tread carefully: git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' –
+
+
+1. List branches in local machine
+
+git branch -a
+
+2. Prune/Cleanup the local references to remote branch
+
+lists branches that can be deleted/pruned on your local. An option --dry-run is needed.
+
+git remote prune origin --dry-run
+
+Now go ahead and actually prune/cleanup the local references by running the command.
+
+git remote prune origin
+bit branch -a
+
+Now you can notice that remotes/origin/feature-collaboration has been removed, but not the local branch feature-collaboration.
+
+3. Delete local branch
+
+If wanted, we can clean-up the local branch feature-collaboration as well
+
+git branch -d feature-collaboration
+
+
+
+
+The easiest way to use prune is to provide it as an option when fetching:
+
+$ git fetch --prune origin
+
+In cases where you'd like to only perform a prune and not fetch remote data, you can use it with the git remote command:
+
+$ git remote prune origin
+
+The result is the same in both cases: stale references to remote branches that don't exist anymore on the specified remote repository will be deleted. By the way: you never have to worry about your local branches, since prune will never affect those.
+
+If you want to have prune executed with every fetch operation, you can configure Git accordingly:
+
+$ git config --global fetch.prune true

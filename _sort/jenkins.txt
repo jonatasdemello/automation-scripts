@@ -1,0 +1,137 @@
+https://mivilisnet.wordpress.com/2019/12/24/how-i-made-my-own-df-command-in-windows-10/#more-3269
+
+fsutil volume diskfree C:
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+I had the same problem. It appeared that the java runtime enviromment had been updated.
+In the jenkins installation folder there is as jenkins.wrapper.log.
+This contains logging from the jenkins.exe service wrapper.
+In my case it tried to start java from c:\Program Files\Java\jre1.8.0_144\bin.
+This folder did not exist, instead, java was installed in c:\Program Files\Java\jre1.8.0_161\bin.
+
+In the jenkins installation folder there is also a jenkins.xml.
+
+This contains the reference to the java installation in the tag.
+Change it to your current java installation and it will start again.
+
+
+
+I also had this problem after each java update. But there is a version-independent absolute path, that can be used to start the java run-time: C:\ProgramData\Oracle\Java\javapath\java.exe.
+
+I changed jenkins-slave.xml to use this path:
+
+<executable>C:\ProgramData\Oracle\Java\javapath\java.exe</executable>
+
+
+PROGRA~1	Program Files
+PROGRA~2	Program Files (x86)
+
+
+C:\Program Files (x86)\Java\jdk1.8.0_131
+
+C:\Program Files\Java\jre1.8.0_241
+C:\Program Files\Java\jdk1.8.0_141
+
+
+JAVA_HOME=C:\Progra~1\Java\jdk1.8.0_141
+JDK_HOME=C:\Progra~1\Java\jdk1.8.0_141
+JRE_HOME=C:\Progra~1\Java\jre1.8.0_241
+
+
+
+java -jar jenkins-cli.jar -s http://org.com:8080/ -webSocket help
+
+
+
+rem dir C:\Octopus\Work\20230324205808-5715341-4222\staging\
+
+rem type C:\Octopus\Work\20230324205808-5715341-4222\staging\Octopus.AzureContext.ps1
+
+fsutil fsinfo drives
+
+fsutil volume diskfree c:
+
+rem fsutil volume diskfree d:
+
+sc query jenkins
+
+sc query | findstr /I jenkins
+
+sc query Jenkins-Runner-Instance
+
+rem net stop Jenkins-Runner-Instance
+rem net start Jenkins-Runner-Instance
+
+sc query Jenkins-Runner-Instance
+
+dir c:\
+
+type c:\Jenkins-Runner-Instance\jenkins.wrapper.log
+
+
+
+
+%temp%
+C:\windows\temp\
+C:\Users\%Username%\AppData\Local\Temp\
+C:\Windows\Installer\*.tmp
+C:\Windows\Panther\*.tmp
+
+C:\Inetpub\Logs\LogFiles
+
+
+Forfiles.exe -p C:\inetpub\logs\LogFiles\W3SVC1 -m *.log -d -30 -c "Cmd.exe /C del @path\"
+
+cypress cache clear
+cypress cache prune
+
+
+Enter-PSSession Server01
+Exit-PSSession
+
+
+
+Enter-PSSession -ComputerName COMPUTER -Credential USER
+
+Invoke-Command -ComputerName COMPUTER -ScriptBlock { COMMAND } -credential USERNAME
+
+
+♦ mstsc /v:[IP address of the remote PC]:3389
+
+♦ Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "/v:$[the computer name of the remote computer]"
+
+
+
+
+you can recliam disk space in your windows \ winsxs directory ( instructions can be found with the listed blog link)
+www.sqlskills.com/blogs/glenn/how-to-reclaim-disk-space-in-your-windowswinsxs-directory-on-windows-server-2008-r2-sp1/
+
+You can also verify which folders and files utilize the most space using the Sysinternals Disk Usage tool,
+simply run the command
+
+	du /v /u c:>File_Usage.txt
+
+this command will show a list of files and size and write it to a file.
+One thing you’ll notice is that the windows\winsxs folder will be large to say the least.
+﻿
+Find the Dism.exe tool in the windows\system32 directory.
+Run the command
+	dism.exe /online /cleanup-Image /spsuperseded
+
+	DISM.exe /online /Cleanup-Image /spsuperseded
+
+This will remove files that are residual of previous service pack installations and you will not be able to uninstall the SP1.
+If you have any concerns be sure to read up on the tool.
+You can utilize the help option “dism /online /Cleanup-Image /?” to check out any of the functions.
+ Below is an example of running the command (just happens to be a Win7 build, its the same on Server 2008).
+﻿Delete the blobs.bin file and reboot.
+The blobs.bin file are located in the windows\winsxs\ManifestCache directory, the file is a caching file and recreated on reboot.
+C:\Windows\system32>dism.exe /online /cleanup-Image /spsuperseded
+
+Deployment Image Servicing and Management tool
+Version: 6.1.7600.16385
+
+Image Version: 6.1.7601.17514
+
+

@@ -1,0 +1,110 @@
+Restore Deleted Branch
+
+https://stackoverflow.com/questions/4674226/does-github-keep-deleted-remote-branches-in-history-if-so-can-those-be-restore
+
+Find your Commit ID: Search for a branch using git reflog
+
+If you had the branch in your local git repo within the last 30 days, you may be able to find it in the reflog using the following:
+
+git reflog
+
+Search for the branch name in the reflog and note the HEAD{x} point or the commit ID.
+Re-create the branch from the Reflog HEAD point:
+
+git checkout -b branch_name HEAD@{27}
+
+Re-create the branch from the commit ID:
+
+You can checkout the commit ID and create a branch off of that commit point:
+
+git checkout -b branch_name <commit id>
+
+
+
+To restore the branch, use:
+
+git checkout -b <branch> <sha>
+
+
+
+
+// log of detailed commits by users
+$> git log
+// reference log compared to the current HEAD
+$> git reflog
+
+Restoring your branch is straight forward by checking out the HEAD you want to a new branch.
+$> git checkout -b my_new_branch HEAD@{5}
+
+You can also use the hash too to checkout the new branch.
+$> git checkout -b my_new_branch d93c27b
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Understanding git reflog by example
+
+1: Let's check the reflog while I am at master branch.
+
+~/w/git_demo >>> git branch
+* master
+~/w/git_demo >>> git reflog
+ce656f5 HEAD@{0}: commit (initial): Initial commit
+
+2: Let's create a new branch test do some changes and commit it.
+
+~/w/git_demo >>> git checkout -b test
+Switched to a new branch 'test'
+~/w/git_demo >>> git branch
+  master
+* test====> Did some changes in file while I'm on test branch <====~/w/git_demo >>> git add .
+~/w/git_demo >>> git commit -m "This is test branch commit after change"
+[test 9867883] This is test branch commit after change
+ 1 file changed, 1 insertion(+)
+
+3: Now let's check the reflog again.
+
+~/w/git_demo >>> git reflog
+9867883 HEAD@{0}: commit: This is test branch commit after change
+ce656f5 HEAD@{1}: checkout: moving from master to test
+ce656f5 HEAD@{2}: commit (initial): Initial commit
+
+    Important
+
+    A new HEAD → HEAD@{1} is created when we checked out to test branch. It refers to the top commit of test the branch which should be exactly the same as master branch’s commit since we did not change anything.
+    Yes, it is. Note the SHA → ce656f5 is the same for master and test branch.
+    Since we changed and committed on test branch our HEAD is moved up which is HEAD@{0} reflecting the topmost commit of the currenttest branch.
+
+4: Its time to delete test branch.
+
+~/w/git_demo >>> git checkout master
+Switched to branch 'master'
+~/w/git_demo >>> git branch
+* master
+  test
+~/w/git_demo >>> git branch -D test
+Deleted branch test (was 9867883).
+~/w/git_demo >>> git branch
+* master
+
+5: What happens to reflog ?
+
+~/w/git_demo >>> git reflog
+ce656f5 HEAD@{0}: checkout: moving from test to master
+9867883 HEAD@{1}: commit: This is test branch commit after change
+ce656f5 HEAD@{2}: checkout: moving from master to test
+ce656f5 HEAD@{3}: commit (initial): Initial commit
+
+Nothing, though test branch it deleted its top or latest commit still persists. This is life-saving. We got the door to enter. Now we have a reference to the deleted test branch. YAAHOOOOO!!
+Getting it back…
+
+~/w/git_demo >>> git branch
+* master
+~/w/git_demo >>> git checkout -b recovered_test 9867883
+Switched to a new branch 'recovered_test'
+~/w/git_demo >>> git branch
+  master
+* recovered_test
+
+Confused with 9867883? it's SHA of the deleted test. (refer step 5 snippet)
+
+DONE!!

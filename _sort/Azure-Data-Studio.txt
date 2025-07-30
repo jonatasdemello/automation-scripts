@@ -1,0 +1,69 @@
+----------------------------------------------------------------
+Azure Data Studio Tips
+----------------------------------------------------------------
+
+To trigger Star Expansion: Place the cursor beside the asterisk, ctrl+space  enter
+
+Comment out the current line          : ctrl+/
+Add a block comment                   : alt+shift+a
+Join Lines                            : ctrl+j
+
+Expand * to all columns in a SELECT * : ctrl + space
+Hide region                           : ctrl+shift+[  and  ctrl+shift+]
+Transform to Uppercase or Lowercase   : ctrl+shift+p "upper" or "lower"
+Change all occurrences of text        : ctrl+f2
+move line                             : alt+up and alt+down
+copy line                             : alt+shift+up and alt+shift+down
+Peek Definition                       : select object alt+f12
+Multiple Cursors                      : 	holding down the alt (Mac: opt) key and left-clicking
+Box Selection                         :		Selection by holding down shift + alt
+
+----------------------------------------------------------------
+Visual Studio
+
+Ctrl+ M.M	toggle
+Ctrl+ M.L	toggle all
+Ctrl+ M.P	stop
+Ctrl+ M.O	definition
+
+-------------------------------------------------------------------------------------------------------------------------------
+VS Code
+
+Folding:
+
+    Fold (Ctrl+Shift+[) 				folds the innermost uncollapsed region at the cursor.
+    Unfold (Ctrl+Shift+]) 				unfolds the collapsed region at the cursor.
+    Toggle Fold (Ctrl+K Ctrl+L) 		folds or unfolds the region at the cursor.
+	Fold Recursively (Ctrl+K Ctrl+[) 	folds the innermost uncollapsed region at the cursor and all regions inside that region.
+    Unfold Recursively (Ctrl+K Ctrl+]) 	unfolds the region at the cursor and all regions inside that region.
+
+	Fold All (Ctrl+K Ctrl+0) 			folds all regions in the editor.
+    Unfold All (Ctrl+K Ctrl+J) 			unfolds all regions in the editor.
+
+    Fold Level X (Ctrl+K Ctrl+2 for level 2) 	folds all regions of level X, except the region at the current cursor position.
+    Fold All Block Comments (Ctrl+K Ctrl+/) 	folds all regions that start with a block comment token.
+
+To fold and unfold only the regions defined by markers use:
+
+    Fold Marker Regions (Ctrl+K Ctrl+8) 	folds all marker regions.
+    Unfold Marker Regions (Ctrl+K Ctrl+9) 	unfolds all marker regions.
+
+Fold selection
+
+Create Manual Folding Ranges from Selection (Ctrl+K Ctrl+,)
+Remove Manual Folding Ranges (Ctrl+K Ctrl+.).
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+PowerShell
+
+Ctrl+l		clear screen
+Ctrl+home	delete from cursor to start of the line
+Ctrl+end	delete from cursor to the end of the line
+
+Shift+home	delete from cursor to start of the line
+Shift+end	delete from cursor to the end of the line
+
+Ctrl+s		search forward
+Ctrl+r		search backward

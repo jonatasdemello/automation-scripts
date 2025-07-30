@@ -1,0 +1,108 @@
+
+https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Reserved-Words
+
+3.2.1 Reserved Words
+
+if	then	elif	else	fi	time
+for	in	until	while	do	done
+case	esac	coproc	select	function
+{	}	[[	]]	!
+
+---------------------------------------------------------------------------------------------------
+
+Quick check with all (128) ASCII bytes:
+
+Note that all bytes from 128 to 255 have to be escaped.
+
+This little loop will print all characters from 0x00 to 0x7f, by using both: printf %q and ${var@Q} method.
+
+for i in {0..127}; do
+    printf -v var %02X $i
+    printf -v var %b \\x$var
+    sign=E
+    printf -v res %q "$var"
+    [[ $var == "$res" ]] && sign=-
+    printf '%02X %s %-*s %-*s\n' $i $sign $(( 31 < i && i < 96 ? 2 : 8
+        )) "${res}" $(( 31 < i && i < 96 ? 3 : 8)) "${var@Q}"
+done |
+    pr -w100 --sep-string='' -t4 |
+    sed 's/\o11\+/\o11/g'
+
+This should render something like:
+
+00 E ''       ''         20 E \  ' '      40 - @  '@'      60 E \`       '`'
+01 E $'\001'  $'\001'    21 E \! '!'      41 - A  'A'      61 - a        'a'
+02 E $'\002'  $'\002'    22 E \" '"'      42 - B  'B'      62 - b        'b'
+03 E $'\003'  $'\003'    23 E \# '#'      43 - C  'C'      63 - c        'c'
+04 E $'\004'  $'\004'    24 E \$ '$'      44 - D  'D'      64 - d        'd'
+05 E $'\005'  $'\005'    25 - %  '%'      45 - E  'E'      65 - e        'e'
+06 E $'\006'  $'\006'    26 E \& '&'      46 - F  'F'      66 - f        'f'
+07 E $'\a'    $'\a'      27 E \' \'       47 - G  'G'      67 - g        'g'
+08 E $'\b'    $'\b'      28 E \( '('      48 - H  'H'      68 - h        'h'
+09 E $'\t'    $'\t'      29 E \) ')'      49 - I  'I'      69 - i        'i'
+0A E $'\n'    $'\n'      2A E \* '*'      4A - J  'J'      6A - j        'j'
+0B E $'\v'    $'\v'      2B - +  '+'      4B - K  'K'      6B - k        'k'
+0C E $'\f'    $'\f'      2C E \, ','      4C - L  'L'      6C - l        'l'
+0D E $'\r'    $'\r'      2D - -  '-'      4D - M  'M'      6D - m        'm'
+0E E $'\016'  $'\016'    2E - .  '.'      4E - N  'N'      6E - n        'n'
+0F E $'\017'  $'\017'    2F - /  '/'      4F - O  'O'      6F - o        'o'
+10 E $'\020'  $'\020'    30 - 0  '0'      50 - P  'P'      70 - p        'p'
+11 E $'\021'  $'\021'    31 - 1  '1'      51 - Q  'Q'      71 - q        'q'
+12 E $'\022'  $'\022'    32 - 2  '2'      52 - R  'R'      72 - r        'r'
+13 E $'\023'  $'\023'    33 - 3  '3'      53 - S  'S'      73 - s        's'
+14 E $'\024'  $'\024'    34 - 4  '4'      54 - T  'T'      74 - t        't'
+15 E $'\025'  $'\025'    35 - 5  '5'      55 - U  'U'      75 - u        'u'
+16 E $'\026'  $'\026'    36 - 6  '6'      56 - V  'V'      76 - v        'v'
+17 E $'\027'  $'\027'    37 - 7  '7'      57 - W  'W'      77 - w        'w'
+18 E $'\030'  $'\030'    38 - 8  '8'      58 - X  'X'      78 - x        'x'
+19 E $'\031'  $'\031'    39 - 9  '9'      59 - Y  'Y'      79 - y        'y'
+1A E $'\032'  $'\032'    3A - :  ':'      5A - Z  'Z'      7A - z        'z'
+1B E $'\E'    $'\E'      3B E \; ';'      5B E \[ '['      7B E \{       '{'
+1C E $'\034'  $'\034'    3C E \< '<'      5C E \\ '\'      7C E \|       '|'
+1D E $'\035'  $'\035'    3D - =  '='      5D E \] ']'      7D E \}       '}'
+1E E $'\036'  $'\036'    3E E \> '>'      5E E \^ '^'      7E E \~       '~'
+1F E $'\037'  $'\037'    3F E \? '?'      5F - _  '_'      7F E $'\177'  $'\177'
+
+Where
+
+    first field is hexadecimal value of byte,
+    second contain E if character need to be escaped,
+    third field show escaped presentation of character and
+    last field show useable version printed by ${var@Q} syntax.
+
+
+https://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-when-using-bash
+
+https://unix.stackexchange.com/questions/634046/are-there-any-single-character-bash-aliases-to-be-avoided
+
+
+
+Things to avoid:
+
+    standard or common commands with single character names: w (show logged in users' activity), X (X Window System server), R (R programming language interpreter), [ (similar to test)
+    builtins of your shell or of common shells: [, ., :, -, r
+    shell keywords: {, }, !
+    ? and * wildcard characters
+    special characters in the shell syntax: `"$&();'#~|\<>, (also ^, % in some shells), SPC, TAB, NL (and other blanks with some shells)
+    better avoid non-ASCII characters (as those have different encoding depending on the locale)
+    better avoid control characters (beside TAB and NL already mentioned above) as they're not that easy to enter, and depending on context, not always visible, or with different representations. Only zsh will let you define and use an alias for the NUL character. bash lets you define an alias for ^A (the control character with byte value 1) but not use it apparently.
+
+To find commands with single character names:
+
+    bash: compgen -c | grep -x . | sort -u (also includes keywords, assumes command names don't contain newline characters)
+
+    zsh: type -m '?' (or type -pm '?' if you don't want functions/aliases/builtins/keywords).
+
+    Debian or derivatives: to find any command in any package with single character name:
+
+    $ apt-file find -x '/s?bin/.$'
+    coreutils: /usr/bin/[
+    e-wrapper: /usr/bin/e
+    python3-q-text-as-data: /usr/bin/q
+    r-base-core: /usr/bin/R
+    r-base-core: /usr/lib/R/bin/R
+    r-cran-littler: /usr/bin/r
+    r-cran-littler: /usr/lib/R/site-library/littler/bin/r
+    wims: /var/lib/wims/public_html/bin/c
+    xserver-xorg-core: /usr/bin/X
+

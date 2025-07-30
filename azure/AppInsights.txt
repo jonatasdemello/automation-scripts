@@ -1,0 +1,44 @@
+From a waiting times perpective the DB seems to have recovered fully after that initial spike.
+
+AzureDiagnostics
+| where Category == "QueryStoreWaitStatistics"
+| where ResourceType == "MANAGEDINSTANCES/DATABASES"
+| where ResourceId contains "/DATABASES/"
+| project
+    Resource = strcat(extract(".+/MANAGEDINSTANCES/([^/]+)/.+", 1, ResourceId), ".", extract(".+/DATABASES/(.+)", 1, ResourceId)).tolower(),
+    TimeGenerated,
+    total_query_wait_time_ms_d,
+    wait_category_s
+| summarize total_wait_time = sum(total_query_wait_time_ms_d) / 1000
+    by wait_category_s, bin(TimeGenerated, 10m)
+| top 1000 by total_wait_time desc
+| evaluate pivot(wait_category_s, sum(total_wait_time))
+| render timechart
+
+
+
+//Time chart of time waiting
+AzureDiagnostics
+| where TimeGenerated > ago(10d)
+| where Category == "QueryStoreWaitStatistics"
+| where ResourceType == "MANAGEDINSTANCES/DATABASES"
+| where ResourceId contains "/DATABASES/"
+//| where wait_category_s in ("CPU","PARALLELISM","LOCK","LATCH","BUFFERLATCH")
+| summarize sum(total_query_wait_time_ms_d) by wait_category_s, bin(TimeGenerated, 5m)
+| render timechart
+
+
+In our team we where used to configure multiple Application Insights in our ASPNET Core applications, but some times it was not easy to find the resource name related to an instrumentation key. We where losing thime searching for the names manualy. In order to avoid this waste, we decided to generate an script based in the Azure Cli.
+
+To run this automatism, first you need to install the resource-graph extension:
+
+az extension add --name resource-graph
+
+Then, you can run the resource graph query script parametrizing the InstrumentationKey, for example 00000000-aaaa-bbbb-cccc-dddddddddddd:
+
+az graph query -q "Resources
+| where type =~ 'microsoft.insights/components'
+| where properties.InstrumentationKey =~ '8ddbe5e7-540c-4665-951a-6576d98fc711'
+| project name, properties.InstrumentationKey "
+
+You will get the resource name that match that with that key.

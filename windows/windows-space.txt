@@ -1,0 +1,24 @@
+
+https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/clean-up-the-winsxs-folder
+https://docs.microsoft.com/en-us/troubleshoot/windows-client/deployment/address-disk-space-issues-caused-by-winsxs
+https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/reduce-the-size-of-the-component-store-in-an-offline-windows-image
+https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder
+
+
+
+schtasks.exe /Run /TN "\Microsoft\Windows\Servicing\StartComponentCleanup"
+
+Dism.exe /online /Cleanup-Image /StartComponentCleanup
+
+Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+
+Dism.exe /online /Cleanup-Image /SPSuperseded
+
+
+Using the /StartComponentCleanup parameter of Dism.exe on a running version of Windows 10 gives you similar results to running the StartComponentCleanup task in Task Scheduler, except previous versions of updated components will be immediately deleted (without a 30 day grace period) and you will not have a 1-hour timeout limitation.
+
+Using the /ResetBase switch with the /StartComponentCleanup parameter of DISM.exe on a running version of Windows 10 removes all superseded versions of every component in the component store.
+
+To reduce the amount of space used by a Service Pack, use the /SPSuperseded parameter of Dism.exe on a running version of Windows 10 to remove any backup components needed for uninstallation of the service pack. A service pack is a collection of cumulative updates for a particular release of Windows.
+
+Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore

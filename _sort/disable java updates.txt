@@ -1,0 +1,48 @@
+Completely Disable Java Updates (Java 7 and 8)
+
+https://www.blackmanticore.com/4642715f947c54ea58ecfbef9160c1b3
+
+The old method of disabling Java updates through the registry or GPO, mentioned in this article is no longer valid for Java 7 (1.7) and 8 (1.8), nor does it prevent the UAC prompt from appearing when the updater runs in the background. The method explained here is a better, more up-to-date solution to completely disabling Java updates from running, and includes the required registry change to stop the updater from running, preventing the UAC prompt from ever appearing.
+Disable Java update from control panel
+
+Disabling Java update from control panel is not as straight forward as it seems to be. Java update can only be disabled with administrative rights, so you need to run the Java control panel elevated. Since you can't do this through the control panel, you need to run the applet through its executable.
+
+    Start Windows Explorer.
+    Browse to the installation folder for Java. Depending on whether you have 32-bit and/or 64-bit installed (both are possible on a 64-bit machine), the path can be different. Also, if you did not keep the default path, the control panel executable could be somewhere else entirely:
+
+    Java	Windows	Default path
+    32-bit	32-bit	%PROGRAMFILES%\Java\<jre-version>\bin
+    32-bit	64-bit	%PROGRAMFILES(X86)%\Java\<jre-version>\bin
+    64-bit	64-bit	%PROGRAMFILES%\Java\<jre-version>\bin
+    Locate and right-click javacpl.exe, and select Run as Administrator.
+    Now, make the change, and click OK to save.
+
+Disable Java update through registry
+
+You can disable Java updates through the registry (either directly or through GPP or scripts) by altering a few registry values.
+
+Note that this does not prevent the updater from running, so you will still get an UAC prompt as the updater is started.
+
+    Start regedit.
+    Depending on your edition of Windows (32 or 64-bit), navigate to the key:
+        32-bit: HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy
+        64-bit: HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\JavaSoft\Java Update\Policy
+
+    Change/create the following values:
+    Value name	Type	New value
+    EnableAutoUpdateCheck	DWORD	0	Java 7 only! the data type is REG_BINARY on Java 8, and changing it does not prevent the download.
+    NotifyDownload	DWORD	0	Disables download notifications.
+    EnableJavaUpdate	DWORD	0	Removes the Update tab from Java control panel.
+
+    Setting EnableJavaUpdate to 0 also removes the Update tab from the Java Configuration applet in Control Panel.
+
+Note that the registry changes above alone are not enough to prevent the Java updater from running. To prevent it from starting, and subsequently preventing the famous UAC prompt from appearing, follow the next step.
+Disable Java update completely (prevents UAC prompt)
+
+To prevent the update checker from running, you'll need to remove its automatic startup entry from the registry.
+
+    Start regedit.
+    Depending on your edition of Windows (32 or 64-bit), navigate to the key:
+        32-bit: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+        64-bit: HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\JavaSoft\Java Update\Policy
+    Delete the value SunJavaUpdateSched. The change will be active the next time you log on.

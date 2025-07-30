@@ -1,0 +1,683 @@
+http://www.zago.eti.br/script/grep.txt
+
+FAQ sobre o grep com copia de mensagens da lista linux-br
+
+dicas e exemplos de linha de comando em novo local.
+http://www.zago.eti.br/script/grep.html
+
+
+Sobre o uso do grep com outras ferramentas pra uso na linha de comando,
+expressões regulares, shell script, modelos de scripts e etc... veja em:
+
+http://www.zago.eti.br/script/A-menu-scripts.html
+
+Use CTRL+F para refinar a pesquisa.
+
+
+*********************************************************************
+Procurando por palavras em seus arquivos de texto:
+Você poderá utilizar o comando grep para localizar qualquer seqüencia de
+caracteres em arquivos de texto. Você pode procurar desde uma simples palavra
+até uma frase completa. Se for encontrada a seqüencia, será retornado o nome
+do arquivo em que ela se encontra.
+Veja como funciona:
+
+
+# grep palavra /diretorio/da/procura/*  -> procura pela palavra nos arquivos
+                                           do diretório especificado.
+
+# grep -i 'uma frase' ./*               -> procura pela frase, sem diferenciar
+                                           letras maiúsculas de minúsculas,
+                                           nos arquivos do diretório atual.
+
+# grep '[0-9]palavra' /usr/doc/*        -> procura por qualquer palavra que
+                                           comece com um número de 0 a 9 nos
+                                           arquivos do diretório especificado.
+
+# grep '[abc]palavra' ../*              -> procura por qualquer palavra que
+                                           comece com as letras a, b ou c nos
+                                           arquivos do diretório especificado.
+
+# grep '[^abc]palavra' arq.txt          -> procura por qualquer palavra que
+                                           comece com qualquer caracter exceto
+                                           as letras a, b ou c no arquivo
+                                           especificado.
+
+
+
+
+grep -v,  devolve todas as linhas sem a cadeia pesquisada
+
+tipo
+grep -v "textoqueprocuro" arq.txt >> /tmp/teste.txt
+
+grep -v "textoqueprocuro"  < arquivo >  arquivo_novo
+
+remover texto de um arquivo.
+cat arquivo |grep -v "textoaexcluir"
+
+para gravar o texto excluido um arquivo
+cat arquivo |grep -v "textoaexcluir" > arquivo1
+
+
+inserir um texto no final de um arquivo.
+echo "texto que quero incluir" >> arq.txt
+
+sobrepor o conteúdo de um arquivo.
+echo "texto que quero incluir" > arq.txt
+l
+ insere >>
+ sobrepoe >
+
+
+procurar por uma frase no texto e salvar em outro arquivo
+grep "Nome='Antonio Zago'" > arqsaida.txt
+muito útil para procurar uma ocorrencia em grandes arquivos de log.
+
+Exemplo da pesquisa  da palavra telnet no arquivo /etc/inetd.conf
+retornou somente a linha completa que contém a palavra telnet:
+#  grep telnet /etc/inetd.conf
+telnet  stream  tcp     nowait  root    /usr/sbin/tcpd  in.telnetd
+
+Exemplo da pesquisa da palavra telnet em todos os arquivos
+do diretório /etc  retornou todos os diretórios pesquisados, listando
+todos os caminhos, arquivos e linha que contém a palavra telnet:
+
+#  grep telnet /etc/*
+grep: /etc/httpd: É um diretório
+grep: /etc/icecast: É um diretório
+/etc/inetd.conf:telnet  stream  tcp     nowait  root    /usr/sbin/tcpd  in.telnetd
+grep: /etc/init.d: É um diretório
+/etc/ippl.conf:# Log telnet connections using ident and name resolution
+/etc/ippl.conf:log options ident,resolve tcp port telnet
+grep: /etc/iproute2: É um diretório
+etc.  .   .   .
+
+**********************************************************
+
+
+Grep Recursivo
+Ja ha algum tempo foi abordada nesta lista a questao do grep
+recursivo, utilitario bastante util. Todas as solucoes sugeridas
+entao foram implementadas utilizando-se o comando find e alguns
+outros.
+Existe tambem o utilitario Tgrep, que realiza esta tarefa de maneira
+mais eficaz. O nome Tgrep vem de "Threaded Recursive Grep". E muito
+mais eficiente e rapido do que seus similares que utilizam o comando
+find.
+O software e distribuido juntamente com o codigo fonte. O binario
+para sistemas Solaris e incluido na distribuicao.
+O software pode ser obtido no endereco
+http://www.sun.com/workshop/threads/share-code/Tgrep/Tgrep.tar.Z.uu
+Esta gravado (nao sei porque) no formato uuencode. Para
+expandi-lo, rode o comando
+uudecode Tgrep.tar.Z.uu
+Este comando ira criar o arquivo Tgrep.tar.Z, que entao podera ser
+tratado normalmente, como abaixo:
+zcat Tgrep.tar.Z | tar xvf -
+**********************************************************
+
+
+> Eu quero utilizar o comando grep para filtrar as linhas que contenham a
+> palavra "connect" e TAMBÉM as linhas que contenham a palavra "hangup" na
+> mesma saída, sendo que as duas palavras nunca ocorrerão na mesma linha.
+> Se eu utilizar
+>
+> tail --lines 1000 /var/log/messages|grep connect|grep hangup
+>
+> a saída é nula. Também não quero concatenar a saída de dois greps pois vai
+> tirar as ocorrências da ordem. Ou então utilizar o tail, grep duas vezes,
+> cat e o sort para reordenar. E como ficaria então a linha de comando para
+> esta salada?
+
+[...]
+
+> Aos interessados está lançado o desafio! Quem acertar ganha um doce! (E falo
+> sério!)
+
+$ tail -1000 /var/log/messages | grep "connect\|hangup"
+
+$ tail -1000 /var/log/messages | sed -n "/connect\|hangup/p"
+
+cadê meu doce? ':)
+************
+
+> Aos interessados está lançado o desafio! Quem acertar ganha um doce! (E falo
+> sério!)
+>
+
+
+tail nome_do_arquivo | egrep "connected|hangup"
+
+se quiser as linhas com connected ou hangup.
+Se for isto, estou de dieta, troco o doce por uma cerveja :)
+**********************************************************
+
+**********************************************************
+Use o poder das expressoes regulares!
+
+ tail --lines 1000 /var/log/messages|grep -E "(hangup|connect)"
+
+> Aos interessados está lançado o desafio! Quem acertar ganha um doce! (E
+**********************************************************
+> Gostaria de saber como fazer o GREP pesquisar em um arquivo
+> linhas que contenham uma palavra OU outra palavra.
+
+
+egrep '(umapalavra|outrapalavra)'
+
+**********************************************************
+rgrep - busque por uma string (recursivamente)
+---------------------------------
+
+O comando rgrep permite que você busque por uma expressão
+regular dentro dos arquivos de um diretório e
+sub-diretórios.
+Exemplo: Você quer saber quais são as linhas que começam
+por "use" dentro de todos os arquivos *.pl no diretório
+corrente "." e todos sub-diretórios:
+
+-------------
+$ rgrep -R "*.pl" "^use" .
+-------------
+
+Uma forma mais "tradicional" de fazer isso, é concatenar o
+comando find e grep; mas "man rgrep" informa que isso é
+mais ineficiente.
+---------------------------
+
+
+**********************************************************
+From: Anderson Lizardo Gomes <andersonlizardo@ieg.com.br>
+To: Linux-br <linux-br@bazar.conectiva.com.br>
+Sent: Friday, April 12, 2002 8:33 PM
+Subject: Re: (linux-br) Substituição inteligente com grep++++
+
+
+Em Sexta, 12 de Abril de 2002 09:39, Juliano Souza escreveu:
+
+> ...tenho um diretório onde tenho diversos arkivos, todos eles contem a
+> palavra "show" no meio.
+> tenho quer trocar nesse diretório inteiro, todas as palavras "show" por
+> "mostrar",
+> tem como tal façanha?
+
+Supondo que os arquivos estejam em /home/usuario:
+
+cd /home/usuario
+for arq in *show*
+do
+mv $arq $(echo $arq | sed "s/show/mostrar/")
+done
+
+Observações:
+- É necessário ter o programa "sed" (stream editor) para que esse script
+funcione;
+- Ele renomeia TUDO o que estiver no diretório e que contenha a palavra "show"
+(incluindo nomes de diretório);
+- NÃO são incluídos arquivos ocultos nem sub-diretórios.
+
+--
+Anderson Lizardo Gomes -- Usuário Linux #253643
+
+**********************************************************
+De: 	dicas-l-owner@unicamp.br
+Assunto: 	[Dicas-L] GREP: Contagem de Acertos
+Data: 	11 Jul 2002 00:13:30 -0300
+--------------------------------------------------------------------
+Endereço: http://www.Dicas-l.com.br/dicas-l/20020711.shtml
+--------------------------------------------------------------------
+                                Edulinks
+                Links para Ensino médio e fundamental
+               http://edulinks.valedofuturo.unicamp.br
+--------------------------------------------------------------------
+  GREP: Contagem de Acertos
+
+Para determinar o número de arquivos que obedecem a determinado
+critério de busca use o comando grep -c:
+
+
+  $ ls
+  a  ba  c  d  e  f
+
+No exemplo abaixo eu quero saber quantos arquivos
+possum a letra a em seu nome:
+
+  $ ls | grep -c a
+  2
+
+A resposta é dois: os arquivos chamados a e ba.
+No próximo exemplo eu quero saber quantos arquivos começam com
+a letra a:
+
+  $ ls | grep -c "^a"
+  1
+
+Apenas o arquivo chamado a atende a esta busca. O próximo
+exemplo, arquivos que terminem em a:
+
+  $ ls | grep -c "a$"
+  2
+
+Neste caso a resposta também é dois: os arquivos a e ba.
+
+---------------------------------------------------------------
+                       Aprendendo Java 2
+           http://novateceditora.com.br/livros/java2/
+---------------------------------------------------------------
+LIVRO:As Palavras Mais Comuns da Língua Inglesa
+      Rubens Queiroz de Almeida
+      http://www.Dicas-l.com.br/palavrasmaiscomuns.html
+---------------------------------------------------------------
+As mensagens da lista Dicas-L são veiculadas diariamente
+para 19596 assinantes.
+
+       Todas as mensagens da Dicas-L ficam armazenadas em
+               http://www.Dicas-l.com.br.
+
+A redistribuição desta e outras mensagens da lista Dicas-L pode
+ser feita livremente, deste que o conteúdo, inclusive esta nota,
+não sejam modificados.
+---------------------------------------------------------------
+
+Esta mensagem foi verificada pelo E-mail Protegido Terra.
+Scan engine: VirusScan / Atualizado em 10/07/2002 / Versão: 1.3.4
+Proteja o seu e-mail Terra: http://www.emailprotegido.terra.com.br/
+**********************************************************
+	De: 	dicas-l-owner@unicamp.br
+Assunto: 	[Dicas-L] GREP: Contagem de Acertos
+Data: 	11 Jul 2002 00:20:19 -0300
+Quer ter seu próprio endereço na Internet?
+Garanta já o seu e ainda ganhe cinco e-mails personalizados.
+DomíniosBOL - http://dominios.bol.com.br
+
+--------------------------------------------------------------------
+Endereço: http://www.Dicas-l.com.br/dicas-l/20020711.shtml
+--------------------------------------------------------------------
+                                Edulinks
+                Links para Ensino médio e fundamental
+               http://edulinks.valedofuturo.unicamp.br
+--------------------------------------------------------------------
+  GREP: Contagem de Acertos
+
+Para determinar o número de arquivos que obedecem a determinado
+critério de busca use o comando grep -c:
+
+
+  $ ls
+  a  ba  c  d  e  f
+
+No exemplo abaixo eu quero saber quantos arquivos
+possum a letra a em seu nome:
+
+  $ ls | grep -c a
+  2
+
+A resposta é dois: os arquivos chamados a e ba.
+No próximo exemplo eu quero saber quantos arquivos começam com
+a letra a:
+
+  $ ls | grep -c "^a"
+  1
+
+Apenas o arquivo chamado a atende a esta busca. O próximo
+exemplo, arquivos que terminem em a:
+
+  $ ls | grep -c "a$"
+  2
+
+Neste caso a resposta também é dois: os arquivos a e ba.
+
+---------------------------------------------------------------
+                       Aprendendo Java 2
+           http://novateceditora.com.br/livros/java2/
+---------------------------------------------------------------
+LIVRO:As Palavras Mais Comuns da Língua Inglesa
+      Rubens Queiroz de Almeida
+      http://www.Dicas-l.com.br/palavrasmaiscomuns.html
+---------------------------------------------------------------
+As mensagens da lista Dicas-L são veiculadas diariamente
+para 19596 assinantes.
+
+       Todas as mensagens da Dicas-L ficam armazenadas em
+               http://www.Dicas-l.com.br.
+
+A redistribuição desta e outras mensagens da lista Dicas-L pode
+ser feita livremente, deste que o conteúdo, inclusive esta nota,
+não sejam modificados.
+---------------------------------------------------------------
+**********************************************************
+	De: 	zgrp@zipmail.com.br
+Para: 	Vandeci <vandeci@ieg.com.br>
+Cc: 	linux-br@bazar.conectiva.com.br
+Assunto: 	=?iso-8859-1?Q?Re=3A=20=28linux=2Dbr=29=20Procurar=20arquivos=20que=20conten ham=20a=20palavr?= a "teste"
+Data: 	28 Aug 2002 15:01:59 -0300
+Use o grep. :)
+
+grep -rna "string a procurar" arquivo1 arquivo2 ....
+
+Por exemplo para procurar a string "fabiana" nos arquivos passwd e hosts
+eu faria:
+
+[root@lnx /root]# grep -rna fabiana /etc/hosts /etc/passwd
+/etc/passwd:25:fabiana:x:512:516::/home/fabiana:/bin/bash
+
+T+
+
+[ ]'s
+
+
+
+-- Mensagem original --
+
+>Oi lista,
+>Preciso combinar comandos para procurar em quais arquivos tem determinada
+>palavra. Exemplo: comando(ou script) dominio.com.br ==> saida : /etc/hosts
+**********************************************************
+	De: 	Brunhara <lista-linux@sangiovanne.com.br>
+Para: 	linux-br@bazar.conectiva.com.br
+Assunto: 	(linux-br) Comando Grep + variavel nao funciona!!!!
+Data: 	28 Feb 2003 13:33:41 -0300
+Ola  lista Br
+Estou tendo alguns problemas  com o comando grep acretido ser prob de
+sintase
+eu pego a primeira linha do meu arquivo e coloco ela em uma  variavel = New
+.
+
+New=`head -1 http-deny |tail -1 |cut -d "T" -f3`
+
+Dou um echo na variavel  e blz!!!
+echo $New
+http://gatorcme.gator.com/gatorcme/core/col.zip - NONE/- -
+
+Agora, quero ver com o grep se a variavel  esta em outro arquivo
+grep "$New" list-deny  ou  grep -i "$New" list-deny com ou sem
+aspa nao funciona, se eu coloco isto fora de uma variavel funciona
+assim funciona:
+grep "http://gatorcme.gator.com/gatorcme/core/col.zip - NONE/- -" list-deny
+
+tela do meu micro veja abaixo !
+[root@ns1 stf]#
+[root@ns1 stf]# New=`head -1 http-deny |tail -1 |cut -d "T" -f3`
+[root@ns1 stf]# echo $New
+http://gatorcme.gator.com/gatorcme/core/col.zip - NONE/- -
+[root@ns1 stf]# grep "$New" list-deny
+[root@ns1 stf]# grep "http://gatorcme.gator.com/gatorcme/core/col.zip -
+NONE/- -" list-deny
+http://gatorcme.gator.com/gatorcme/core/col.zip - NONE/- -
+http://gatorcme.gator.com/gatorcme/core/col.zip - NONE/- -
+http://gatorcme.gator.com/gatorcme/core/col.zip - NONE/- -
+[root@ns1 stf]#
+**********************************************************
+	De: 	Alvaro Figueiredo <alvarof@freeshell.org>
+Para: 	Thiego Xavier <xavier@miu.com.br>, linux-br@bazar.conectiva.com.br
+Assunto: 	Re: (linux-br) grep ???
+Data: 	16 Jun 2003 11:36:52 -0300
+Em Sex 16 Mai 2003 10:26, Thiego Xavier escreveu:
+> Ola Pessoal, estou com uma duvida simples q ate o momento ñ
+> consegui resolver.
+> Tenho um arquivo texto no seguinte formato:
+> palavra1
+> palavra
+> palavra2
+> palavra3
+> Estou usando o 'grep' para pegar um valor de arquivo.
+> $ cat bancos.txt | grep palavra
+> So que o 'grep' faz um like e ñ um igual, preciso fazer com  q
+> ele traga apenas o texto 'palavra'.
+> Como fazer isso?
+> Obriagado,
+> Thiego Xavier
+
+O comando grep procura por uma expressão regular dentro de cada
+linha e imprime a linha quando encontra.
+
+No caso descrito acima, use o comando abaixo:
+
+    grep '^palavra$' bancos.txt
+
+Leia a documentação do grep e de expressões regulares. Por
+exemplo, comece por:
+
+    man grep
+    info grep
+**********************************************************
+	De: 	Thiego Xavier <xavier@miu.com.br>
+Para: 	linux-br@bazar.conectiva.com.br
+Assunto: 	(linux-br) Grep - Resolvido
+Data: 	16 May 2003 15:56:43 -0300
+Resolvido Pessoal
+
+$ cat arquivo.txt | grep "^palavra[^[:alnum:]]"
+com este comando ele traz o valor exato
+
+Grato a todos q colaboraram...
+Thiego.
+**********************************************************
+	De: 	Mike Shigueru Matsumoto <fuji_linux@yahoo.com.br>
+Para: 	Marcelo Marra Assis <marcelo-hu@uol.com.br>, Lista Conectiva linux-br <linux-br@bazar2.conectiva.com.br>
+Assunto: 	Re: (linux-br) Procurar string dentro de arquivo
+Data: 	02 Jul 2003 23:21:29 -0300
+E ai tudo bem?
+
+Usa o comando "grep"
+
+Ex:
+
+$ cat cidades.txt
+sao paulo
+uberaba
+uberlandia
+araguari
+
+$ grep -i "ao" cidades.txt
+sao paulo
+
+pode ser usado mais de um arquivo de uma vez:
+
+$ grep -i "ao" cidades.txt arquivo2.txt arquivo3.txt
+
+ou ainda:
+
+$ grep -i "ao" *
+
+a opcao -i serve para especificar que a caixa de maiuscula ou minuscula deve
+ser ignorada.
+
+maiores informações:
+
+$ grep --help
+$ man grep
+--
+**********************************************************
+
+	De: 	Viktor Mota <fulano2001@terra.com.br>
+Responder-a: 	Viktor Mota <fulano2001@terra.com.br>
+Para: 	Marcio Merlone <mm@surf.com.br>, linux-br@bazar2.conectiva.com.br
+Assunto: 	Re[2]: (linux-br)script para remover linhas
+Data: 	Wed, 19 May 2004 14:16:07 -0300
+Olá Marcio Merlone,
+
+quarta-feira, 19 de maio de 2004, 13:43:20, você escreveu:
+
+MM> Viktor Mota wrote:
+
+>> CE> pessoal, tenho um arquivo com 1000 linhas por ex...
+>> CE> e preciso excluir todas que comecam com 0003
+>> CE> tem mais ou menos umas 100 linhas que iniciam com 0003
+>> CE> sem estar em sequencia.. ( uma embaixo da outra.. )
+>> CE> teria como ter um script que fizesse essa remoção pra mim
+>> CE> direto... pois 1 vez por semana terei que fazer isso ...
+
+>> nao precisa de script, digita o seguinte comando:
+>>
+>> grep -v 0003 arquivo_1000_linhas
+
+MM> NÃO!!!!
+MM> E se a linha não começar com 0003 mas tiver 9550003 por ex. no meio? Faça:
+MM> grep -v "^0003" arquivo
+
+Obrigado pela correçao :)
+
+So lembrando que o grep apenas mostrara o resultado na tela, nao se
+esqueca de redirecionar para um arquivo temporiario sua pesquisa caso
+isto seja necessario, é claro!
+
+Algo do genero:
+
+grep -v "^0003" arquivo >/path_destino/arquivo-tmp
+ou
+grep -v "^0003" arquivo >>/path_destino/arquivo-tmp
+para adicionar ao arquivo (desde que ele ja exista)
+
+[]s
+Viktor Mota
+fulano2001@terra.com.br
+
+
+Date: Wed, 19 May 2004 12:03:11 -0300
+From: Samoied <samoied@users.sourceforge.net>
+Subject: Re: (linux-br)script para remover linhas
+To: Carlos Eduardo <edu@vitapelli.com.br>
+Cc: linux-br@bazar2.conectiva.com.br
+Message-ID: <40AB772F.3010005@users.sourceforge.net>
+Content-Type: text/plain; charset="iso-8859-1"
+
+Carlos Eduardo wrote:
+
+>pessoal, tenho um arquivo com 1000 linhas por ex...
+>e preciso excluir todas que comecam com 0003
+>tem mais ou menos umas 100 linhas que iniciam com 0003
+>sem estar em sequencia.. ( uma embaixo da outra.. )
+>teria como ter um script que fizesse essa remoção pra mim
+>direto... pois 1 vez por semana terei que fazer isso ...
+> 
+>
+Creio que isto resolva seu problema:
+#grep -v "^0003" arquivo.txt  > sem_o_0003.txt
+
+Isto jogara no arquivo sem_o_0003.txt todas as linhas menos (o -v do
+grep) as que começarem com 0003 (o "^0003").
+
+Até mais,
+
+--
+  _    Samoied <nazario@ciasc.gov.br>
+ °v°   UIN: #106162852
+/(_)\  GNU/Linux user: #263461
+ ^ ^   Please encrypt and sign e-mails
+
+
+
+
+	De: 	Marcio Merlone <mm@surf.com.br>
+Para: 	Viktor Mota <fulano2001@terra.com.br>
+Cc: 	linux-br@bazar2.conectiva.com.br
+Assunto: 	Re: (linux-br)script para remover linhas
+Data: 	Wed, 19 May 2004 13:43:20 -0300
+Viktor Mota wrote:
+CE> pessoal, tenho um arquivo com 1000 linhas por ex...
+> CE> e preciso excluir todas que comecam com 0003
+> CE> tem mais ou menos umas 100 linhas que iniciam com 0003
+> CE> sem estar em sequencia.. ( uma embaixo da outra.. )
+> CE> teria como ter um script que fizesse essa remoção pra mim
+> CE> direto... pois 1 vez por semana terei que fazer isso ...
+> nao precisa de script, digita o seguinte comando:
+>
+> grep -v 0003 arquivo_1000_linhas
+>
+NÃO!!!!
+
+E se a linha não começar com 0003 mas tiver 9550003 por ex. no meio? Faça:
+
+grep -v "^0003" arquivo
+
+[ ]´s
+
+--
+Marcio Merlone
+**********************************************************
+	De: 	EPx <epx@brturbo.com>
+Para: 	linux-br@bazar2.conectiva.com.br
+Assunto: 	Re: (linux-br)script para remover linhas
+Data: 	Thu, 20 May 2004 13:06:39 -0300
+Em Qui 20 Mai 2004 11:39, Danilo Vasconcelos de O. e Silva escreveu:
+> Senhores, e qual a diferença de usar o grep para o egrep?
+
+O egrep implementa expressões regulares "estendidas", onde uma série de
+caracteres adquire significado especial, ou seja, viram operadores.
+
+Nas expressões regulares simples, esses mesmos caracteres têm de ser
+escapeados para serem operadores. Vide exemplos:
+
+# filtra linhas com uma ou mais ocorrências seguidas da string "bo"
+cat arquivo.txt | grep  '\(bo\)\+'
+cat arquivo.txt | egrep  '(bo)+'
+
+# filtra linhas com 2 ou mais ocorrências seguidas da string "bo"
+cat teste.txt | grep '\(bo\)\{2\}'
+cat teste.txt | egrep '(bo){2}'
+
+Para expressões regulares complexas, a versão do egrep é sem dúvida mais
+legível. O reverso da moeda é que, se quisermos o caractere literal, "+" por
+exemplo, é preciso escapeá-lo no egrep, enquanto isso não era necessário no
+grep:
+
+# filtra linhas com a string literal "o+"
+
+cat arquivo.txt | grep  'o+'
+cat arquivo.txt | egrep  'o\+'
+**********************************************************
+	De: 	Alvaro Figueiredo <alvarof@freeshell.org>
+Para: 	Danilo Vasconcelos de O. e Silva <preceptor@secrel.com.br>, Viktor Mota <fulano2001@terra.com.br>, Marcio Merlone <mm@surf.com.br>, linux-br@bazar2.conectiva.com.br
+Assunto: 	Re: Re[2]: (linux-br) grep vs egrep (era: script para remover linhas)
+Data: 	Thu, 20 May 2004 14:16:00 -0300
+Em Qui 20 Mai 2004 11:39, Danilo Vasconcelos de O. e Silva
+escreveu:
+> Senhores, e qual a diferença de usar o grep para o egrep?
+
+O egrep usa uma sintaxe mais recente de expressão regular que o
+grep. Para maiores detalhes, man egrep.
+
+--
+Alvaro Figueiredo
+alvarof@freeshell.org
+**********************************************************
+	De: 	Ronaldo Lazzari <tuamae@terra.com.br>
+Para: 	mrodrigom@gmail.com
+Cc: 	linux-br@bazar2.conectiva.com.br
+Assunto: 	Re: (linux-br)problema com o grep
+Data: 	Fri, 11 Mar 2005 14:59:37 -0300
+Em expressões regulares o . (ponto) geralmente significa qualquer coisa.
+
+Portando o grep está retornando os valoes corretos nos dois casos que
+tu citou.
+
+Para funcionar como tu quer, use:
+
+cat arquivo.txt | grep "^$LINHA\." | wc -l
+
+Na dúvida, não deixe de consultar o programa text2regex.
+
+Ronaldo Lazzari
+
+
+> cat arquivo.txt | grep ^$LINHA. | wc -l
+>
+> arquivo.txt
+> ==========
+> ...
+> ipec.ouvidoria
+> ipece.anacristina
+> ipece.cristinamedeiros
+> ...
+> ==========
+>
+> quando $LINHA=ipec ele diz que existem 3 arquivo
+> comecados por "ipec.", quando na verdade deveria ser
+> somente 1, o ipec.ouvidoria. quando $LINHA=ipece ele
+> devolve 2, o que eh certo. soh acontece o erro quando
+> $LINHA=ipec
+> ja tentei grep ^$LINHA".", mas deu o mesmo coisa.
+> alguem sabe como resolvo esse problema?
+**********************************************************

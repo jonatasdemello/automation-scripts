@@ -1,0 +1,8 @@
+Go to the directory: [Drive]:\Users\[Username]\AppData\Local\Google\Chrome\User Data\SwReporter\
+Replace [Drive] and [Username] with your hard drive letter and user account name, respectively.
+Select the folder(s) present on the screen, right click on them, and select "Properties". The properties window should open.
+Go to the "Security" tab and click on "Advanced". A new window should open.
+Click on "Disable Inheritance". A new window should open. Select "Remove all inherited permissions from this object."
+Click "Ok" or "Apply". Access to the software reporting tool folder(s) should be disabled now, so they won't run.
+You should periodically check this folder, as Google will release new versions of the software reporting tool, and you will need to disable them using the above procedure.
+

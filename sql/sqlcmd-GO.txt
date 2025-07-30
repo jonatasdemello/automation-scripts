@@ -1,0 +1,42 @@
+# sqlcmd GO version
+
+https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16&tabs=go%2Clinux&pivots=cs1-powershell
+
+https://github.com/microsoft/go-sqlcmd
+
+winget search sqlcmd
+
+Name         Id               Version Match           Source
+------------------------------------------------------------
+Sqlcmd Tools Microsoft.Sqlcmd 1.6.0   Moniker: sqlcmd winget
+
+
+
+winget install sqlcmd
+winget upgrade sqlcmd
+
+choco install sqlcmd
+choco upgrade sqlcmd
+
+
+Ubuntu
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/20.04/prod.list)"
+
+sudo apt-get update
+sudo apt-get install sqlcmd
+
+-------------------------------------------------------------------------------------------------------------------------------
+OLD:
+sqlcmd -?
+Version 15.0.1300.359 NT
+
+C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE
+
+NEW:
+sqlcmd --version
+v1.5.0
+
+/usr/bin/sqlcmd
+
+-------------------------------------------------------------------------------------------------------------------------------

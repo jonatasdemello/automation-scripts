@@ -1,0 +1,8 @@
+BrowserLink
+
+https://docs.microsoft.com/en-ca/aspnet/core/client-side/using-browserlink?view=aspnetcore-6.0
+https://docs.microsoft.com/en-ca/aspnet/core/mvc/views/view-compilation?view=aspnetcore-6.0&tabs=visual-studio
+
+
+Install-Package Microsoft.VisualStudio.Web.BrowserLink -Version 2.2.0
+Install-Package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation -Version 6.0.8

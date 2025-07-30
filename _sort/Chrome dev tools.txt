@@ -1,0 +1,6 @@
+Chrome dev tools
+
+-regexp:(png|jpg|ogg|ske.json|gif|wof|otf|svg|ico|css) -js
+
+-regexp:(png|jpg|ogg|ske.json|gif|wof|otf|svg|ico|css|primer|collect|ga-) -js
+

@@ -1,0 +1,37 @@
+---------------------------
+TortoiseGitPlink Fatal Error
+---------------------------
+No supported authentication methods available (server sent: publickey)
+---------------------------
+OK
+---------------------------
+
+
+For me there was a problem to perform actions against the remote repository only when using TortoiseGit, through CMD / GitBash there have been no issue at all.
+
+So what I did was Very simple:
+I opened TortoiseGit-->Settings --> Network and in SSH Client I changed to
+"C:\Program Files\Git\usr\bin\ssh.exe" instead of "TortoiseGitPlink.exe".
+
+---------------------------------------------------------------------------------------------------
+
+For TortoiseGit Users on Windows
+(as I originally posted in this question)
+
+I used to setup most of my Github/Bitbucket repositories using the SSH repository URLs as (originally) it used to be the only convenient way to prevent TortoiseGit from prompting for your password on every single action.
+
+But setting TortoiseGit up this way was always hair-pullingly painful. Every time it took me hours to set up correctly, as the default installation options never seemed to work (even as of 2016, sheesh!).
+
+But TortoiseGit now has better password management for HTTPS, and Github actually recommends using HTTPS URLs wherever possible.
+
+    SSH URL: git@github.com:User/repo-name.git
+
+    HTTPS URL: https://github.com/User/repo-name.git
+
+The benefits of HTTPS are:
+
+    No managing or generating of SSH keys
+    No need to have pageant.exe constantly running (which requests your password on each launch)
+    Using TortoiseGit from Australia, I find that clones over HTTPS are 5-10x faster than SSH
+
+

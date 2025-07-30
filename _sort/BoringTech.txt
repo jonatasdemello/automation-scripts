@@ -1,0 +1,67 @@
+
+	https://boringtechnology.club/
+
+	https://hypermedia.systems/
+
+Django demo
+	https://www.youtube.com/watch?v=wffkI6xNNeU&ab_channel=MichaelBrayer
+
+Djago aplicacoes
+	http://imersao.fullcycle.com.br
+
+	https://www.youtube.com/live/bupRIZrXySk
+
+Django + htmx + alpinejs + litelement
+
+	https://alpinejs.dev/
+	https://lit.dev/
+	https://github.com/lit/lit-element
+
+stack for fast development?
+
+I don't think there's a thing wrong with bootstrap if you know and like it.
+
+I like to use tailwind and components from various places (like daisy, flowbite, tailkit) when I want things to look polished.
+
+But when I'm just starting something and trying to move quickly, I kind of like missing.css lately.
+It's small and easy. And it plays very nicely with alpine and htmx. And you don't need a build step like tailwind does.
+
+I've been building the contacts app from the hypermedia.systems using this stack, starting from nothing. I tried to write down every detail of what I did in this set of blog posts. I'm through chapter 6 and will probably do another couple chapters later.
+
+	https://missing.style/
+	https://picocss.com/
+
+	https://hypermedia.systems/
+	https://geoff.tuxpup.com/posts/hypermedia-systems-django-intro/
+
+My code is here.
+	https://git.sr.ht/~tuxpup/contacts-hypermedia-systems
+
+If you want to focus on fast ship features and not losing time against bug/problems, I'd suggest the following stack:
+
+	bootstrap for UI: rock solid, plenty of resources
+	Django MVC (or anything you are proficient with: Spring Boot, laravel, rails, ...)
+	htmx for SPA-like features
+	hyperscript if you need some client logic
+
+I'd suggest to avoid vue/react/svelte or anything js, because js ecosystem is a jungle and the effort to maintain both a FE tech stack and a BE tech stack with 2 different technologies is huge (and I don't see any advantage anymore). This is especially true if you are a lone developer.
+
+At the end of the day, your users will care about the functionalities you offer and how fast you ship them or how fast you fix a bug. They don't care if it's written in language X with framework Y.
+
+Some links that I found useful in my journey:
+
+	https://hypermedia.systems/
+	https://boringtechnology.club/
+
+Just to give some background, but it's related to work projects, not personal ones:
+
+I made a startup last year as CTO and I had to choose the stack.
+
+I've been working 10+ years in enterprises and came from a project with ~15 developers, split in two different teams, one for frontend and one for backend. The effort of maintaining the two teams aligned was HUGE and debugging was a real pain. Development was cumbersome due to very complex architecture (micro services for the backend, full SPA for the fe).
+
+So in my startup, I tried to do things different and went with modular monolithic Django+htmx.
+
+I can say that with 3 developers now, we are as much productive as 15 developers.
+
+And I'm very confident this will scale very smoothly with the number of developers.
+

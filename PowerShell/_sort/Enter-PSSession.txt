@@ -1,0 +1,34 @@
+Enter-PSSession -ComputerName Server01
+Enter-PSSession -ComputerName Server01 -Port 90 -Credential Domain01\User01
+
+PS> $s = New-PSSession -ComputerName Server01
+PS> Enter-PSSession -Session $s
+
+PS> Enter-PSSession -ComputerName Server01
+[Server01]: PS> Exit-PSSession
+
+# SSH
+Enter-PSSession -HostName UserA@LinuxServer01
+Enter-PSSession -HostName UserA@LinuxServer02:22 -KeyFilePath c:\\userAKey_rsa
+
+
+
+Enter-PSSession : Connecting to remote server cc-srv-17 failed with the following error message : WinRM cannot process
+the request. The following error occurred while using Kerberos authentication: Cannot find the computer cc-srv-17.
+Verify that the computer exists on the network and that the name provided is spelled correctly. For more information,
+see the about_Remote_Troubleshooting Help topic.
+
++ Enter-PSSession -ComputerName cc-srv-17
+
+
+WinRM (ComputerName parameter set)
+
+To connect to a remote computer, the remote computer must be listening on the port that the connection uses. The default ports are 5985, which is the WinRM port for HTTP, and 5986, which is the WinRM port for HTTPS.
+
+Before using an alternate port, you must configure the WinRM listener on the remote computer to listen at that port. Use the following commands to configure the listener:
+
+    winrm delete winrm/config/listener?Address=*+Transport=HTTP
+    winrm create winrm/config/listener?Address=*+Transport=HTTP @{Port="\<port-number\>"}
+
+Do not use the Port parameter unless you must. The port setting in the command applies to all computers or sessions on which the command runs. An alternate port setting might prevent the command from running on all computers.
+

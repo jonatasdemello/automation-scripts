@@ -1,0 +1,116 @@
+https://medium.com/swlh/writing-better-commit-messages-9b0b6ff60c67
+
+Why use a commit message convention?
+
+A well-organized commit message history leads to more readable messages that are easy to follow when looking through the project history.
+Better collaboration
+
+    Foster transparency by communicate the nature of changes in your codebase to a variety of audience: existing teammates, future contributors, and sometimes the public and other stakeholders.
+    Peer Code Review requires a well-formatted Git commit message convention to communicate context about changes to fellow developers.
+    Structured commit history is required to understand which notable changes have been made between each release (or version) of the project.
+
+Squeeze the most out of git utilities
+
+$ git log is a beautiful and powerful command — Suddenly, navigating through the log output become a possible mission!
+
+Embracing a commit message convention will also help you properly use other git commands like git blame, git revert, git rebase, git shortlog and other git subcommands.
+Identify semantic version bumps
+
+Commit message convention goes hand in hand with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
+
+    Automatically generating CHANGELOGs
+    Automatically determining a semantic version bump (based on the types of commits landed)
+
+Key to writing better commit messages
+
+The most important part of a commit message is that it should be clear and meaningful. In the long run, writing good commit messages shows how much of a collaborator you are. The benefits of writing good commit messages are not only limited to your team, but indeed expand to yourself and future contributors.
+
+
+Defining a Commit Message Convention
+
+type(scope): subject<body><footer>
+
+The commit contains the following structural elements, to communicate intent to the consumers:
+1. Type of commit
+
+feat:     The new feature being added to a particular applicationfix:      A bug fix (this correlates with PATCH in SemVer)style:    Feature and updates related to stylingrefactor: Refactoring a specific section of the codebasetest:     Everything related to testingdocs:     Everything related to documentationchore:    Regular code maintenance
+
+2. Scope of commit (Optional)
+
+A scope MUST consist of a noun describing a section of the codebase affected by the changes (or simply the epic name) surrounded by parenthesis. Example:
+
+feat(claims)fix(orders)
+
+3. Subject
+
+Short description of the applied changes.
+
+    Limit the subject line to 50 characters
+    Your commit message should not contain any whitespace or punctuations
+    Do not end the subject line with a period
+    Use the present tense or imperative mood in the subject line
+
+feat(claims): add claims detail pagefix(orders): validation of custom specification
+
+4. Body (Optional)
+
+Use the body to explain what changes you have made and why you made them.
+
+    Separate the subject from the body with a blank line
+    Limit each line to 72 characters
+    Do not assume the reviewer understands what the original problem was, ensure you add it
+    Do not think your code is self-explanatory
+
+refactor!: drop support for Node 6BREAKING CHANGE: refactor to use JavaScript features not available in Node 6.
+
+5. Footer (Optional)
+
+Use this section to reference issues affected by the code changes or comment to another developers or testers.
+
+    Resolve issues automatically: To link commit to an issue from a commit message, include a <command> <issue> pair somewhere in your commit message e.g. close #658, reopen #459, etc — specified command will be performed on the tagged issue.
+
+fix(orders): correct minor typos in codeSee the issue for detailson typos fixed.Reviewed-by: @John Doe
+Refs #133
+
+SemVer Tips
+
+    fix: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in semantic versioning).
+
+    feat: a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in semantic versioning).
+
+    BREAKING CHANGE: a commit that has a footer BREAKING CHANGE:, or appends a ! after the type/scope, introduces a breaking API change (correlating with MAJOR in semantic versioning). A BREAKING CHANGE can be part of commits of any type.
+
+The curious case of reverting commits:
+
+Lets take a look at another commit message:
+
+feat(lang): add polish languageReviewed-by: @John Doe
+Refs #133
+
+Now for some reason you have to remove support for polish language — all you have to do is to revert the above commit, as mentioned below:
+
+Revert "feat(lang): add polish language"Refs: 676104e, a215868
+
+Voila! Writing better commit messages not only keeps your commit history structured but also let you squeeze the most out of git utilities 😎
+
+Following is the ready to use template that you can easily import in your repositories and customise as needed.
+Git Commit Best Practices
+
+    Make Small, Single-Purpose Commits
+
+For proper source code management and better housekeeping a commit should be a wrapper for related changes. For example, fixing two different bugs should produce two separate commits.
+Small commits make it easier for other developers to a) understand the changes b) roll them back if something went wrong.
+
+    Commit Early & Often
+
+Committing early and often keeps your commits small and helps you commit only related changes. Moreover, it allows you to share your code more frequently with others and avoid having merge conflicts.
+
+    Test Your Code Before You Commit
+
+Resist the temptation to commit something that you «think» is completed. Test it thoroughly to make sure it really is completed and has no side effects (as far as one can tell).
+
+    Agree on A Workflow
+
+Git lets you pick from a lot of different workflows: long-running branches, feature branches, merge or rebase, git-flow, etc. Which one you choose depends on a couple of factors: your project, your overall development and deployment workflows, etc. However you choose to work, just make sure to agree on a common workflow that everyone follows.
+
+Thanks for reading and don’t forget to share, comment and give as many as

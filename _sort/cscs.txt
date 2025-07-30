@@ -1,0 +1,91 @@
+https://www.codemag.com/Article/1607081/
+
+https://www.codemag.com/Article/2103091/Using-Scripting-for-Working-with-SQL-Server-in-C#
+https://www.codemag.com/Article/2105071/Using-Scripting-for-Working-with-SQL-Server-in-C#
+
+https://www.smashingmagazine.com/2020/01/cscs-scripting-language-cross-platform-development/
+
+
+Installing Microsoft SQL Server on macOS
+Because it's a common task to install and run SQL Server on Windows, here, you're going to see how to install and run it on macOS. Perform the following steps to get SQL Server up and running on your Mac:
+
+
+docker pull
+mcr.microsoft.com/mssql/server:2019-latest
+If this doesn't work because of permission issues, try running same command with sudo (you will have to know the admin password for that):
+
+
+sudo docker pull
+mcr.microsoft.com/mssql/server:2019-latest
+
+docker run -d --name sql_server_demo
+-e 'ACCEPT_EULA=Y'
+-e 'SA_PASSWORD=<password>' -p 1433:1433
+mcr.microsoft.com/mssql/server:2019-latest
+
+npm install -g sql-cli
+Precede the command above with sudo if you encounter some permission issues. This step is optional, but highly recommended. Install Microsoft Azure Data Studio from: https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15.
+
+Obviously, there are other free SQL Server GUI Wrappers available, but I found the Azure Data Studio on macOS to be quite powerful and a good competition to the Microsoft SQL Server Management Studio for Windows.
+
+
+mssql -u sa -p <password>
+To check the installed version of Microsoft SQL Server just run:
+
+
+SELECT @@version
+
+https://github.com/vassilych/cscs
+
+
+Setting Up SQL Server DB and Tables
+Once the SQL Server is installed and the CSCS Scripting Engine is integrated into your project, you can set up the SQL Server database that you're going to use in the following examples.
+
+You'll do this set up in CSCS itself. All of the SQL Server functions are described in Table 1. First, you create a new Database:
+
+
+SQLConnectionString("Data Source=localhost,1433;
+Initial Catalog=master;Database=master;
+User Id=sa;Password=<password>");
+SQLCreateDB("CSCS");
+SQLNonQuery("CREATE DATABASE CSCS");
+Next, you create a table of users. Note that you use the newly created CSCS Database in the SQL Server connection string in order for the new table to be created there:
+
+
+SQLConnectionString(
+"Data Source=localhost,1433;
+Initial Catalog=CSCS;Database=CSCS;
+User Id=sa; Password=<password>");
+SQLNonQuery("CREATE TABLE Users (
+ID int NOT NULL IDENTITY PRIMARY KEY,
+FirstName varchar(255),
+LastName varchar(255),
+Email varchar(255),
+Salary real,
+Timestamp datetime not null
+default current_timestamp)");
+Note the way you created the table Users: There's no need to provide user ID nor the Timestamp: for the former; the next consequent integer will be called user I and for the latter, the current time stamp will be used.
+
+Let's populate the newly created table Users with some sample data:
+
+
+columns = "FirstName,LastName,Email,Salary";
+SQLInsert("Users", columns,
+["John", "Johnson", "john@gmail.com", 45000]);
+SQLInsert("Users", columns,
+["Juan", "Perez", "juan@gmail.mx", 75000]);
+SQLInsert("Users", columns,
+["Johannes", "Dei", "dei@my.ch", 65000]);
+SQLInsert("Users", columns,
+["Jean", "Cap", "jean@my.fr", 49000]);
+SQLInsert("Users", columns,
+["Giovanni", "Vasco", "gv@my.it", 34000]);
+SQLInsert("Users", columns,
+["Joan", "Lee", "joan@my.es", 74000]);
+After that, the table looks like Figure 4:
+
+Figure                            SEQ Figure * ARABIC                           4                    : After populating the Users table with sample data
+Figure SEQ Figure * ARABIC 4 : After populating the Users table with sample data
+The list of currently implemented CSCS functions related to the SQL Server is shown in Table 1.
+
+Now you're ready to start playing around with SQL using CSCS scripting.

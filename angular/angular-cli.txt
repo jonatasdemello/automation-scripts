@@ -1,0 +1,132 @@
+https://github.com/isaacs/node-glob/blob/main/README.md
+
+https://www.npmjs.com/package/copyfiles
+https://github.com/calvinmetcalf/copyfiles
+
+
+https://docs.npmjs.com/cli/v8/using-npm/scripts#npm-run-user-defined
+
+
+https://angular.io/cli/build
+
+"build": "npm run copy && ng build --configuration=production --delete-output-path --output-path ./dist/assets/",
+"build": "npm run copy && ng build --configuration=production --delete-output-path --resources-output-path res",
+
+--base-href
+
+	Base url for the application being built.
+
+--configuration
+
+	One or more named builder configurations as a comma-separated list as specified in the "configurations" section of angular.json.
+	The builder uses the named configurations to run the given target.
+	For more information, see https://angular.io/guide/workspace-config#alternate-build-configurations.
+	Setting this explicitly overrides the "--prod" flag.
+	Aliases: -c
+
+--delete-output-path
+
+	Delete the output path before building.
+
+--output-path
+
+	The full path for the new output directory, relative to the current workspace.
+	By default, writes output to a folder named dist/ in the current project.
+
+--prod
+
+	Deprecated: Use --configuration production instead.
+
+	Shorthand for "--configuration=production".
+	Set the build configuration to the production target.
+	By default, the production target is set up in the workspace configuration such that all builds make use of bundling,
+	limited tree-shaking, and also limited dead code elimination.
+
+--resources-output-path
+
+The path where style resources will be placed, relative to "outputPath".
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+The given solution "resourcesOutputPath": "images" works fine for image. But unfortunately if we need to do the same for other resources like *.js or *.ttf files etc... it will not work.
+
+Here is how I do that for *.js files : in the file package.json, below the scripts node, I add a script called postbuild that will :
+
+    Move the files in the dedicated folder (resources in my example)
+    Search and replace <script src="*.js"></script> in index.html by <script src="resources/*.js"></script>. The search and replace is done with sed commande line (please be aware that there are some difference with sed commande lin on linux or MacOS).
+
+Here is the final look of my package.json file :
+
+{
+  "name": "my-project",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --proxy-config proxy.conf.json",
+    "build": "ng build",
+    "postbuild": "mv ./dist/my-project/*.js ./dist/my-project/*.js.map ./dist/my-project/resources; sed -i -e 's/src=\"/src=\"resources\\//g' dist/my-project/index.html",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  }
+
+WARNING in Terser Plugin: Dropping __PURE__ call [5-es2015.3c58192cc73c3ee9231e.js:1855,55]
+
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/",
+            "resourcesOutputPath": "res/",
+            "deleteOutputPath": true,
+            "verbose": true,
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": ["src/favicon.ico", "src/content", "src/images", "src/assets", "src/assets/icons", "src/assets/images", "src/assets/font"],
+            "styles": ["src/styles.scss"],
+            "scripts": ["node_modules/moment/min/moment.min.js"]
+          },
+
+
+    "postbuild": "mv ./dist/my-project/*.js ./dist/my-project/*.js.map ./dist/my-project/resources; sed -i -e 's/src=\"/src=\"resources\\//g' dist/my-project/index.html"
+
+ "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build && npm run postbuild",
+    "postbuild":"xcopy /s \".\/dist\\angular-material-bottom-sheet-app\" \".\/mydistapp\\dist\" \/Y",
+      .....
+  },
+
+before
+---------------------------
+assets/bundle.*.js
+index.html
+
+after
+---------------------------
+*.js
+*.css
+*.html
+assets/*.js
+
+---------------------------
+assets/bundle.js
+assets/*bundle.js
+assets/app.css
+index.html
+assets/vendor.bundle.js
+
+---------------------------
+*.js
+*.css
+*.html
+assets/*.js
+
+-------------------------------------------------------------------------------------------------------------------------------
+https://www.npmjs.com/package/regex-replace
+
+
+const publicPath = isProduction ? '#{Octopus.Action[Setup].Output.cdnEndpoint}/#{assetsContainer}/' : '/assets/';

@@ -1,0 +1,28 @@
+
+https://docs.github.com/en/search-github/github-code-search/understanding-github-code-search-syntax
+
+user:<user>
+org:<company>
+repo:<repo>
+
+org:github
+repo:github-linguist/linguist
+language:csharp
+
+	source: https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml
+
+path
+path:/(^|\/)README\.md$/
+path:unit_tests
+path:*.txt
+path:src/*.js
+path:/src/*.js
+path:/src/**/*.js
+path:*.a?c
+path:"file?"
+
+content:README.md
+
+is:archived
+NOT is:fork
+

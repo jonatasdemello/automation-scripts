@@ -1,0 +1,6 @@
+Face Depixelizer
+
+https://github.com/tg-bomze/Face-Depixelizer
+
+https://colab.research.google.com/github/tg-bomze/Face-Depixelizer/blob/master/Face_Depixelizer_Eng.ipynb#scrollTo=fU0aGtD4Nl4W
+

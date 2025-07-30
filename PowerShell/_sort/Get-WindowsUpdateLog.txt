@@ -1,0 +1,21 @@
+Basically open a powershell and type Get-WindowsUpdateLog
+
+
+Windows Update logs are now generated using ETW (Event Tracing for Windows).
+Please run the Get-WindowsUpdateLog PowerShell command to convert ETW traces into a readable WindowsUpdate.log.
+
+Get-WindowsUpdateLog
+
+For more information, please visit https://go.microsoft.com/fwlink/?LinkId=518345
+
+Wilogutl.exe
+
+wilogutl.exe [<options>][<source file>][<options>][<report file directory>]
+
+You can use the following command lines to run in quiet mode.
+
+wilogutl /q /l c:\mymsilog.log /o c\outputdir\
+
+wilogutl /q /l c:\mymsilog.log
+
+

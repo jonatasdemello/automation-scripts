@@ -1,0 +1,39 @@
+# Email:
+	https://www.troyhunt.com/dont-trust-net-web-forms-email-regex/
+
+	^(?!\.)("([^"\r\\]|\\["\r\\])*"|([-a-z0-9!#$%&'*+/=?^_`{|}~] |(?@[\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$
+
+	\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b
+
+	Getting back to the original question, I don't see a performance problem with either of those regexes.
+	Aside from the nested-quantifiers anti-pattern cited in that BCL blog entry,
+	you should also watch out for situations where two or more adjacent parts of the regex can match the same set of characters--for example,
+
+	([A-Za-z]+|\w+)@
+	There's nothing like that in either of the regexes you posted.
+	Parts that are controlled by quantifiers are always broken up by other parts that aren't quantified.
+	Both regexes will experience some avoidable backtracking, but there are many better reasons than performance to reject them.
+
+	EDIT: So the second regex is subject to catastrophic backtracking;
+	I should have tested it thoroughly before shooting my mouth off.
+	Taking a closer look at that regex, I don't see why you need the outer asterisk in the first part:
+
+	[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*
+
+	All that bit does is make sure the first and last characters are alphanumeric while allowing some additional characters in between.
+	This version does the same thing, but it fails much more quickly when no match is possible:
+
+	[0-9a-zA-Z][-.\w]*[0-9a-zA-Z]
+
+	That would probably suffice to eliminate the backtracking problem,
+	but you could also make the part after the "@" more efficient by using an atomic group:
+
+	(?>(?:[0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+)[a-zA-Z]{2,9}
+
+	In other words, if you've matched all you can of substrings that look like domain components with trailing dots,
+	and the next part doesn't look like a TLD, don't bother backtracking.
+	The first character you would have to give up is the final dot, and you know [a-zA-Z]{2,9} won't match that.
+
+Email:
+	/^([[:alnum:]]{1,}|[[:punct:]]{1,})@[[:lower:]]+\.[[:lower:]]+$/
+

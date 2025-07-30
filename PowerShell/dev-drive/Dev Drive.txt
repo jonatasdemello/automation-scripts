@@ -1,0 +1,100 @@
+# Dev Drive
+
+- Hyper-V
+	- Hyper-V Management Tools
+	- Hyper-V Platform
+- Virtual Machine Platform
+- Windows Hypervisor Platform
+
+- Windows Sandbox
+- Windows Subsystem for Linux
+
+They are separate independent features and do not directly correlate with one another.
+
+Hyper-V:
+	Is Microsoft's Hypervisor. This component adds the management tools and platform to create and run virtual machines on Windows 11.
+
+Windows Hypervisor Platform:
+	Enables the user-mode API components to allow third-party virtualization stacks and applications (Docker, VirtualBox, and QEMU) to connect and interact with Hyper-V.
+	"Enables virtualization software to run on the Windows hypervisor" and at one time was required for Docker on Windows. The Hypervisor platform is an API that third-party developers can use in order to use Hyper-V. Oracle VirtualBox, Docker, and QEMU are examples of these projects.
+
+Virtual Machine Platform:
+	This component enables virtualization support to run virtual machines, and you must turn on this feature to use the Windows Subsystem for Linux (WSL). In addition, the component can also help to create MSIX app packages for an MSI or App-V.
+	"Enables platform support for virtual machines" and is required for WSL2. Virtual Machine Platform can be used to create MSIX Application packages for an App-V or MSI.
+
+
+
+optionalfeatures
+
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
+
+-----------------------------------------------------------------------
+winget upgrade Microsoft.DevHome
+
+
+fsutil devdrv query
+
+fsutil devdrv enable
+fsutil devdrv disable
+
+Format D: /DevDrv /Q
+Format-Volume -DriveLetter D -DevDrive
+
+
+Open Run, type “gpedit.msc”, and hit Enter.
+Now, you need to navigate to Computer Configuration > Administrative Templates > System > Filesystem​.
+Inside the Filesystem folder, you will see Enable dev drive policy, double-click on it to configure.
+To disable Create Dev Drive: Click on Disabled and then on Apply > Ok.
+To enable Create Dev Drive: Either select Not configured or Enabled and click on Apply > Ok.
+
+
+So, for that, open Notepad on your computer, and paste the following lines of codes to enable Dev Drive.
+
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Policies]
+"FsEnableDevDrive"=-
+"FltmgrDevDriveAllowAntivirusFilter"=-
+Save the file with any name but add .reg extension, for example, enableDevDrive.reg.
+
+To disable Dev Drive, use the following script.
+
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Policies]
+"FsEnableDevDrive"=dword:00000000
+"FltmgrDevDriveAllowAntivirusFilter"=dword:00000000
+
+
+Turn On or Off Dev Drive Protection using Windows Security
+
+Let us first see how to configure Dev Drive Protection easily using the Windows Security app.
+
+Open Windows Security and follow the steps below to enable Dev Drive Protection.
+
+Click on Virus & threat protection from the left panel of the window.
+Now, from the Virus & threat protection settings, click on the Manage Settings.
+Next up, look for Dev Drive protection and then enable it.
+In case, Dev Drive protection is greyed out, you need to enable Real-time protection; otherwise, it won’t work.
+Finally, click on the Exit button.
+This will enable Dev Drive Protection. If you want to disable it, you must untick the Dev Drive protection option. You don’t necessarily have to disable it, as that would make your Dev Drive susceptible to viruses and malware.
+
+
+# Enable or Disable Dev Drive protection using Registry Editor
+
+We can also configure Dev Drive Protection from the Registry Editor. However, before making any changes to the Registry Editor, we must create its backup. The backup can be used if something goes wrong.
+
+Open Run by Win + R, type “regedit” and click OK.
+
+Now, navigate to the following location.
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Real-Time Protection
+In case, there is no Real-Time Protection, right-click on the Windows Defender folder and select New > Key, and name the newly created folder, Real-Time Protection.
+
+Now, right-click on Real-Time Protection, select New > DWORD (32-bit) Value, and name it DisableAsyncScanOnOpen.
+
+Then, double-click on DisableAsyncScanOnOpen and set its value to 0 to enable Dev Drive protection and 1 to disable it.
+
+Finally, close Registry Editor and then reboot your system.
+

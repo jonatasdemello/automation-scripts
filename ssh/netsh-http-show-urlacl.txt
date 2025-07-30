@@ -1,0 +1,27 @@
+https://stackoverflow.com/questions/13454705/running-iis-express-with-admin-privileges
+
+Failed to register URL "http://localhost:9608/" for site "CMS" application "/". Error description: Access is denied. (0x80070005)
+
+cannot start the website because administrative privileges are required to bind the hostname or port
+
+netsh http show urlacl
+
+which showed me
+
+Reserved URL            : http://*:15888/
+        User: \Everyone
+            Listen: Yes
+            Delegate: No
+            SDDL: D:(A;;GX;;;WD)
+
+So for my case, I have removed it from this list and it worked again. Here is the command for removing:
+
+netsh http delete urlacl http://*:15888/
+
+
+netsh http delete urlacl http://*:3387/
+netsh http delete urlacl http://+:3387/rdp/
+netsh http delete urlacl https://+:3392/rdp/
+
+That will list the process bindings for each queue / port / namespace.
+NETSH HTTP SH SER

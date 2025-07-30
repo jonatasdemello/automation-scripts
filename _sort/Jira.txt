@@ -1,0 +1,12 @@
+Jira
+
+More info in regards to this feature
+https://support.atlassian.com/jira-software-cloud/docs/understand-backlog-insights-in-company-managed-projects/
+
+
+The article also shows an example of issue type breakdown and they have specific issue types for 'Ideas' and 'Tech debt'. We may want to also look into creating an issue type for 'Tech debt' or 'refactor' so we can track it
+
+`
+The callout lets you know which issue type appears the most in the sprint. This is useful during retrospectives, so you can reflect on recurring, time-consuming issue types.
+During planning sessions, assess your top issue type to make sure your team isn’t heavily focused on bugs and tech debt. Too many bugs and a hefty tech debt could be a cue for your team to focus on quality or block out time to resolve debts.
+`

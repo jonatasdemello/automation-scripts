@@ -1,0 +1,186 @@
+SQL projects in Git
+	https://github.com/OpenDBDiff/OpenDBDiff
+	https://github.com/search?p=7&q=sql+script&type=Repositories
+
+SQL Join
+	http://michaeljswart.com/2012/09/when-i-use-nested-joins/
+	https://15to20minutes.com/2017/06/29/common-table-expression-cte/
+	https://blog.sqlauthority.com/2017/06/18/write-case-statement-clause-interview-question-week-127/
+	https://blog.tcs.de/using-the-bcrypt-hash-algorithm-in-ms-sql-server/
+	https://blog.timescale.com/why-sql-beating-nosql-what-this-means-for-future-of-data-time-series-database-348b777b847a
+	https://docs.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql
+	https://explainextended.com/2009/07/16/inner-join-vs-cross-apply/
+	https://sqlperformance.com/2015/01/t-sql-queries/pagination-with-offset-fetch
+	https://stackoverflow.com/questions/1139160/when-should-i-use-cross-apply-over-inner-join
+	https://www.brentozar.com/archive/2019/06/whats-better-ctes-or-temp-tables/
+	https://www.codeproject.com/Articles/1065295/SQL-Server-Table-and-Column-Naming-Conventions
+	https://www.mssqltips.com/sqlservertip/2420/sql-server-2012-server-side-paging/
+	https://www.pluralsight.com/courses/building-nosql-apps-redis?utm_medium=affiliate&utm_source=1058191
+	https://www.red-gate.com/simple-talk/cloud/cloud-data/designing-highly-scalable-database-architectures/
+	https://www.sqlskills.com/blogs/paul/inside-the-storage-engine-ghost-cleanup-in-depth/
+	https://www.w3resource.com/sql/joins/perform-a-full-outer-join.php
+
+	http://cc.davelozinski.com/sql/fastest-way-to-insert-new-records-where-one-doesnt-already-exist
+
+SQL Table Variables
+	https://www.mssqltips.com/sqlservertip/1556/differences-between-sql-server-temporary-tables-and-table-variables/
+	https://codingsight.com/performance-table-variables-sql-server/
+	https://codingsight.com/introducing-common-table-expressions-in-sql-server/
+
+Json SQL
+	https://docs.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server?view=sql-server-2017
+	https://stackoverflow.com/questions/51356338/converting-json-to-table-in-sql-server-2016
+	https://www.mssqltips.com/sqlservertip/5374/transforming-json-data-to-relational-data-in-sql-server-2016/
+	https://www.red-gate.com/simple-talk/blogs/sql-server-json-to-table-and-table-to-json/
+	https://blogs.msdn.microsoft.com/sqlserverstorageengine/2015/09/22/openjson-the-easiest-way-to-import-json-text-into-table/
+
+Excel-to-SQL / SQL-Excel / Excel-2-SQL
+	https://sqlizer.io/#/
+	https://blog.sqlizer.io/posts/convert-excel-to-sql/
+	https://github.com/mbmccormick/excel-to-sql
+	https://github.com/ubbn/excel-to-sql
+	https://github.com/bilal-fazlani/ExcelToSqlScripts
+	https://github.com/hueidou/Excel2Sql
+	https://sourceforge.net/p/excel2sql/wiki/Home/
+	https://www.google.com/search?q=excel-to-sql&rlz=1C1YQLS_enCA801CA801&oq=excel-to-sql&aqs=chrome..69i57.735j0j7&sourceid=chrome&ie=UTF-8
+	https://www.google.com/search?q=ExcelToSqlScripts&rlz=1C1YQLS_enCA801CA801&oq=ExcelToSqlScripts&aqs=chrome..69i57.830j0j7&sourceid=chrome&ie=UTF-8
+	https://docs.microsoft.com/en-us/sql/reporting-services/report-server-sharepoint/reporting-services-report-server?view=sql-server-2017
+
+GraphSQL
+	https://github.com/ChilliCream/hotchocolate
+
+CouchDB / MongoDB
+	http://ravendb.net
+	http://nosql-database.org/
+	https://github.com/ravendb/ravendb
+
+Index
+	https://docs.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-ver15
+
+
+
+SQL Server
+	Understanding Logging and Recovery in SQL Server
+	https://docs.microsoft.com/en-us/previous-versions/technet-magazine/dd392031(v=msdn.10)?redirectedfrom=MSDN
+
+	Understanding How Restore and Recovery of Backups Work in SQL Server
+	https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2008-r2/ms191455(v=sql.105)?redirectedfrom=MSDN
+
+	Start, stop, pause, resume, restart SQL Server services
+	https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/start-stop-pause-resume-restart-sql-server-services?view=sql-server-ver15
+
+
+SQL
+	https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-data-tools/hh272679(v=vs.103)
+
+SQL Unit Tests
+
+	https://docs.microsoft.com/en-us/sql/ssdt/verifying-database-code-by-using-sql-server-unit-tests?view=sql-server-ver15
+	https://docs.microsoft.com/en-us/sql/ssdt/walkthrough-creating-and-running-a-sql-server-unit-test?view=sql-server-ver15
+	https://docs.microsoft.com/en-us/sql/ssdt/running-sql-server-unit-tests?view=sql-server-ver15
+
+SQL Server Data Tools for Visual Studio
+
+	https://visualstudio.microsoft.com/vs/features/ssdt/
+	https://docs.microsoft.com/en-us/sql/ssdt/sql-server-data-tools?view=sql-server-2017
+	https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-data-tools/hh272702(v=vs.103)?redirectedfrom=MSDN
+
+	https://docs.microsoft.com/en-us/sql/ssdt/how-to-create-a-new-database-project?view=sql-server-ver15
+	https://docs.microsoft.com/en-us/sql/ssdt/overview-of-extensibility-for-database-code-analysis-rules?view=sql-server-ver15
+
+Analyzing Database Code to Improve Code Quality
+	https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2010/dd172133(v=vs.100)
+
+	https://improveandrepeat.com/2017/11/sonarqube-installation-walkthrough-for-windows-and-sql-server-express/
+
+	https://www.red-gate.com/hub/product-learning/topic/sql-code-analysis?product=sql-change-automation
+	https://www.red-gate.com/hub/product-learning/sql-change-automation/simple-database-development-with-sql-change-automation
+
+	https://docs.microsoft.com/en-us/azure/azure-monitor/insights/azure-sql
+
+-------------------------------------------------------------------------------------------------------------------------------
+SQL
+	https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-data-tools/hh272679(v=vs.103)
+
+SQL Unit Tests
+	https://docs.microsoft.com/en-us/sql/ssdt/verifying-database-code-by-using-sql-server-unit-tests?view=sql-server-ver15
+	https://docs.microsoft.com/en-us/sql/ssdt/walkthrough-creating-and-running-a-sql-server-unit-test?view=sql-server-ver15
+	https://docs.microsoft.com/en-us/sql/ssdt/running-sql-server-unit-tests?view=sql-server-ver15
+
+SQL and Relational Theory: How to Write Accurate SQL Code 3rd Edition, Kindle Edition
+	by C. J. Date (Author) Format: Kindle Edition
+
+
+SqlBulkCopy:
+	https://programmingwithmosh.com/net/using-sqlbulkcopy-for-fast-inserts/
+	https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlbulkcopy?view=dotnet-plat-ext-5.0
+
+
+SQL string
+	https://stackoverflow.com/questions/1256915/remove-the-last-character-in-a-string-in-t-sql
+
+	https://cloudblogs.microsoft.com/sqlserver/2021/11/02/announcing-sql-server-2022-preview-azure-enabled-with-continued-performance-and-security-innovation/
+
+SELECT *
+	https://stackoverflow.com/questions/3639861/why-is-select-considered-harmful
+
+
+Sanitize HTML Dynamic SQL
+	https://techcommunity.microsoft.com/t5/sql-server-blog/dynamic-sql-amp-sql-injection/ba-p/383196#:~:text=But%20be%20careful,as%20a%20parameter
+
+	https://medium.com/coding-skills/clean-code-101-meaningful-names-and-functions-bf450456d90c
+	https://medium.com/@pabashani.herath/clean-code-naming-conventions-4cac223de3c6
+
+	https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/general-naming-conventions
+	https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+
+SQL ANSI
+	https://docs.google.com/document/d/1CXIcVv0S8yXYaKP22yiwPIkveK_YpKaPOz8frH1cGLc/edit#heading=h.hyt7zxtbzurq
+
+
+SQL
+	https://github.com/microsoft/mssql-scripter/tree/dev/doc
+	https://dbatools.io/getting-started/
+	https://dbatools.io/commands/
+	https://github.com/sqlcollaborative/dbatools
+	https://www.manning.com/books/learn-dbatools-in-a-month-of-lunches
+
+
+
+SQL SSIS
+	http://docs.microsoft.com/en-us/sql/integration-services/lesson-1-create-a-project-and-basic-package-with-ssis?view=sql-server-2017
+
+SQL linter
+	https://www.sqlfluff.com/
+	https://docs.sqlfluff.com/en/stable/
+	https://github.com/sqlfluff/sqlfluff
+
+TSQLLint
+	https://github.com/tsqllint/tsqllint
+	https://marketplace.visualstudio.com/items?itemName=tsqllint.tsqllint
+
+
+Sonar
+	https://improveandrepeat.com/2017/12/integrate-sonarqube-with-visual-studio-using-sonarlint/
+	https://community.sonarsource.com/t/coverage-test-data-generate-reports-for-c-vb-net/9871
+	https://community.sonarsource.com/t/coverage-troubleshooting-guide-for-net-code-coverage-import/37151
+
+	https://github.com/gretard/sonar-sql-plugin
+
+Creating and Running a SQL Server Unit Test
+	https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-data-tools/jj851212(v=vs.103)
+	https://docs.microsoft.com/en-us/sql/ssdt/walkthrough-creating-and-running-a-sql-server-unit-test?view=sql-server-ver15
+
+Analyzing Database Code to Improve Code Quality
+	https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2010/dd172133(v=vs.100)
+
+RedGate  SQL Code Analysis
+
+	https://www.red-gate.com/hub/product-learning/sql-change-automation/sql-code-analysis-powershell-deployment-script
+	https://www.red-gate.com/hub/product-learning/topic/sql-code-analysis?product=sql-change-automation
+	https://www.red-gate.com/hub/product-learning/sql-change-automation/integrating-redgate-sql-code-guard-with-sonarqube?topic=sql-code-analysis&product=sql-change-automation
+	https://www.red-gate.com/hub/product-learning/sql-provision/testing-databases-whats-required
+	https://www.red-gate.com/hub/product-learning/sql-change-automation/sql-code-analysis-powershell-deployment-script?topic=sql-code-analysis&product=sql-change-automation
+	https://www.red-gate.com/hub/product-learning/sql-change-automation/simple-database-development-with-sql-change-automation?topic=database-builds&product=sql-change-automation
+

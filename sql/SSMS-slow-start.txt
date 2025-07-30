@@ -1,0 +1,144 @@
+Just a few tips that could solve that:
+
+First:
+
+    Go to Control Panel -> Internet Options
+    Once there go to "Advanced" tab and near the bottom uncheck the "Check for server certificate revocation" (it has an * because you need to restart the computer)
+    Start SSMS after the reboot.
+
+Second:
+
+    Edit the hosts file (remember to use the text editor of your choice as administrator) located here %systemroot%\system32\drivers\etc\hosts
+    Add this line to the end: 127.0.0.1 crl.microsoft.com
+    Save and start SSMS.
+
+Third:
+
+    Open SSMS (after all that time)
+    Go to Tools -> Options and then in "Environment" select "Open empty environment" at the start up.
+    Ok and restart SSMS.
+
+Last:
+
+    Edit the shortcut that you use to open SSMS
+    Add at the end the /nosplash parameter (it will be something like this: "C:\Program Files\Microsoft SQL Server\XXX\Tools\Binn\VSShell\Common7\IDE\Ssms.exe" /nosplash)
+    Start SSMS.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+I found MANY possible solutions online to help me speed SSMS 18 load times.
+For me it was taking 2.5 minutes to load, and right-click context menus in the object explorer would bring up the wait icon, it it may have taken 20-30 seconds for the context menu to appear.
+SSMS from SQL 2014 was quick and responsive.
+I TRIED ALL OF THE SOLUTIONS FOUND ONLINE, AND NONE WORKED FOR ME.
+Using System Internals I set the filter to "ssms.exe", and watched what this program was doing at start up.
+It was doing fusion logging! Apparently I had turned on fusion logging some time ago and forgot to turn it back off (fuslogvw).
+It didn't seem to affect everything else nearly as much as it did SSMS 18, which now loads and runs in 10 seconds!
+
+I did not see this as a possible solution from anyone, so I think this POSSIBLE solution is being documented for the first time here.
+
+
+Once I added the computer I was running SSMS on to the allow all out in the firewall
+SSMS started in 6s from about 3 minutes
+
+
+
+If you have the Windows SDK installed on your machine,
+you'll find the "Fusion Log Viewer" under Microsoft SDK\Tools
+(just type "Fusion" in the start menu on Vista or Windows 7/8).
+Launch it, click the Settings button, and select "Log bind failure" or "Log all binds".
+
+
+Fuslogvw.exe (Assembly Binding Log Viewer)
+
+
+
+reg add "HKLM\Software\Microsoft\Fusion" /v EnableLog /t REG_DWORD /d 0 /f
+
+reg add "HKLM\Software\Microsoft\Fusion" /v EnableLog /t REG_DWORD /d 1 /f
+
+
+# Disable-Fusion-Log-.NET-Assembly-Binding-Logging.bat
+
+	reg add "HKLM\Software\Microsoft\Fusion" /v EnableLog /t REG_DWORD /d 0 /f
+
+# Enable-Fusion-Log-.NET-Assembly-Binding-Logging.bat
+
+	reg add "HKLM\Software\Microsoft\Fusion" /v EnableLog /t REG_DWORD /d 1 /f
+
+
+
+You can run this Powershell script as administrator to enable FL:
+
+Set-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name ForceLog         -Value 1               -Type DWord
+Set-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name LogFailures      -Value 1               -Type DWord
+Set-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name LogResourceBinds -Value 1               -Type DWord
+Set-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name LogPath          -Value 'C:\FusionLog\' -Type String
+
+mkdir C:\FusionLog -Force
+
+and this one to disable:
+
+Remove-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name ForceLog
+Remove-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name LogFailures
+Remove-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name LogResourceBinds
+Remove-ItemProperty -Path HKLM:\Software\Microsoft\Fusion -Name LogPath
+
+
+https://learn.microsoft.com/en-us/dotnet/framework/tools/fuslogvw-exe-assembly-binding-log-viewer
+
+https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022
+
+https://techcommunity.microsoft.com/t5/iis-support-blog/fusion-log-viewer-fuslogvw-exe/ba-p/784396
+
+
+Enable Fusion Logs (Assembly Binding Logging)
+
+Enable Fusion Logs so that you can see where the binding is failing. There are two ways to enable it:
+
+    Registry Editor
+    Fusion Log Viewer (fuslogvw.exe)
+
+
+Registry Editor:
+
+    Open Registry Editor
+    Go to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Fusion
+	Change the value of EnableLog to 1.
+		If this key doesn’t exist, create it (DWORD(32-bit) type)
+
+Other related registry keys:
+
+DWORD ForceLog set value to 1
+DWORD LogFailures set value to 1
+DWORD LogResourceBinds set value to 1
+String LogPath set value to folder for logs (Example: C:\FusionLog\)
+
+
+Fusion Log Viewer (fuslogvw.exe)
+
+You can also use Microsoft’s Fusion Log Viewer utility (Reference) to enable Fusion Logs. Fusion Log Viewer is installed with Visual Studio. It should be in your “Microsoft SDKs” folder (Example path: C:\Program Files (x86)\Microsoft SDKs\Windows\v{SDK version}A\Bin\FUSLOGVW.exe)
+
+
+
+You can also run it by using Visual Studio Command Prompt (Run the command prompt as Administrator):
+
+
+
+thumbnail image 3 of blog post titled Fusion Log Viewer (fuslogvw.exe)
+
+
+Steps to enable assembly binding via Fusion Log Viewer:
+
+    Click fuslogvw.exe or run it using Visual Studio Command Prompt
+    Click “Settings“
+    Select “Log bind failures to disk“
+    Check “Enable custom log path“
+    Create the directory you want the logs to be recorded in (Example: C:\FusionLogs)
+    Enter the path of this folder in “Custom log path” field
+    Click “OK“
+
+After enabling it, reproduce the issue. Then click “Refresh” in the Fusion Log Viewer. You should see the binding failure listed. Click “View log” to see more information.
+
+Disable assembly binding logging once you complete troubleshooting because it may affect your server’s performance.
+

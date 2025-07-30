@@ -1,0 +1,60 @@
+Office 365 Subscriptions
+
+https://portal.office.com/account#
+
+
+User unique identifier and license status
+
+User unique identifier
+10033FFF8D8D26E4
+
+Licenses
+
+Microsoft 365 Apps for business
+	Microsoft Search
+	Whiteboard (Plan 1)
+	Microsoft Forms (Plan E1)
+	Exchange Foundation
+	OneDrive for Business (Plan 1)
+	The latest desktop version of Office
+
+Power BI (free)
+	Exchange Foundation
+	Power BI (free)
+
+Enterprise Mobility + Security E3
+	Exchange Foundation
+	Microsoft Defender for Cloud Apps Discovery
+	Azure Information Protection Premium P1
+	Microsoft Intune
+	Azure Rights Management
+	Azure Active Directory Premium P1
+	Microsoft Azure Multi-Factor Authentication
+
+Microsoft Power Automate Free
+	Exchange Foundation
+	Common Data Service
+	Flow Free
+
+Microsoft Teams Exploratory
+	Power Virtual Agents for Office 365
+	Common Data Service for Teams
+	Microsoft Teams
+	Yammer Enterprise
+	Whiteboard (Plan 1)
+	To-Do (Plan 1)
+	Sway
+	SharePoint (Plan 1)
+	Power Apps for Office 365
+	Office Mobile Apps for Office 365
+	Office for the Web
+	Microsoft Teams
+	Microsoft Stream for Office 365 E1
+	Microsoft StaffHub
+	Microsoft Search
+	Microsoft Planner
+	Microsoft Forms (Plan E1)
+	Insights by MyAnalytics
+	Power Automate for Office 365
+
+

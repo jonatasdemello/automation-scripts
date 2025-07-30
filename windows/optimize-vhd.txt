@@ -1,0 +1,13 @@
+https://www.hanselman.com/blog/
+
+optimize-vhd -Path .\ext4.vhdx -Mode full
+docker system prune -a
+
+Ubuntu WSL disks will be in folders with names like
+
+C:\Users\scott\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc\LocalState
+
+or
+
+C:\Users\scott\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu20.04onWindows_79rhkp1fndgsc\LocalState
+

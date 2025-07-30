@@ -1,0 +1,35 @@
+
+NPM update packages
+
+Firstly, the dependencies that are out of date can be discovered by running the following command:
+npm outdated
+
+All the dependencies can be safely updated to the wanted version by using the following command:
+npm update
+
+If we don’t want to update all of the packages, then the package names can be specified at the end of the command:
+npm update "react" "react-dom"
+
+    If we think we are safe to do the upgrade, run the following command:
+
+npm install <packagename>@latest
+
+    If multiple packages go together, you can list them all out. The example below will update React to the latest version:
+
+npm install react@latest react-dom@latest
+
+Yes, there is a tool called npm-check-updates that will do this. Just run the following command:
+
+npx npm-check-updates -u
+
+This will update the dependencies to the latest versions (including major version changes) in the package.json file. If we are happy to go ahead with the upgrades we need to run the following command:
+
+npm install
+
+
+Wrap up
+
+    Use npm outdated to discover dependencies that are out of date
+    Use npm update to perform safe dependency upgrades
+    Use npm install <packagename>@latest to upgrade to the latest major version of a package
+    Use npx npm-check-updates -u and npm install to upgrade all depe

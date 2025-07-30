@@ -1,0 +1,103 @@
+# PowerShell
+
+https://github.com/powershell/powershell
+
+https://docs.microsoft.com/en-us/powershell/scripting/install/migrating-from-windows-powershell-51-to-powershell-7?view=powershell-7
+https://docs.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-70?view=powershell-7
+
+
+Separate installation path and executable name
+PowerShell 7 installs to a new directory, enabling side-by-side execution with Windows PowerShell 5.1.
+
+Install locations by version:
+
+Windows PowerShell 5.1: $env:WINDIR\System32\WindowsPowerShell\v1.0
+PowerShell Core 6.x: $env:ProgramFiles\PowerShell\6
+PowerShell 7: $env:ProgramFiles\PowerShell\7
+
+
+The new location is added to your PATH allowing you to run both Windows PowerShell 5.1 and PowerShell 7. If you're migrating from PowerShell Core 6.x to PowerShell 7, PowerShell 6 is removed and the PATH replaced.
+
+In Windows PowerShell, the PowerShell executable is named powershell.exe.
+In version 6 and above, the executable is named pwsh.exe.
+
+The new name makes it easy to support side-by-side execution of both versions.
+
+
+Separate PSModulePath
+By default, Windows PowerShell and PowerShell 7 store modules in different locations. PowerShell 7 combines those locations in the $Env:PSModulePath environment variable. When importing a module by name, PowerShell checks the location specified by $Env:PSModulePath. This allows PowerShell 7 to load both Core and Desktop modules.
+
+TABLE 1
+Install Scope	Windows PowerShell 5.1	PowerShell 7.0
+PowerShell modules	$env:WINDIR\system32\WindowsPowerShell\v1.0\Modules	$PSHOME\Modules
+User installed
+AllUsers scope	$env:ProgramFiles\WindowsPowerShell\Modules	$env:ProgramFiles\PowerShell\Modules
+User installed
+CurrentUser scope	$HOME\Documents\WindowsPowerShell\Modules	$HOME\Documents\PowerShell\Modules
+The following examples show the default values of $Env:PSModulePath for each version.
+
+For Windows PowerShell 5.1:
+
+PowerShell
+
+Copy
+$Env:PSModulePath -split (';')
+Output
+
+Copy
+C:\Users\<user>\Documents\WindowsPowerShell\Modules
+C:\Program Files\WindowsPowerShell\Modules
+C:\WINDOWS\System32\WindowsPowerShell\v1.0\Modules
+For PowerShell 7:
+
+PowerShell
+
+Copy
+$Env:PSModulePath -split (';')
+Output
+
+Copy
+C:\Users\<user>\Documents\PowerShell\Modules
+C:\Program Files\PowerShell\Modules
+C:\Program Files\PowerShell\7\Modules
+C:\Program Files\WindowsPowerShell\Modules
+C:\WINDOWS\System32\WindowsPowerShell\v1.0\Modules
+Notice that PowerShell 7 includes the Windows PowerShell paths and the PowerShell 7 paths to provide autoloading of modules.
+
+
+
+
+
+SSH-based remoting
+SSH-based remoting was added in PowerShell Core 6.x to support other operating systems that can't use Windows native components like WinRM. SSH remoting creates a PowerShell host process on the target computer as an SSH subsystem. For details and examples on setting up SSH-based remoting on Windows or Linux, see: PowerShell remoting over SSH.
+
+ Note
+
+The PowerShell Gallery (PSGallery) contains a module and cmdlet that automatically configures SSH-based remoting. Install the Microsoft.PowerShell.RemotingTools module from the PSGallery and run the Enable-SSH cmdlet.
+
+The New-PSSession, Enter-PSSession, and Invoke-Command cmdlets have new parameter sets to support SSH connections.
+
+PowerShell
+
+Copy
+[-HostName <string>]  [-UserName <string>]  [-KeyFilePath <string>]
+To create a remote session, specify the target computer with the HostName parameter and provide the user name with UserName. When running the cmdlets interactively, you're prompted for a password.
+
+PowerShell
+
+Copy
+Enter-PSSession -HostName <Computer> -UserName <Username>
+Alternatively, when using the HostName parameter, provide the username information followed by the at sign (@), followed by the computer name.
+
+PowerShell
+
+Copy
+Enter-PSSession -HostName <Username>@<Computer>
+You may set up SSH key authentication using a private key file with the KeyFilePath parameter. For more information, see OpenSSH Key Management.
+
+
+https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_keymanagement
+
+
+Install-Module -Name Microsoft.PowerShell.RemotingTools
+

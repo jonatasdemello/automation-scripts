@@ -1,0 +1,153 @@
+Windows:
+XN92K-PCPV6-24QJ9-JTKDX-66PKM
+
+---------------------------------------------------------------------------------------------------
+
+Powershell	(https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7.1)
+Chocolatey	(https://community.chocolatey.org/install.ps1)
+
+---------------------------------------------------------------------------------------------------
+# C:\Workspace\Solutions\posh\install-scripts\dev_chocolatey.ps1
+
+Param( [String] $vsKey = "none" )
+
+	.\install_chocolatey.ps1
+
+	chocolatey feature enable -n allowGlobalConfir	mation
+
+	cinst azure-cli
+	cinst diffmerge
+	cinst fiddler
+	cinst Firefox
+	cinst google-chrome-x64
+	cinst mRemoteNG
+	cinst git
+	cinst greenshot
+	cinst nodejs.install
+	cinst notepadplusplus.install
+	cinst nuget.commandline
+	cinst python2
+	cinst skype
+	cinst slack
+	cinst sourcetree
+	cinst vscode
+	cinst webpi
+	cinst webpicmd
+	cinst 7zip.install
+
+	if($vsKey -ne "none")
+	{
+		if($vsKey -eq "express"){
+			cinst VisualStudioExpress2013WindowsDesktop
+			write-host "express"
+		}
+		else{
+			#cinst VisualStudio2013Premium -InstallArguments "/Features:'Blend LightSwitch VC_MFC_Libraries OfficeDeveloperTools SQL WebTools Win8SDK SilverLight_Developer_Kit WindowsPhone80' /ProductKey:$vsKey"
+			write-host "not express - Please install the latest version of Visual Studio"
+		}
+	}
+# end script
+---------------------------------------------------------------------------------------------------
+
+Tools:
+	winget install --id Git.Git -e --source winget
+	winget install tortoisegit
+	winget install winmerge
+	winget install grepwin
+	winget install --id den4b.ReNamer
+	winget install --id Greenshot.Greenshot
+	winget install --id mRemoteNG.mRemoteNG
+	winget install --id SumatraPDF.SumatraPDF
+	winget install -e --id Microsoft.dotnet
+
+	choco install nodejs-lts
+	choco install git
+	choco install notepadplusplus
+	choco install tortoisegit
+	choco install winmerge
+	choco install diffmerge
+	choco install grepwin
+	choco install mremoteng
+	choco install renamer
+	choco install python3
+	choco install python2
+	choco install conemu
+	choco install dbeaver
+
+---------------------------------------------------------------------------------------------------
+
+-------Dev IDE-------
+- VS Code	(https://code.visualstudio.com/Download)
+- DotNet Core SDK and Framework |	(https://dotnet.microsoft.com/download)
+- Visual Studio 2019 (Express at least) - account/setup	(https://visualstudio.microsoft.com/downloads/)
+- Visual Studio C++ Redistributable Packages 	 (https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0)
+- MSBuild 	(https://visualstudio.microsoft.com/downloads/?q=build+tools)
+- Node.js		(https://nodejs.org/en/download/)
+
+-------Database-------
+- Azure Data Studio (https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15)
+- SQL Server 2019 Express (free edition) (for local DB build)	(https://www.microsoft.com/en-ca/sql-server/sql-server-downloads)
+- SQL Server Management Studio SSMS 	(https://aka.ms/ssmsfullsetup)	(SSMS 18.7 installs a system version of Azure Data Studio by default)
+- DBeaver 	(https://dbeaver.io/)	(choco install dbeaver)
+- MySQL/Workbench	(https://www.mysql.com/products/workbench/)
+- dbForge Studio for SQL Server	(https://www.devart.com/dbforge/sql/studio/)
+
+-------windows-------
+IIS Express	(https://visualstudio.microsoft.com/downloads/?q=build+tools)
+WSL - Windows Subsystem for Linux 	(https://docs.microsoft.com/en-us/windows/wsl/install-win10#simplified-installation-for-windows-insiders)
+
+-------tools-------
+Git 		|	(https://gitforwindows.org/)
+TortoiseGit	|	(https://tortoisegit.org/download/)
+Notepad++	|	(https://notepad-plus-plus.org/downloads/)
+Winmerge	|	(https://winmerge.org/downloads/?lang=en)
+Diffmerge	|	(https://sourcegear.com/diffmerge/downloads.php)
+GrepWin 	|	(https://tools.stefankueng.com/grepWin.html)
+
+Python27	|	(https://www.python.org/downloads/)
+Python38	|	(https://www.python.org/downloads/)
+
+mRemoteNG	|	(https://mremoteng.org/download - https://github.com/mRemoteNG/mRemoteNG)
+ReNamer		|	(https://www.den4b.com/products/renamer)
+WinRar		|	(https://www.win-rar.com/download.html?&L=0)
+glogg		|	(https://glogg.bonnefon.org/download.html	https://github.com/nickbnf/glogg)
+klogg 		|	(https://github.com/variar/klogg	choco install klogg)
+PuTTY		|	(https://www.putty.org/)
+7zip		|	(https://www.7-zip.org/download.html)
+Docker		|	(https://docs.docker.com/desktop/windows/install/)
+OpenSSH		|	(https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse)
+
+-------extras-------
+Paint.net	|	(https://www.getpaint.net/	https://www.dotpdn.com/downloads/pdn.html)
+ConEmu		|	(https://conemu.github.io/)
+DBeaver		|	(https://dbeaver.io/download/)
+dbForge 	| 	(https://www.devart.com/dbforge/sql/studio/)
+MySQL/Workbench		|	(https://www.mysql.com/products/workbench/)
+
+
+TreeSizeFree 		(find big files, disk usage per directory)
+FreeCommander XE 	(good to compare and sync folders)
+SumatraPDF Reader 	(light and fast, compared to Adobe Reader)
+CubicExplorer 		(this one allows filters in folders - DB has 2k files in storedprocedures)
+
+-------screenshot-------
+Greenshot	|	(https://getgreenshot.org/)
+ShareX 		|	(https://getsharex.com/downloads/)
+
+FileZilla	|	(https://filezilla-project.org/download.php)
+
+PostMan		|	(https://www.postman.com/downloads/)
+Fiddler		|	(https://www.telerik.com/download/fiddler)
+
+Audacity	|	(https://www.audacityteam.org/download/)
+AutoHotkey	|	(https://www.autohotkey.com/download/ahk-install.exe)
+
+Charles Proxy	|	https://www.charlesproxy.com
+Video recorder	| 	https://obsproject.com/
+
+---------------------------------------------------------------------------------------------------
+REST tools
+	- SoapUI
+	- Isnomnia
+	- Arc - https://install.advancedrestclient.com/install
+

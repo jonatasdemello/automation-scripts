@@ -1,0 +1,155 @@
+
+https://en.wikipedia.org/wiki/Cron
+
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of the month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday;
+# │ │ │ │ │                                   7 is also Sunday on some systems)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * * <command to execute>
+
+
+
+This field follows the syntax of cron (with minor differences). Specifically, each line consists of 5 fields separated by TAB or whitespace:
+
+MINUTE HOUR DOM MONTH DOW
+
+	MINUTE	Minutes within the hour (0–59)
+	HOUR	The hour of the day (0–23)
+	DOM		The day of the month (1–31)
+	MONTH	The month (1–12)
+	DOW		The day of the week (0–7) where 0 and 7 are Sunday.
+
+	05 22 * * 1-5
+	Spread load evenly by using ‘H 22 * * 1-5’ rather than ‘05 22 * * 1-5’
+    Would last have run at Friday, May 29, 2020 10:05:13 PM EDT; would next run at Monday, June 1, 2020 10:05:13 PM EDT.
+
+
+	30 3 * * *
+	Spread load evenly by using ‘H 3 * * *’ rather than ‘30 3 * * *’
+	Would last have run at Monday, June 1, 2020 3:30:26 AM EDT; would next run at Tuesday, June 2, 2020 3:30:26 AM EDT.
+
+	H 0 * * 1-5
+	Would last have run at Monday, June 1, 2020 12:50:22 AM EDT; would next run at Tuesday, June 2, 2020 12:50:22 AM EDT.
+
+	00 6 * * 2
+	Spread load evenly by using ‘H 6 * * 2’ rather than ‘00 6 * * 2’
+    Would last have run at Tuesday, May 26, 2020 6:00:10 AM EDT; would next run at Tuesday, June 2, 2020 6:00:10 AM EDT.
+
+# every fifteen minutes (perhaps at :07, :22, :37, :52)
+H/15 * * * *
+# every ten minutes in the first half of every hour (three times, perhaps at :04, :14, :24)
+H(0-29)/10 * * * *
+# once every two hours at 45 minutes past the hour starting at 9:45 AM and finishing at 3:45 PM every weekday.
+45 9-16/2 * * 1-5
+# once in every two hours slot between 9 AM and 5 PM every weekday (perhaps at 10:38 AM, 12:38 PM, 2:38 PM, 4:38 PM)
+H H(9-16)/2 * * 1-5
+# once a day on the 1st and 15th of every month except December
+H H 1,15 1-11 *
+
+
+Let us see some examples.
+
+1. To run a cron job at every minute, the format should be like below.
+
+* * * * * <command-to-execute>
+
+For example if the time is 10:00, the next job will run at 10:01, 10:02, 10:03 and so on.
+
+2. To run cron job at every 5th minute, add the following in your crontab file.
+
+*/5 * * * * <command-to-execute>
+
+For example if the time is 10:00, the next job will run at 10:05, 10:10, 10:15 and so on.
+
+3. To run a cron job at every quarter hour (i.e every 15th minute), add this:
+
+*/15 * * * * <command-to-execute>
+
+For example if the time is 10:00, the next job will run at 10:15, 10:30, 10:45 and so on.
+
+4. To run a cron job every hour at minute 30:
+
+30 * * * * <command-to-execute>
+
+For example if the time is 10:00, the next job will run at 10:30, 11:30, 12:30 and so on.
+
+5. You can also define multiple time intervals separated by commas. For example, the following cron job will run three times every hour, at minute 0, 5 and 10:
+
+0,5,10 * * * * <command-to-execute>
+
+6. Run a cron job every half hour i.e at every 30th minute:
+
+*/30 * * * * <command-to-execute>
+
+For example if the time is now 10:00, the next job will run at 10:30, 11:00, 11:30 and so on.
+
+7. Run a job every hour (at minute 0):
+
+0 * * * * <command-to-execute>
+
+For example if the time is now 10:00, the next job will run at 11:00, 12:00, 12:00 and so on.
+
+8. Run a job every 2 hours:
+
+0 */2 * * * <command-to-execute>
+
+For example if the time is now 10:00, the next job will run at 12:00.
+
+9. Run a job every day (It will run at 00:00):
+
+0 0 * * * <command-to-execute>
+
+10. Run a job every day at 3am:
+
+0 3 * * * <command-to-execute>
+
+11. Run a job every Sunday:
+
+0 0 * * SUN <command-to-execute>
+
+Or,
+
+0 0 * * 0 <command-to-execute>
+
+It will run at exactly at 00:00 on Sunday.
+
+12. Run a job on every day-of-week from Monday through Friday i.e every weekday:
+
+0 0 * * 1-5 <command-to-execute>
+
+The job will start at 00:00.
+
+13. Run a job every month (i.e at 00:00 on day-of-month 1):
+
+0 0 1 * * <command-to-execute>
+
+14. Run a job at 16:15 on day-of-month 1:
+
+15 16 1 * * <command-to-execute>
+
+15. Run a job at every quarter i.e on day-of-month 1 in every 3rd month:
+
+0 0 1 */3 * <command-to-execute>
+
+16. Run a job on a specific month at a specific time:
+
+5 0 * 4 * <command-to-execute>
+
+The job will start at 00:05 in April.
+
+17. Run a job every 6 months:
+
+0 0 1 */6 * <command-to-execute>
+
+This cron job will start at 00:00 on day-of-month 1 in every 6th month.
+
+18. Run a job every year:
+
+0 0 1 1 * <command-to-execute>
+
+This cron job will start at 00:00 on day-of-month 1 in January.
+

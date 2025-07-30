@@ -1,0 +1,46 @@
+-------------------------------------------------------------------------------------------------------------------------------
+TelemetryConfiguration  - ApplicationInsights - App Insights
+
+As explained in the question not deploying or deploying an ApplicationInsights.config without <instrumentationkey>key</instrumentationkey> block events from being generated. You can then put the instrumentation key in code (only on release in my case)
+
+#if !DEBUG
+    Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = "instrumentation key";
+#endif
+
+
+#if DEBUG
+	Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.DisableTelemetry = true;
+#endif
+
+However adding the following to Configure() in Startup.cs did the job;
+
+if (_env.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    TelemetryConfiguration.Active.DisableTelemetry = true;
+    TelemetryDebugWriter.IsTracingDisabled = true;
+}
+
+if (env.IsDevelopment())
+{
+	Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.DisableTelemetry = true;
+	Microsoft.ApplicationInsights.Extensibility.Implementation.TelemetryDebugWriter.IsTracingDisabled = true;
+}
+
+
+
+protected void Application_Start()
+{
+    DisableApplicationInsightsOnDebug();
+    // do the other stuff
+}
+
+/// <summary>
+/// Disables the application insights locally.
+/// </summary>
+[Conditional("DEBUG")]
+private static void DisableApplicationInsightsOnDebug()
+{
+    TelemetryConfiguration.Active.DisableTelemetry = true;
+}
+

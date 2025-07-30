@@ -1,0 +1,21 @@
+Shared Folder;
+
+you can't access this shared folder because your organization's security policies block unauthenticated guest access
+
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
+AllowInsecureGuestAuth = 1
+
+Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows
+
+3.Expand the Windows Registry Key and search for LanmanWorkstation registry key,
+If you are not able to find the registry key, then you need to create it.
+
+4.Right Click on the Windows Registry Key and Choose New > Key, Name the Key as LanmanWorkstation.
+Now Click on the LanmanWorkstation Registry key and from your right-hand side right click
+and choose New > DWORD 32 bit Value and name it as AllowInsecureGuestAuth.
+Double click on the AllowInsecureGuestAuth DWORD and set the vlaue to 1 and give OK.
+
+
+\\192.168.2.27\temp
+
+\\192.168.2.129

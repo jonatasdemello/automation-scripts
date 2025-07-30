@@ -1,0 +1,229 @@
+
+AutoCrLf
+	true: convert CRLF to LF when reading from the filesystem, and convert in reverse when writing to the filesystem.
+	input: the conversion happens only while reading from the filesystem but files are written out with LF at the end of lines.
+
+
+
+
+    true - when content goes into the repository (is committed), its line endings will be converted to LF, and when content comes out of the repository (is checked out), the line endings be converted to CRLF. This is in general meant for clueless windows users/editors. Given the assumption that an editor (or user) is going to create files with CRLF endings, and will freak out if it sees normal LF endings, but that you want LF endings in the repo, this will hopefully cover you. It's possible for things to go awry, though. There are examples of spurious merge conflicts and reports of modified files in the linked questions.
+
+    input - when content goes into the repository, its line endings will be converted to LF, but content is left untouched on the way out. This is basically in the same realm as true, with the assumption that the editors actually can deal with LF endings correctly; you're just guarding against the possibility of accidentally creating a file with CRLF endings.
+
+    false - git doesn't deal with line endings at all. It's up to you. This is what a lot of people recommend. With this setting, if a file's line endings are going to be messed with, you'll have to be aware of it, so merge conflicts are a lot less likely (assuming informed users). Educating developers about how to use their editors/IDEs can pretty much take care of the problem. All of the editors I've seen designed for programmers are capable of dealing with this if configured properly.
+
+
+	If true, makes git convert CRLF at the end of lines in text files to LF when reading from the filesystem, and convert in reverse when writing to the filesystem.
+	The variable can be set to input, in which case the conversion happens only while reading from the filesystem but files are written out with LF at the end of lines.
+	A file is considered "text" (i.e. be subjected to the AutoCrLf mechanism) based on the file's CRLF attribute, or if CRLF is unspecified, based on the file's contents.
+
+SafeCrLf
+	If true, makes git check if converting CRLF as controlled by core.autocrlf is reversible.
+	Git will verify if a command modifies a file in the work tree either directly or indirectly.
+	For example, committing a file followed by checking out the same file should yield the original file in the work tree. If this is not the case for the current setting of core.autocrlf, git will reject the file.
+	The variable can be set to "warn", in which case git will only warn about an irreversible conversion but continue the operation.
+
+SAFE_CRLF_FALSE:       do nothing in case of EOL roundtrip errors
+SAFE_CRLF_FAIL:        die in case of EOL roundtrip errors
+SAFE_CRLF_WARN:        print a warning in case of EOL roundtrip errors
+SAFE_CRLF_RENORMALIZE: change CRLF to LF
+SAFE_CRLF_KEEP_CRLF:   keep all line endings as they are
+
+
+For Windows users
+
+    If windows users working with cross-platform projects, It MUST be core.autocrlf=true for Windows machines and core.autocrlf=input for Unix machines.
+    If windows users work with Only Windows projects, It can be both core.autocrlf=true or core.autocrlf=false. But core.autocrlf=input will result in issues in this case.
+
+For Unix users (Linux / Mac OS)
+
+    If Unix users working with cross-platform projects, It MUST be core.autocrlf=true for Windows machines and core.autocrlf=input for Unix machines.
+    If Unix users work with Only Unix projects, It can be both core.autocrlf=input or core.autocrlf=false. But core.autocrlf=true will result in issues in this case.
+
+For same OS users
+
+    For a pure Windows project or pure Unix project, it can be core.autocrlf=false.
+
+
+
+I explored 3 possible values for commit and checkout cases and this is the resulting table:
+
+╔═══════════════╦══════════════╦══════════════╦══════════════╗
+║ core.autocrlf ║     false    ║     input    ║     true     ║
+╠═══════════════╬══════════════╬══════════════╬══════════════╣
+║   git commit  ║ LF => LF     ║ LF => LF     ║ LF => LF     ║
+║               ║ CR => CR     ║ CR => CR     ║ CR => CR     ║
+║               ║ CRLF => CRLF ║ CRLF => LF   ║ CRLF => LF   ║
+╠═══════════════╬══════════════╬══════════════╬══════════════╣
+║  git checkout ║ LF => LF     ║ LF => LF     ║ LF => CRLF   ║
+║               ║ CR => CR     ║ CR => CR     ║ CR => CR     ║
+║               ║ CRLF => CRLF ║ CRLF => CRLF ║ CRLF => CRLF ║
+╚═══════════════╩══════════════╩══════════════╩══════════════╝
+
+╔═══════════════╦══════════════╦══════════════╦══════════════╗
+║ core.autocrlf ║    false     ║    input     ║    true      ║
+║               ║ Win => Unix  ║ Win => Unix  ║ Win => Unix  ║
+╠═══════════════╬══════════════╬══════════════╬══════════════╣
+║   git commit  ║ LF => LF     ║ LF => LF     ║ LF => LF     ║
+║               ║ CR => CR     ║ CR => CR     ║ CR => CR     ║
+║               ║ CRLF => CRLF ║ *CRLF => LF  ║ *CRLF => LF  ║
+╠═══════════════╬══════════════╬══════════════╬══════════════╣
+║  git checkout ║ LF => LF     ║ LF => LF     ║ *LF => CRLF  ║
+║               ║ CR => CR     ║ CR => CR     ║ CR => CR     ║
+║               ║ CRLF => CRLF ║ CRLF => CRLF ║ CRLF => CRLF ║
+╚═══════════════╩══════════════╩══════════════╩══════════════╝
+
+
+                 | Resulting conversion when       | Resulting conversion when
+                 | committing files with various   | checking out FROM repo -
+                 | EOLs INTO repo and              | with mixed files in it and
+                 |  core.autocrlf value:           | core.autocrlf value:
+--------------------------------------------------------------------------------
+File             | true       | input      | false | true       | input | false
+--------------------------------------------------------------------------------
+Windows-CRLF     | CRLF -> LF | CRLF -> LF | as-is | as-is      | as-is | as-is
+Unix -LF         | as-is      | as-is      | as-is | LF -> CRLF | as-is | as-is
+Mac  -CR         | as-is      | as-is      | as-is | as-is      | as-is | as-is
+Mixed-CRLF+LF    | as-is      | as-is      | as-is | as-is      | as-is | as-is
+Mixed-CRLF+LF+CR | as-is      | as-is      | as-is | as-is      | as-is | as-is
+
+
+
+unix2dos filename
+
+or
+
+dos2unix -D filename
+
+
+
+
+git config core.eol lf
+git config core.autocrlf input
+
+git config --global core.autocrlf false
+
+
+git rm --cached -r .
+git reset --hard
+
+
+
+
+If you just want to renormalize your current commit after having set core.autocrlf or text=auto,
+so you can have all the line ending normalization in one commit, run these commands:
+
+git rm --cached -rf .
+git add .
+
+To also normalize the files in your working dir, run:
+
+git checkout .
+
+
+
+
+
+How autocrlf works:
+
+core.autocrlf=true:      core.autocrlf=input:     core.autocrlf=false:
+
+     repository               repository               repository
+      ^      V                 ^      V                 ^      V
+     /        \               /        \               /        \
+crlf->lf    lf->crlf     crlf->lf       \             /          \
+   /            \           /            \           /            \
+
+Here crlf = win-style end-of-line marker, lf = unix-style (also used on Mac since Mac OS X).
+
+(pre-osx cr is not affected for any of three options above.)
+
+When does this warning show up (under Windows)?
+
+    – autocrlf = true if you have unix-style lf in one of your files (= RARELY),
+    – autocrlf = input if you have win-style crlf in one of your files (= almost ALWAYS),
+    – autocrlf = false – NEVER!
+
+What does this warning mean?
+
+The warning "LF will be replaced by CRLF" says that you (having autocrlf=true) will lose your unix-style LF after commit-checkout cycle (it will be replaced by windows-style CRLF). Git doesn't expect you to use unix-style LF under Windows.
+
+The warning "CRLF will be replaced by LF" says that you (having autocrlf=input) will lose your windows-style CRLF after a commit-checkout cycle (it will be replaced by unix-style LF). Don't use input under Windows.
+
+Yet another way to show how autocrlf works
+
+1) true:             x -> LF -> CRLF
+2) input:            x -> LF -> LF
+3) false:            x -> x -> x
+
+where x is either CRLF (windows-style) or LF (unix-style) and arrows stand for
+
+file to commit -> repository -> checked out file
+
+How to fix
+
+The default value for core.autocrlf is selected during Git installation and stored in system-wide gitconfig (%ProgramFiles(x86)%\git\etc\gitconfig on Windows, /etc/gitconfig on Linux). Also there're (cascading in the following order):
+
+   – "global" (per-user) gitconfig located at ~/.gitconfig, yet another
+   – "global" (per-user) gitconfig at $XDG_CONFIG_HOME/git/config or $HOME/.config/git/config and
+   – "local" (per-repo) gitconfig at .git/config in the working directory.
+
+So, write git config core.autocrlf in the working directory to check the currently used value and
+
+   – git config --system core.autocrlf false            # per-system solution
+   – git config --global core.autocrlf false            # per-user solution
+   – git config --local core.autocrlf false              # per-project solution
+
+Warnings
+
+    – git config settings can be overridden by gitattributes settings.
+    – crlf -> lf conversion only happens when adding new files, crlf files already existing in the repo aren't affected.
+
+Moral (for Windows):
+
+    - use core.autocrlf = true if you plan to use this project under Unix as well (and unwilling to configure your editor/IDE to use unix line endings),
+    - use core.autocrlf = false if you plan to use this project under Windows only (or you have configured your editor/IDE to use unix line endings),
+    - never use core.autocrlf = input unless you have a good reason to (eg if you're using unix utilities under Windows or if you run into makefiles issues),
+
+PS What to choose when installing Git for Windows?
+
+If you're not going to use any of your projects under Unix, don't agree with the default first option. Choose the third one (Checkout as-is, commit as-is). You won't see this message. Ever.
+
+PPS: My personal preference is configuring the editor/IDE to use unix-style endings, and setting core.autocrlf to false.
+
+Update(2022)
+
+Since 2018, git can --renormalize repo fixing the existing line endings as required.
+
+
+Since Git 2.16 (Q1 2018) there is another way (other than deleting the index content), which is a new and safer way to record the fact that you are correcting the end-of-line convention:
+
+git add --renormalize .
+
+See commit 9472935 (16 Nov 2017) by Torsten Bögershausen (tboegi).
+(Merged by Junio C Hamano -- gitster -- in commit af6e0fe, 27 Nov 2017)
+
+    add: introduce "--renormalize"
+
+    Make it safer to normalize the line endings in a repository.
+    Files that had been committed with CRLF will be committed with LF.
+
+    The old way to normalize a repo was like this:
+
+    # Make sure that there are not untracked files
+    $ echo "* text=auto" >.gitattributes
+    $ git read-tree --empty
+    $ git add .
+    $ git commit -m "Introduce end-of-line normalization"
+
+    The user must make sure that there are no untracked files, otherwise they would have been added and tracked from now on.
+
+    The new "add --renormalize" does not add untracked files:
+
+    $ echo "* text=auto" >.gitattributes
+    $ git add --renormalize .
+    $ git commit -m "Introduce end-of-line normalization"
+
+    Note that "git add --renormalize <pathspec>" is the short form for "git add -u --renormalize <pathspec>".
+
+

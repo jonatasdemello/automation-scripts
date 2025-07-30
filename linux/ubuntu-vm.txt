@@ -1,0 +1,106 @@
+Space Clean-up:
+
+sudo apt-get autoremove
+sudo du -sh /var/cache/apt
+sudo apt-get autoclean
+sudo apt-get clean
+
+journalctl --disk-usage
+sudo journalctl --vacuum-time=3d
+
+du -h /var/lib/snapd/snaps
+
+
+#!/bin/bash
+# Removes old revisions of snaps
+# CLOSE ALL SNAPS BEFORE RUNNING THIS
+set -eu
+snap list --all | awk '/disabled/{print $1, $3}' |
+    while read snapname revision; do
+        snap remove "$snapname" --revision="$revision"
+    done
+
+du -sh ~/.cache/thumbnails
+rm -rf ~/.cache/thumbnails/*
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Password:
+
+Type the following command to become root user and issue passwd:
+sudo -i
+passwd
+
+OR set a password for root user in a single go:
+sudo passwd root
+
+Test it your root password by typing the following command:
+su -
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+In case other people encounter the same issue.
+
+I do not understand why things a re happening, but I found a workaround.
+
+When the display freezes
+
+    I press Ctrl-Alt-F1 (switch from the X-display to a text console)
+    I login as the same user as for my X session
+    I use ps to identify a process xfce4-screenssaver
+    I kill this process
+    I press alt-F7 to go back to my x-windows screen
+
+Now everything is unlocked again:
+
+Why all this is happening (especially as I explicitly disabled the screensaver in settings) is beyond my comprehension
+
+
+As mentioned by @gelonida, this issue is likely related to screensaver. For a VM, its a waste to have screensaver enabled so its probably best to uninstall it and block it from being re-installed automatically.
+
+Uninstall:
+
+sudo apt remove xfce4-screensaver
+
+Block from being re-installed by creating /etc/apt/preferences.d/noscreensaver.pref as su with contents:
+
+# This is to prevent screensaver from ever being installed
+Package: xfce4-screensaver
+Pin: release a=*
+Pin-Priority: -10
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Xfce Power Management Settings>Display Tab
+
+    Temporarily set Display power management slider to ON position
+    Set Blank after slider to 60 minutes (max)
+    Set Put to sleep after slider to 60 Minutes (max)
+    Set Switch off after slider to 60 minutes (max)
+    Then reset Display power management slider to OFF position
+
+Screen Saver preferences>Screensaver tab
+
+    Enable screen saver slider to OFF
+    Activate screensaver when computer is idle slider to ON
+    Regard the computer as idle after 128 minutes (Or any value longer than you need)
+    Inhibit screensaver for full screen applications to on
+    Reset Activate screensaver when computer is idle slider to off
+
+Screen Saver preferences>Lock Screen tab
+
+    Enable Lock screen slider to OFF
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+https://docs.microsoft.com/en-ca/windows-server/virtualization/hyper-v/manage/manage-hyper-v-integration-services#start-and-stop-an-integration-service-from-a-linux-guest
+
+
+lsmod | grep hv_utils
+
+
+
+https://unix.stackexchange.com/questions/444946/how-can-we-run-a-command-stored-in-a-variable

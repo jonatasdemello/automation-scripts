@@ -1,0 +1,96 @@
+
+$(Get-WmiObject SoftwareLicensingService).OA3xOriginalProductKey | foreach{ if ( $null -ne $_ ) { Write-Host "Installing"$_;changepk.exe /Productkey $_ } else { Write-Host "No key present" } }
+
+
+Activate windows:
+
+slmgr /ato
+
+
+Free up drive space in Windows 10
+https://support.microsoft.com/en-us/help/12425
+
+
+https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-operating-system-package-servicing-command-line-options#cleanup-image
+
+
+
+Analyze the size of the component store (WinSxS folder)
+	https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder
+
+Dism.exe /online /Cleanup-Image /AnalyzeComponentStore
+
+If recommended, clean up the folder using this command in the Command Prompt:
+
+Dism.exe /online /Cleanup-Image /StartComponentCleanup
+
+
+schtasks.exe /Run /TN "\Microsoft\Windows\Servicing\StartComponentCleanup"
+
+
+Use the /StartComponentCleanup parameter
+
+Using the /StartComponentCleanup parameter of Dism.exe on a running version of Windows 10 gives you similar results to running the StartComponentCleanup task in Task Scheduler, except previous versions of updated components will be immediately deleted (without a 30 day grace period) and you will not have a 1-hour timeout limitation.
+
+From an elevated command prompt, type the following:
+
+Dism.exe /online /Cleanup-Image /StartComponentCleanup
+
+Use the /ResetBase switch with the /StartComponentCleanup parameter
+
+Using the /ResetBase switch with the /StartComponentCleanup parameter of DISM.exe on a running version of Windows 10 removes all superseded versions of every component in the component store.
+
+From an elevated command prompt, type the following:
+
+Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+
+Use the /SPSuperseded parameter
+
+To reduce the amount of space used by a Service Pack, use the /SPSuperseded parameter of Dism.exe on a running version of Windows 10 to remove any backup components needed for uninstallation of the service pack. A service pack is a collection of cumulative updates for a particular release of Windows.
+
+From an elevated command prompt, type the following:
+
+Dism.exe /online /Cleanup-Image /SPSuperseded
+
+Warning: The service pack cannot be uninstalled after this command is completed.
+
+
+Run Disk Cleanup to delete system files
+
+To delete system files run the steps as provided in Delete files using Disk Cleanup.
+
+
+
+Low Disk Space error due to a full Temp folder
+If you used Disk Cleanup to free up space on your device and then see a Low Disk Space error, it’s possible that your Temp folder is quickly filling up with application (.appx) files that are used by Microsoft Store. To fix this problem, you’ll need to reset the Store, clear the Store cache, and run the Windows Update troubleshooter:
+
+To reset Microsoft Store, select Start  >Settings  > Update & Security  > Troubleshoot, then select Windows Store Apps from the list and select Run the troubleshooter.
+To clear the Microsoft Store cache, press the Windows Logo Key  + R to open the Run dialog box,
+	then type wsreset.exe and click OK. A blank Command Prompt window will open,
+	and after about ten seconds the window will close and the Store will open automatically.
+	> wsreset
+To reset Windows Update, select Start  > Settings  > Update & Security  > Troubleshoot, then select Windows Update from the list, and select Run the troubleshooter.
+
+
+
+
+It is usually safe to delete the contents of the Software Distribution folder. Even if you delete files, they will be downloaded automatically. The following methods are used to delete:
+
+
+Press Windows + R and enter CMD in the Run.
+
+Type the following commands in CMD:
+> net stop wuauserv
+> net stop bits
+This will stop the Windows Update Service and the Background Intelligent Transfer Service.
+
+Now browse to the %WinDir%\SoftwareDistribution folder and delete all the files and folders inside.
+
+After you have emptied this folder, you may restart your computer or you may type the following commands in CMD:
+> net start wuauserv
+> net start bits
+
+Now that folder has been flushed, it will now get populated afresh.
+
+
+https://blogs.technet.microsoft.com/askcore/2013/03/01/where-did-my-space-go/

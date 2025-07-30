@@ -1,0 +1,53 @@
+
+sudo chmod -R 777 themes
+
+
+sudo chmod a+rwx /path/to/file
+sudo chmod -R a+rwx /path/to/file
+
+sudo chmod -R a+rwx /bitnami/wordpress/wp-content/uploads
+
+sudo chmod -R 775 /bitnami/wordpress/wp-content/uploads
+
+drwxrwxrwx = 777
+drwxrwxrw- = 776
+drwxrwxr-x = 775
+
+#  	rwx 	Binary	Permission
+7	rwx 	111		read, write and execute
+6 	rw- 	110 	read and write
+5 	r-x 	101 	read and execute
+4 	r-- 	100 	read only
+3 	-wx 	011 	write and execute
+2 	-w- 	010 	write only
+1 	--x 	001 	execute only
+0 	--- 	000  	none
+
+
+Linux home directory, /home, for example, should be (0755/drwxr-xr-x).
+User's home directory, /home/ec2-user/, for example, should be (0700/drwx------).
+.ssh directory permission, /home/ec2-user/.ssh, for example, should be (0700/drwx------).
+authorized_keys file permission, /home/ec2-user/.ssh/authorized_keys, for example, should be (0600/-rw-------).
+
+(0755/drwxr-xr-x)	/home
+(0700/drwx------)	/home/ec2-user/
+(0700/drwx------)	/home/ec2-user/.ssh
+(0600/-rw-------)	/home/ec2-user/.ssh/authorized_keys
+
+stat /home/
+stat /home/ec2-user/
+stat /home/ec2-user/.ssh
+stat /home/ec2-user/.ssh/authorized_keys
+
+If the permissions don't match the preceding values, run the following commands.
+
+$ sudo chown root:root /home
+$ sudo chmod 755 /home
+$ sudo chown ec2-user:ec2-user /home/ec2-user -R
+$ sudo chmod 700 /home/ec2-user /home/ec2-user/.ssh
+$ sudo chmod 600 /home/ec2-user/.ssh/authorized_keys
+
+chmod g-w /home/your_user
+chmod 700 /home/your_user/.ssh
+chmod 600 /home/your_user/.ssh/authorized_keys
+

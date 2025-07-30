@@ -1,0 +1,22 @@
+Navigate to your version of Mac and copy the respective command.
+
+MacOS Version	Command
+macOS 12 (Monterey)	sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+macOS 11 (Big Sur)	sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+macOS 10.15 (Catalina)	sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+macOS 10.14 (Mojave)	sudo killall -HUP mDNSResponder
+macOS 10.13 (High Sierra)	sudo killall -HUP mDNSResponder
+macOS 10.12 (Sierra)	sudo killall -HUP mDNSResponder
+OS X 10.11 (El Capitan)	sudo killall -HUP mDNSResponder
+OS X 10.10 (Yosemite)	sudo discoveryutil udnsflushcaches
+OS X 10.9 (Mavericks)	sudo killall -HUP mDNSResponder
+OS X 10.8 (Mountain Lion)	sudo killall -HUP mDNSResponder
+Mac OS X 10.7 (Lion)	sudo killall -HUP mDNSResponder
+Mac OS X 10.6 (Snow Leopard)	sudo dscacheutil -flushcache
+Mac OS X 10.5 (Leopard)	sudo lookupd -flushcache
+Mac OS X 10.4 (Tiger)	lookupd -flushcache
+
+
+portal.cloudc.allstream.com
+
+https://portal.cloudc.allstream.com/server-common/cgi-bin/login?back=%2Fserver-manager%2F&cookie_probe=1

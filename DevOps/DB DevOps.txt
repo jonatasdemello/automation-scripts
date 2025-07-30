@@ -1,0 +1,58 @@
+DB DevOps
+
+https://robrich.org/
+
+https://robrich.org/tags/sql
+
+
+
+
+https://github.com/robrich/DevOps-Pipeline-for-.NET-Apps-and-Databases-Workshop
+
+
+https://github.com/robrich/database-devops-pipeline
+
+https://github.com/robrich/database-devops-with-containers
+
+https://robrich.org/slides/database-devops-with-containers/
+
+Migration Tools
+- Flyway
+- Ready Roll / SQL Change Automation
+- db-migrate
+- knex
+
+
+DevOps Community
+https://www.youtube.com/@canada_devops_community/videos
+
+
+ADDO
+All Day DevOps
+https://sonatype.cventevents.com/hub/events/9b2a9865-2cb7-48b7-b863-2b9f110ded42
+https://sonatype.cventevents.com/d/0pqmrz
+
+
+
+
+5) DB Dockerization Strategy and Support
+5.1 This conversation started about the CC3_Database for macOS users.
+The currently supported practice is that developers may connect to the dev db server (.49) and create their "local" database there.
+When pointing an API at the "local" db, make sure to also create a "local" redis instance to not cross-populate the "Dev Redis" with "local db" data;
+5.2 At this point we ended up talking quite a bit about dockerization and support for containerization;
+In a nutshell, we do want to containerize, but have to consider
+- Code duplication: we would like to avoid having different build scripts for each environment, OS and use-case. Code duplication leads to drift and bugs. For something intrinsically runtimy and instance-specific like a database, these bugs have a tendency to only show up late into the pipeline, namely in production.
+- Simplicity: Avoid changing the build sequence and flow for the DB deploy as much as possible.
+- Universality: Does the solution solve most problems or is it too specific to be mainlined and supported?
+- Backwards compatibility: Feature-wise and process wise. The DB build/deploy flow is custom, but extensively tested/patched over many years and this process has some extenal dependents; Changes to it require consideration of
+- Low Tech Debt: Avoid digging into (further) customization if possible. The DB build/deploy flow is already custom, but it is documented, tested and predictable. Customization is powerful, but custom behaviors steepen the learning curve and tend to cause more bugs and confusion than simple and expected behaviors.
+- Realistic (Verissimilitude): Containerization in general is a worthy goal, but we don't want local builds to veer to hard away from the production builds/environments. In essence, our "containerization in local" efforts should somewhat align with the goals and timelines for containerization in the pipeline efforts. Not too far ahead, not too far behind, and using the same/similar implementations whenever possible.
+....
+So with all that said about dockerization constraints
+We do support that developers continue to solve their own problems and investigate into containerization and share what they find using branches.
+However, we must acknowldge that for these efforts to be merged into main, they will be subject to higher standards, since there's an implicit expectation that code in main branch is SUPPORTED and MAINTAINED.
+"I will support it" is not a viable long term strategy for enterprise code.
+So I'm hopeful that we can use branches, sub-branches and code-review to "sift" through some of the solutions already discovered and implemented and start converging some of our individual findings towards something that can be mainlined, with higher confidence that it will be useful to most developers, as well as being maintainable and supported.
+:thank_you:
+3
+

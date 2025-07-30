@@ -1,0 +1,57 @@
+LIMPAR HTML WORD:
+=================
+The first regular expression removes unwanted tags,
+and is broken down as follows:
+
+	<[/]?(font|span|xml|del|ins|[ovwxp]:\w+)[^>]*?>
+
+The second regular expression removes unwanted attributes,
+and is broken down as follows:
+
+	<([^>]*)(?:class|lang|style|size|face|[ovwxp]:\w+)=(?:'[^']*'|""[^""]*""|[^\s>]+)([^>]*)>
+
+-------------------------------------------------------------------------------------------------------------------------------
+Explanation of Regular Expressions
+
+I've spent a good deal of time examining the problematic tags that MS Word inserts in its HTML, some examples are shown above.  The above code is based on a few requirements for my CMS:
+
+	remove all FONT and SPAN tags, because all the content in my CMS is done through style-sheets.
+	remove all CLASS and STYLE tags because they mean nothing outside of the original word document
+	remove all namespace tags and attributes like <o:p> and < ... v:shape ... >
+
+The first regular expression removes unwanted tags, and is broken down as follows:
+
+	<[/]?(font|span|xml|del|ins|[ovwxp]:\w+)[^>]*?>
+
+- match an open tag character <
+- and optionally match a close tag sequence </  (because we also want to remove the closing tags)
+- match any of the list of unwanted tags: font,span,xml,del,ins
+- a pattern is given to match any of the namespace tags, anything beginning with o,v,w,x,p, followed by a : followed by another word
+- match any attributes as far as the closing tag character >
+- the replace string for this regex is "", which will completely remove the instances of any matching tags.
+- note that we are not removing anything between the tags, just the tags themselves
+
+The second regular expression removes unwanted attributes, and is broken down as follows:
+
+	<([^>]*)(?:class|lang|style|size|face|[ovwxp]:\w+)=(?:'[^']*'|""[^""]*""|[^\s>]+)([^>]*)>
+
+- match an open tag character <
+- capture any text before the unwanted attribute (This is $1 in the replace expression)
+- match (but don't capture) any of the unwanted attributes: class, lang, style, size, face, o:p, v:shape etc.
+- there should always be an = character after the attribute name
+- match the value of the attribute by identifying the delimiters. these can be single quotes, or double quotes, or no quotes at all.
+- for single quotes, the pattern is: ' followed by anything but a ' followed by a '
+- similarly for double quotes.
+for a non-delimited attribute value, i specify the pattern as anything except the closing tag character >
+- lastly, capture whatever comes after the unwanted attribute in ([^>]*)
+- the replacement string <$1$2> reconstructs the tag without the unwanted attribute found in the middle.
+- note: this only removes one occurence of an unwanted attribute, this is why i run the same regex twice.  For example, take the html fragment: <p class="MSO Normal" style="Margin-TOP:3em">
+the regex will only remove one of these attributes.  Running the regex twice will remove the second one.  I can't think of any reasonable cases where it would need to be run more than that.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+remove angular stuff:
+
+(ng-class|ng-repeat|ng-show|ng-if|ng-switch|ng-click)="[^"]*"
+(ui-sref|ui-sref-opts)="[^"]*"
+

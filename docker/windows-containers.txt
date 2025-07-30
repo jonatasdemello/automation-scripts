@@ -1,0 +1,58 @@
+Enabling Windows Containers in Windows 10
+
+https://www.spiria.com/en/blog/web-applications/enabling-windows-containers-windows-10/
+
+
+The Anniversary update for Windows 10 (i.e. version number 1607) lets you deploy Windows containers, which can be used with the popular Docker virtualization platform. But first things first: what’s a container? Put simply, it’s the equivalent of a virtual machine, with the fewest possible operating system components.
+
+This enables you to execute Web servers, for example, in a lightweight, portable and isolated environment. Containers used to be based almost exclusively on Linux, but, since the release of the Anniversary update and Windows Server 2016, it is possible to deploy and use Windows containers based on the small-footprint Windows Nano Server (among others).
+
+To enable the container feature, first make sure that you are running the Pro or Enterprise version of Windows 10.
+
+Then, enable the Windows container and Microsoft-Hyper-V features with the following commands in an elevated PowerShell session with Administrator rights:
+
+Enable-WindowsOptionalFeature -Online -FeatureName containers –All
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V –All
+
+Note: don’t reboot after installing the first feature, but do reboot after activating the second feature.
+
+After the reboot, you’ll need to download and install Docker. Here’s how to do it from the command line:
+
+$version = (Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/docker/docker/master/VERSION).Content.Trim() Invoke-WebRequest "https://master.dockerproject.org/windows/amd64/docker-$($version).zip" -OutFile "$env:TEMP\docker.zip" -UseBasicParsing
+
+Expand-Archive -Path "$env:TEMP\docker.zip" -DestinationPath $env:ProgramFiles
+
+To avoid errors and save steps when starting new PowerShell sessions, add the Docker directory to the path environment variable with the command below. Then, close PowerShell and start a new session in order for the new path to register.
+
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Docker", [EnvironmentVariableTarget]::Machine)
+
+For Docker to fully install, you’ll need to add it as a Windows service using the following commands:
+
+dockerd --register-service
+Start-Service Docker
+
+Now, in order to create Windows containers, install the Windows Nano Server Base Container image, using the following command:
+
+docker pull microsoft/nanoserver
+
+This command downloads the image onto the computer. You can check this by running docker images.
+
+Finally, test the installation by deploying your own container from an existing image. Still working in an elevated PowerShell session as an Administrator, execute the following commands, which will deploy a container from an existing image and add a basic “Hello World” PowerShell script.
+
+docker run -it microsoft/nanoserver cmd
+powershell.exe Add-Content C:\helloworld.ps1 'Write-Host "Hello World"'
+exit
+
+Then, create a new image for future use from the modified container. First, run docker ps -a in PowerShell to see a list of containers and take note of the container ID. The most recent container (and at this point, the only one) should be the one that will be saved with the following command, replacing with the appropriate ID:
+
+docker commit  helloworld
+
+Once completed, the modified container is saved as an image, which can be seen using docker images.
+
+Finally, run the new helloworld container with the following command:
+
+docker run --rm helloworld powershell c:\helloworld.ps1
+
+If all of the above commands ran smoothly, « Hello World » should appear in the command interface, meaning that the container is running according to plan. Now that everything is installed, you can further test Windows containers with more advanced applications, like ASP.NET Web sites, among others.
+
+

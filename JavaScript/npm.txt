@@ -1,0 +1,72 @@
+-------------------------------------------------------------------------------------------------------------------------------
+Configuring Python Dependency
+
+node-gyp requires that you have installed a compatible version of Python,
+
+one of: v3.6, v3.7, v3.8, or v3.9.
+
+If you have multiple Python versions installed, you can identify which Python version node-gyp
+should use in one of the following ways:
+
+
+1) by setting the --python command-line option, e.g.:
+
+node-gyp <command> --python /path/to/executable/python
+
+2)  If node-gyp is called by way of npm, and you have multiple versions of Python installed,
+	then you can set npms python config key to the appropriate value:
+
+npm config set python /path/to/executable/python
+
+3) If the PYTHON environment variable is set to the path of a Python executable,
+	then that version will be used, if it is a compatible version.
+
+4) If the NODE_GYP_FORCE_PYTHON environment variable is set to the path of a Python executable,
+	it will be used instead of any of the other configured or builtin Python search paths.
+	If its not a compatible version, no further searching will be done.
+
+-------------------------------------------------------------------------------------------------------------------------------
+# https://github.com/nodejs/node-gyp
+
+npm config set msvs_version 2017
+npm install -g node-gyp
+
+-------------------------------------------------------------------------------------------------------------------------------
+# SASS
+npm install -g sass
+choco install sass
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+rm -rf package-lock.json node_modules
+npm cache clean --force
+npm i --unsafe-perm node-sass
+npm install -g node-sass@4.5.0 --unsafe-perm=true --allow-root
+
+npm uninstall node-sass
+npm install node-sass@4.9.3
+
+npm audit
+npm audit fix
+
+
+	However, please note that this will install the pure JavaScript implementation of Sass,
+	which runs somewhat slower than the other options listed here.
+	But it has the same interface, so it’ll be easy to swap in another implementation later if you need a bit more speed!
+	Install on Windows (Chocolatey)
+	If you use the Chocolatey package manager for Windows, you can install Dart Sass by running
+
+
+
+Found bindings for the following environments:
+- OS X 64-bit with Node.js 4.x
+
+This usually happens because your environment has changed since running `npm install`.
+
+Run `npm rebuild node-sass` to build the binding for your current environment.
+
+npm rebuild node-sass
+
+This can occur when you have compiled modules locally and checked the resulting node_modules folder into git before deploying.
+To fix this, we recommend removing the node_modules folder from your git repo and redeploying.
+

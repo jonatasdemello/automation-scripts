@@ -1,0 +1,56 @@
+
+sudo apt update
+sudo apt install snapd
+sudo snap install indicator-sensors
+
+sudo apt update
+sudo apt install snapd
+
+sudo snap install snap-store
+
+
+Diff tool:
+	kdiff3
+	kompare
+	xxdiff
+
+Renamer
+	krename
+
+File Manager:
+
+0. Nautilus
+	nautilus --version
+	sudo apt install nautilus
+
+1. Dolphin
+	sudo apt install dolphin
+
+2. Nemo
+	sudo apt install nemo
+
+3. Konqueror
+	sudo apt install konqueror
+
+4. Xfe
+	sudo apt install xfe
+
+5. Krusader
+	sudo apt install krusader
+
+6. Thunar
+	sudo apt install thunar
+
+7. Polo
+	sudo apt-add-repository -y ppa:teejee2008/ppa
+	sudo apt update
+	sudo apt install polo-file-manager
+
+8. nnn - Terminal File Manager
+	sudo apt install nnn
+
+9. PCManFM
+	sudo apt install pcmanfm
+
+10. Double Commander
+	sudo apt install doublecmd-gtk

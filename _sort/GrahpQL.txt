@@ -1,0 +1,7 @@
+GrahpQL
+
+https://www.pluralsight.com/courses/building-graphql-apis-aspdotnet-core
+
+
+https://www.lynda.com/NET-tutorials/API-Development-NET-GraphQL/664823-2.html
+

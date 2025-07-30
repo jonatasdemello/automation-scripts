@@ -1,0 +1,78 @@
+
+git clone https://github.com/MicrosoftDocs/mslearn-improve-api-developer-experience-with-swagger.git
+
+cd ~/code
+bash setup-exercise.sh
+
+	DEPLOYMENT-PASSWORD for  https://myName1174f7c2064@PrintFramerAPI220f19ed178e3a.scm.azurewebsites.net/PrintFramerAPI220f19ed178e3a.git: Pw170a0e990d3a96ece046e
+	API-ROOT-URL: https://PrintFramerAPI220f19ed178e3a.azurewebsites.net
+	EXAMPLE-URL: https://PrintFramerAPI220f19ed178e3a.azurewebsites.net/api/priceframe/6/17
+
+	https://PrintFramerAPI220f19ed178e3a.azurewebsites.net/swagger/v1/swagger.json
+
+cd ~/code/PrintFramerAPI
+dotnet add package Swashbuckle.AspNetCore
+code .
+
+Startup.cs
+
+using Swashbuckle.AspNetCore.Swagger;
+
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc()
+        .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+        .AddJsonOptions(options =>
+        {
+        options.SerializerSettings.Formatting = Formatting.Indented;
+        });
+
+    // NEW CODE STARTS HERE
+    services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+    });
+    // NEW CODE ENDS HERE
+}
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    if (env.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+    }
+    else
+    {
+        app.UseExceptionHandler("/Error");
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseCookiePolicy();
+
+    // Enable middleware to serve generated Swagger as a JSON endpoint.
+    app.UseSwagger();
+
+    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+    // specifying the Swagger JSON endpoint.
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
+
+
+    app.UseMvc();
+}
+
+
+git add .
+git commit -m "adds Swagger to our API"
+git push production
+
+dotnet build
+
+git add .
+git commit -m "adds XML comment to GetPrice method"
+git push production
+

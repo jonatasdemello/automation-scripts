@@ -1,0 +1,34 @@
+
+msdt.exe -id DeviceDiagnostic
+
+
+    Press Win + R to open the Run dialog box and enter regedit to launch the Registry Editor.
+    Use the navigation tree on the left side to browse to the following location: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class.
+    With the Class key expanded, you'll see many keys below it that are long strings of characters. These GUIDs (Globally Unique Identifiers) all correspond to different types of hardware in the Device Manager.
+
+Now, you'll need to find the correct GUID for the type of device you're looking for. To do this, head back to the Device Manager and double-click on the device having a problem. Switch to the Details tab on the resulting window and change the Property dropdown box to Class Guid.
+
+A Value will appear in the box below, which matches one of the keys in the Registry.
+
+Back in the Registry Editor, click the matching string of characters in the Registry's left panel to open its contents in the right panel. Some of these look alike, so be sure you get the right one.
+
+Once you're in the right folder:
+
+    Look for the UpperFilters and LowerFilters items. You might only see one of them, which is fine. If you don't see either, double-check that you've got the correct GUID. If you're sure you have it right and still don't see them, then this will not work for you.
+    Right-click on UpperFilters and/or LowerFilters and choose Delete. Confirm the warning and the file will be erased.
+    Restart your computer, then check the device again to see if it's working.
+
+
+Don't get disheartened if the above methods went futile. You still have a chance to get things sorted. As the next method, we would like to suggest you get your corrupted registry entries fixed on your own. When it comes to 'Device Manager error code' like code 10 error, performing some tweaks with the Windows registry editor can help. In other words, if you remove the "upper and lower filters" registry values, you can get rid of the problem in a hassle-free way. Not just code 10 error, but various Device Manager error codes like code 19, code 32, code 41, etc. can be the reason for incorrect UpperFilter and LowerFilter values. Let us now know how you can fix these corrupted values and ensure the system performance smoother by eliminating the code 10 error.
+
+    To begin with, simply open the run dialog box by pressing the "Windows + R" keys together.
+    When in the run dialog box, you are supposed to type "Regedit" (without quotes) followed by pressing the Enter key or "OK" button.
+    Look for the "HKEY_LOCAL_MACHINE" and expand it from the left panel of the screen.
+    You need to do this continuously until you get to the following path:
+    "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class (expand the Class key)
+    You will notice a big list of subkeys under "Class" where each subkey is different for GUID (Globally Unique Identifier) denoting each type/class of hardware or device in your system.
+    You need to examine the right or should we say the problematic Class GUID from the list. Click on it when you find the device's class GUID and wait for the results.
+    Now, look for the UpperFilters and LowerFilters values. Right-click on each one by one and then select "Delete".
+    Upon asking "Deleting certain registry values could cause system instability. Are you sure you want to permanently delete this value?", please go ahead with "Yes".
+    Quit the Registry Editor and you can now restart your computer. We hope that deleting the UpperFilters and LowerFilters has solved your issue.
+

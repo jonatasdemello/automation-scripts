@@ -1,0 +1,41 @@
+Start-Process cmd -ArgumentList '/s,/c,takeown /f C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC /r /d y & icacls C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC /grant administrators:F /t & RD /S /Q C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc & MD C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc & icacls C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc /T /Q /C /RESET' -Verb runAs
+
+Start-Process cmd -ArgumentList '/s,/c,takeown /f C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC /r /d y
+& icacls C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC /grant administrators:F /t & RD /S /Q C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc
+& MD C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc
+& icacls C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc /T /Q /C /RESET' -Verb runAs
+
+
+Set-ItemProperty HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name "AllowDomainPINLogon" -Value 0
+Set-ItemProperty HKLM:\SOFTWARE\Microsoft\PolicyManager\default\Settings\AllowSignInOptions -Name "value" -Value 0
+
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Setting
+
+certutil /deletehellocontainer
+
+REG ADD HKLM\SOFTWARE\Policies\Microsoft\PassportForWork /v Enabled /t REG_DWORD /d 0 /f
+
+REG ADD HKCU\Software\Policies\Microsoft\PassportForWork /v Enabled /t REG_DWORD /d 0 /f
+
+In order to remove all locally stored PINs and possibly even Finger-Prints, you must delete all contents of %windir%\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC.
+
+
+
+The quickest way to accomplish this is using the two following commands in an elevated Command Prompt / CMD (run as administrator).
+
+takeown /f %windir%\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC /r /d y
+icacls %windir%\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC /grant administrators:F /t
+
+
+The first one will take ownership of the folder, the second one then will grant administrators rights to it.
+
+
+
+Once this is done, you need to delete all contents of the folder. If you are logged on as an administrator you can just use Windows Explorer. If you are logged on as a regular user, you need to do it either more manual in CMD or use e.g. a tool like 7-zip in elevated mode and navigate to the folder, be aware that 7-zip might not be able to handle %windir%, either navigate manually to the folder or use C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\NGC to get to the path. Delete all contents.
+
+Reboot.
+
+This sledgehammer method will delete all stored PINs and other information for all accounts known by the device. They will need to logon with their Active Directory password and start from scratch. You might also need to click on e.g. REMOVE in the Finger-Print configuration to start over.
+
+

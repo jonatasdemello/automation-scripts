@@ -1,0 +1,44 @@
+Nano shortcuts
+
+Action 						Shortcut
+Show the help 				Ctrl+G 		F1
+Close file 					Ctrl+X 		F2
+Save file 					Ctrl+O 		F3
+Search text 				Ctrl+W 		F6
+Continue search 			Alt+W 		F16
+Copy line to clipboard 		Alt+^ 		Alt+6
+Cut line to clipboard 		Ctrl+K 		F9
+Paste line from clipboard 	Ctrl+U 		F10
+
+
+Nano to Shell:
+
+1. Using mouse to mark the text.
+2. Right-Click the mouse in the Shell.
+
+Within Nano:
+
+1. CTRL+6 (or hold Shift and move cursor) for Mark Set and mark what you want (the end could do some extra help).
+2. ALT+6 for copying the marked text.
+3. CTRL+u at the place you want to paste.
+
+or
+1. CTRL+6 (or hold Shift and move cursor) for Mark Set and mark what you want (the end could do some extra help).
+2. CTRL+k for cutting what you want to copy
+3. CTRL+u for pasting what you have just cut because you just want to copy.
+4. CTRL+u at the place you want to paste.
+
+For whoever still looking for a copy + paste solution in nano editor
+
+To select text
+ctrl+6
+Use arrow to move the cursor to where you want the mark to end
+Note: If you want to copy the whole line, no need to mark just move the cursor to the line
+
+To copy:
+Press alt + 6
+To paste:
+Press ctrl + U
+Reference
+
+

@@ -1,0 +1,2488 @@
+FONTE:  http://guia-er.sourceforge.net/
+Em resumo, você é livre para consultar, baixar as páginas para ler OFFLINE e imprimi-las.
+Mas NÃO publique estas páginas em seu site, ao invés disso coloque um link para
+http://aurelio.net/er, a versão oficial e atualizada.
+Você também pode divulgar (copiar/colar) trechos do guia por e-mail ou no seu site,
+desde que até 300 palavras e colocando o meu nome completo e o link já citado.
+Ou seja, para quem tem bom senso, nada muda.
+Agora, daqueles que querem plagiar o meu trabalho, ou ganhar dinheiro às minhas custas, eu tenho muita
+pena.
+Vocês poderiam estar produzindo ao invés de parasitar.
+Aurélio Marinho Jargas
+Florianópolis, 2 de julho de 2003
+
+1. Introdução
+*	1.1 Objetivo
+*	1.2 Sobre o guia
+*	1.3 Apresentando as Expressões Regulares
+*	1.4 História
+*	1.5 Terminologia
+*	1.6 Para que servem?
+2. Os Metacaracteres
+*	2.1 Metacaracteres tipo Representante
+*	2.2 Ponto: o necessitado .
+*	2.3 Lista: a exigente [...]
+*	2.4 Lista negada: a experiente [^...]
+*	2.5 Metacaracteres tipo Quantificador
+*	2.6 Opcional: o opcional ?
+*	2.7 Asterisco: o tanto-faz *
+*	2.8 Mais: o tem-que-ter +
+*	2.9 Chaves: o controle {n,m}
+*	2.10 Metacaracteres tipo Âncora
+*	2.11 Circunflexo: o início ^
+*	2.12 Cifrão: o fim $
+*	2.13 Borda: a limítrofe \b
+*	2.14 Outros Metacaracteres
+*	2.15 Escape: a criptonita \
+*	2.16 Ou: o alternativo |
+*	2.17 Grupo: o pop (...)
+*	2.18 Retrovisor: o saudosista \1 ... \9
+3. Mais sobre Metacaracteres
+*	3.1 Épocas e aplicativos diversos, Metacaracteres distorcidos
+*	3.2 Quantificadores gulosos
+*	3.3 Quantificadores não-gulosos
+*	3.4 Metacaracteres tipo barra-letra
+*	3.5 Metacaracteres modernosos
+*	3.6 Precedência entre metacarateres
+4. Os 6 mandamentos do Criador
+*	4.1 Não complique
+*	4.2 Use o circunflexo
+*	4.3 Evite a lista negada
+*	4.4 Evite o curinga
+*	4.5 Seja específico
+*	4.6 Não seja afobado, seja ninja
+5. Como lidar com...
+*	5.1 Problemas com maiúsculas e minúsculas
+*	5.2 ERs pré-processadas e cruas
+*	5.3 Negação de uma palavra
+*	5.4 Multilinha
+*	5.5 Acentuação
+6. Editores de texto
+*	6.1 Vim
+*	6.2 Emacs
+*	6.3 MS Word 2000
+7. Linguagens de programação
+*	7.1 Python
+*	7.2 Perl
+*	7.3 Ruby (NOVO!)
+*	7.4 Php
+*	7.5 Javascript
+*	7.6 VBscript
+*	7.7 Tcl
+*	7.8 Awk
+*	7.9 Sed
+8. Bibliotecas e programas relacionados
+*	8.1 Bibliotecas
+*	8.2 Programas
+9. Onde obter mais informações
+*	9.1 Livros
+*	9.2 Listas
+*	9.3 Páginas
+10. E por hoje é só pessoal
+11. Tabelas
+*	11.1 Diferenças de Metacaracteres entre aplicativos
+*	11.2 Resumão dos Metacaracteres e seus detalhes
+*	11.3 POSIX, barra-letras e outros aliens
+*	11.4 Modernosos, remendos e precedência
+*	11.5 Caracteres ASCII imprimíveis
+
+
+
+1. Introdução
+Olá. Que tal esquecer um pouco a rotina e a realidade e fazer uma viagem ao interior de sua mente?
+Descobrir conceitos novos, diferentes. Ao voltar, as coisas não serão mais tão normais quanto antes, pois
+símbolos estranhos farão parte de seu dia-a-dia.
+Inspirado pelo funcionamento de seus próprios neurônios, descubra o fascinante mundo abstrato das
+expressões regulares.
+1.1 Objetivo
+Neste nosso mundo tecnoinformatizado onde o acesso rápido à informação desejada é algo crucial, temos
+nas expressões regulares uma mão amiga, que quanto mais refinada for sua construção, mais preciso e
+rápido será o resultado, diferenciando aqueles que as dominam daqueles que perdem horas procurando
+por dados que estão ao alcance da mão.
+O assunto é algo bem peculiar, pois apesar de a maioria das linguagens de programação, programas e
+editores de texto mais utilizados possuírem esse recurso, poucos o dominam, principalmente pelo fato de
+a documentação sobre o assunto, quando existente, ser enigmática e pouco didática, ou simplesmente se
+resumir a listagens, sem explicar os conceitos. Esta obra nasceu dessa necessidade e tem como objetivo
+preencher essa lacuna, sendo uma documentação completa e didática para iniciantes, tipo tutorial, e um
+guia de referência para os já iniciados.
+Este guia é a primeira publicação em português totalmente dedicada ao assunto, e espero que esse
+pioneirismo traga muitos frutos, inclusive outros guias e outras publicações sobre o tema, para difundir e
+desmistificar o uso das expressões regulares.
+1.2 Sobre o guia
+A primeira parte é o "feijão com arroz", indicada àqueles que desconhecem ou ainda não se sentem à
+vontade para criar suas próprias expressões regulares. Faremos um "tour" por todas as pecinhas que
+compõem esse mundo fantástico, explicando didaticamente, do zero, o que são, de onde vieram, para que
+servem e como utilizá-las (Exemplos! Exemplos!). Após ler e entender essa primeira parte, algo como ^
+*[A-Za-z0-9_]+:(.*)..$ vai fazer parte de sua realidade, sem lhe causar pânico.
+A segunda parte é a "feijoada", para aqueles que querem uma experiência mais intensa. Mergulharemos
+de cabeça e entenderemos de vez essa maquininha esquisita. São as explicações dos conceitos envolvidos,
+bem como táticas e dicas para você realmente entender e otimizar seu uso das expressões regulares. Ao
+final da leitura, você entenderá porque ^[^:]+:([[:alpha:]]+): é melhor que .*:(.*):.
+Mas note que tudo isso, sem viajar muito nos detalhes intrínsecos e sem conhecer os becos escuros que
+você talvez nunca precisará saber que existem. Acima de tudo este é um guia prático. É para ler e fazer
+suas expressões. Isso não o torna superficial, apenas direto.
+Com tudo isso temos diversas tabelas e listagens, que servem para serem consultadas rapidamente em
+caso de dúvida ou esquecimento. Relaxe, não é um bicho de [0-9]+ cabeças... Vamos bater um papo
+descontraído sobre o assunto. Então respire fundo, desligue a TV, olhe fixamente para estas letras e
+vamos! Espere, antes disso vamos ver as notações utilizadas neste guia:
+*	itálico: texto a ser casado
+*	sublinhado: casamentos
+*	expressão: expressão regular, ou parte dela
+*	destaque: opções, texto substituído
+*	"termo": termos estrangeiros
+1.3 Apresentando as Expressões Regulares
+Então, para podermos começar nossa viagem, nada como uma apresentação de nosso objetivo, pois afinal
+de contas, que raios são estas expressões?
+Bem resumido, uma expressão regular é um método formal de se especificar um padrão de texto.
+Mais detalhadamente, é uma composição de símbolos, caracteres com funções especiais, que, agrupados
+entre si e com caracteres literais, formam uma seqüência, uma expressão. Essa expressão é interpretada
+como uma regra, que indicará sucesso se uma entrada de dados qualquer casar com essa regra, ou seja,
+obedecer exatamente a todas as suas condições.
+Ou como variações aceitas também pode-se afirmar que é:
+*	uma maneira de procurar um texto que você não lembra exatamente como é, mas tem idéia das
+variações possíveis;
+*	uma maneira de procurar um trecho em posições específicas como no começo ou no fim de uma
+linha, ou palavra;
+*	uma maneira de um programador especificar padrões complexos que podem ser procurados e
+casados em uma cadeia de caracteres;
+*	uma construção que utiliza pequenas ferramentas, feita para obter determinada seqüência de
+caracteres de um texto.
+Ou ainda, didaticamente falando, é:
+*	Como o brinquedo LEGO, várias pecinhas diferentes, cada uma com sua característica, que juntas
+compõem estruturas completas e podem ser arranjadas com infinitas combinações diferentes.
+*	Como um jogo de truco, com as cartas normais e as quentes: gato, copas, espadilha e mole, que
+são especiais e têm uma ordem de grandeza.
+*	Como um quebra-cabeça, sempre tem solução, às vezes óbvia, às vezes difícil, mas decifrando as
+partes, junta-se tudo e chega-se ao todo.
+*	Como um jogo, no começo é difícil, mas após conhecer todas as regras, basta jogar e curtir.
+*	Como uma receita culinária, com seus ingredientes e uma ordem correta para adicioná-los à
+mistura.
+*	Como consertar carros. Você tem várias peças e várias ferramentas. Dependendo do tipo da peça,
+há uma ferramenta certa para você lidar com ela. E dependendo da sua localização, você tem de
+incrementar a ferramenta com mais barras e cotovelos para alcançá-la.
+*	Como o alfabeto. Você aprende primeiro as letras individualmente. Depois as sílabas, as palavras,
+frases e finalmente os textos. Mas no fundo, são apenas letras.
+Acima de tudo, assim como um sorvete no domingo ensolarado, uma expressão regular é:
+Divertida!
+Divertida? Tá louco? Todos aqueles símbolos estranhos...
+Calma... É normal estranharmos ou até repudiarmos aquilo que ainda não conhecemos ou não dominamos
+bem. Como diria o vovô Simpson no meio da multidão: "vamos destruir aquilo que não entendemos!"
+Ao final da leitura, ficará claro que as expressões são apenas pequenos pedacinhos simples que agrupados
+formam algo maior. O importante é você compreender bem cada um individualmente, e depois apenas lê-
+los em seqüência. Lembre-se do alfabeto: são apenas letras...
+1.4 História
+Vem cá, mas de onde surgiram essas tais expressões regulares, tem algo a ver com expressões
+matemáticas?
+Sim! Vou te contar uma história. A fecundação dessas expressões aconteceu no ano de 1943, quando os
+"pais", dois neurologistas, publicaram um estudo que teorizava o funcionamento dos nossos neurônios.
+Sentiu o drama? Nosso assunto é nobre desde a sua origem.
+Anos depois o "parteiro", um matemático, descreveu algebricamente os modelos desse estudo, utilizando
+símbolos para representar seus recém-criados grupos regulares (do inglês "regular sets"). Com a criação
+dessa notação simbólica, nasceram as expressões regulares, que durante toda a sua infância e juventude
+(cerca de 20 anos), foram bastante estudadas pelos matemáticos da época.
+Mas o encontro com o computador, só aconteceu mesmo em 1968, em um algoritmo de busca utilizado
+no editor de textos qed, que depois virou o ed, EDitor padrão dos primeiros sistemas Unix. Este ed tinha
+o comando de contexto g, que aceitava expressões regulares e um comando p, e sua sintaxe ficava
+g/RE/p ("Global Regular Expression Print"), que deu origem ao aplicativo grep, que por sua vez originou
+o egrep.
+Outros filhos como o sed e o awk também apareceram, cada um implementando as expressões do seu
+próprio jeito; e finalmente em 1986 foi criado o divisor de águas, um pacote pioneiro em C chamado
+regex que tratava das expressões regulares e qualquer um poderia incluí-lo em seu próprio programa, de
+graça. Opa! Falaram as palavras mágicas: "de graça". Aí não teve mais volta, as expressões caíram no
+gosto popular e cada vez mais e mais programas e linguagens as utilizam.
+CURIOSIDADE: apesar de esse assunto ser antigo, o que vamos ver aqui basicamente é o mesmo que um
+estudante veria há 15 anos atrás. É um conceito consistente, que não sofre alterações com o passar do
+tempo.
+1.5 Terminologia
+E se eu te disser que "ERs são metacaracteres que casam um padrão"? Não entendeu?
+Bem, como expressões regulares é um termo muito extenso, daqui adiante, chamarei apenas de ER (ê-
+érre) para simplificar a leitura. Outras nomenclaturas que podem ser encontradas em outras fontes são
+expreg, "regexp", "regex" e "RE". Particularmente "regex" é uma boa escolha para usar em ferramentas
+de busca na Internet.
+E como estamos falando de termos, tem mais alguns novos que farão parte de nossa conversa. Lembra
+que as expressões são formadas por símbolos e caracteres literais? Esses símbolos são chamados de
+metacaracteres, pois possuem funções especiais, que veremos detalhadamente adiante.
+Outro termo que é interessante e às vezes pode assustar um leitor meio distraído é o casar ("match").
+Casamento aqui não é juntar os trapos, mas sim o ato de bater, conferir, combinar, igualar, encontrar,
+encaixar, equiparar. É como em um caixa 24 horas, em que você só retirará o dinheiro se sua senha
+digitada casar com aquela já cadastrada no banco.
+Também temos o padrão ("pattern"), que é nosso objetivo quando fazemos uma ER: casar um padrão.
+Esse padrão pode ser uma palavra, várias, uma linha vazia, um número, ou seja, o que quer que precise
+ser encontrado pela nossa ER.
+E ainda tem o robozinho, que é uma referência ao compilador e interpretador das expressões regulares, o
+código que vai ler, checar, entender e aplicar sua ER no texto desejado. Como exemplo, para programas
+em C o robozinho é a biblioteca regex, que faz todo o serviço.
+1.6 Para que servem?
+Basicamente servem para você dizer algo abrangente de forma específica. Definido seu padrão de busca,
+você tem uma lista (finita ou não) de possibilidades de casamento. Em um exemplo rápido, [rgp]ato
+pode casar rato, gato e pato. Ou seja, sua lista "abrange especificamente" essas três palavras, nada mais.
+Mmmmmmmmmmmmmmmm...
+Na prática as expressões regulares servem para uma infinidade de tarefas, é difícil fazer uma lista, pois
+elas são úteis sempre que você precisar buscar ou validar um padrão de texto que pode ser variável, como:
+*	data
+*	horário
+*	número IP
+*	nome de pessoa
+*	endereço de e-mail
+*	endereço de Internet
+*	nome de usuário e senha
+*	declaração de uma função()
+*	dados na coluna N de um texto
+*	dados que estão entre <tags></tags>
+*	campos específicos de um texto tabulado
+*	número de telefone, RG, CPF, cartão de crédito
+*	dados que estão apenas no começo ou no fim da linha
+E mais uma infinidade de outros padrões que não podem ser especificados com caracteres literais. Um
+exemplo prático: você tem uma lista diária de acesso de usuários que entraram em seu sistema, onde
+consta em cada linha, o horário do acesso e o "login" do usuário, algo como:
+        05:15  ernesto
+        08:39  ricardo
+        10:32  patricia
+        14:59  gabriel
+        16:27  carla
+        22:23  marcelo
+Como fazer para buscar automaticamente apenas os usuários que acessaram o sistema no período da tarde
+(meio-dia às seis)? Você tem várias opções, desde procurar uma a uma manualmente até fazer um
+programa que compare os primeiros caracteres de cada linha, mas falando de algo prático e rápido, que
+não exija conhecimentos de programação, a ER é simplesmente ^1[2-8].
+O que significa essa sopa de letrinhas?
+Caaaaaaalma. Acompanhe o próximo tópico e vamos conhecer todos os metacaracteres, essas coisinhas
+úteis que facilitam nossa vida.
+2. Os Metacaracteres
+Então, para já matar sua curiosidade, aqui estão os tão falados metacaracteres-padrão que serão nossos
+personagens das próximas páginas: . ? * + ^ $ | [ ] { } ( ) \ . E aí, sentiu um frio na barriga?
+Cada simbolozinho desses tem sua função específica, que pode mudar dependendo do contexto no qual
+está inserido, e podemos agregá-los uns com os outros, combinando suas funções e fazendo construções
+mais complexas. Olha, ainda dá tempo de fechar o livro e voltar a assistir à novela....
+Então deixa eu te assustar mais um pouquinho. Além destes, temos outros metacaracteres extendidos que
+foram criados posteriormente, pois tarefas mais complexas requisitavam funções mais específicas ainda.
+E para terminar de complicar, sua sintaxe de utilização não é a mesma para todos os programas que
+suportam expressões regulares.
+Bem, já que você não desistiu (eu tentei), vamos logo ao que interessa, e para começar vamos dar nomes
+aos bois. Leia, releia e "treleia" esta lista, repetindo para si mesmo e associando o nome ao símbolo, pois
+estas palavras farão parte de sua vida, de sua rotina. Acostume-se com os nomes e não os mude.
+        meta    mnemônico
+        ------------------------------
+        .       ponto
+        []      lista
+        [^]     lista negada
+        ?       opcional
+        *       asterisco
+        +       mais
+        {}      chaves
+        ^       circunflexo
+        $       cifrão
+        \b      borda
+        \       escape
+        |       ou
+        ()      grupo
+        \1      retrovisor
+Agora que sabemos como chamar nossos amigos novos, veremos uma prévia, um apanhado geral de
+todos os metacaracteres e suas funções. Eles estão divididos em quatro grupos distintos, de acordo com
+características comuns entre eles.
+Representantes
+meta    mnemônico       função
+---------------------------------------------------------------
+.       ponto           um caractere qualquer
+[...]   lista           lista de caracteres permitidos
+[^...]  lista negada    lista de caracteres proibidos
+Quantificadores
+meta    mnemônico       função
+---------------------------------------------------------------
+?       opcional        zero ou um
+*       asterisco       zero, um ou mais
++       mais            um ou mais
+{n,m}   chaves          de n até m
+Âncoras
+meta    mnemônico       função
+---------------------------------------------------------------
+^       circunflexo     início da linha
+$       cifrão          fim da linha
+\b      borda           início ou fim de palavra
+Outros
+meta    mnemônico       função
+---------------------------------------------------------------
+\c      escape          torna literal o caractere c
+|       ou              ou um ou outro
+(...)   grupo           delimita um grupo
+\1...\9 retrovisor      texto casado nos grupos 1...9
+aaaah, ? e * eu já uso na linha de comando!
+Opa, não confunda! Os curingas usados na linha de comando para especificar nomes de arquivos, como
+*.txt, relatorio.{txt,doc} e guia-??.html não são expressões regulares. São curingas específicos
+de nomes de arquivo, e apesar de parecidos, são outra coisa e os significados de seus símbolos são
+diferentes dos das expressões, então o melhor que você faz agora é esquecer esses curingas, senão eles
+podem confundi-lo e atrapalhar seu aprendizado.
+E para aqueles que gostam de ir lendo e testando os exemplos na sua própria máquina, para ver a mágica
+acontecendo, dêem uma olhada adiante, no capítulo específico da sua ferramenta: "Editores de texto" ou
+"Linguagens de programação", e ainda, conheça a representação correta dos metacaracteres na tabela
+"Diferenças de Metacaracteres entre aplicativos".
+2.1 Metacaracteres tipo Representante
+O primeiro grupo de metacaracteres que veremos são os do tipo representante, ou seja, são
+metacaracteres cuja função é representar um ou mais caracteres.
+Também podem ser encarados como apelidos, links, ou qualquer outra coisa que lhe lembre essa
+associação entre elementos.
+Todos os metacaracteres deste tipo casam a posição de um único caractere, e não mais que um.
+2.2 Ponto: o necessitado .
+O ponto é nosso curinga solitário, que está sempre à procura de um casamento, não importa com quem
+seja. Pode ser um número, uma letra, um TAB, um @, o que vier ele traça, pois o ponto casa qualquer
+coisa.
+Suponhamos uma ER que contenha os caracteres "fala" e o metacaractere ponto, assim: fala.. No texto a
+seguir, essa ER casaria tudo o que está sublinhado:
+Olha, com vocês me pressionando a fala não vai sair natural. Eu não consigo me concentrar na minha
+fala. Aliás, isso é um falatório, pois nunca vi um comercial com tantas falas assim. Vou me queixar com
+o problemasnafala@ medicos.com.br
+Nesse pequeno trecho de texto, nossa ER casou 5 vezes, tendo o ponto casado com os seguintes
+caracteres: " .ts@".
+/!\ ATENÇÃO /!\ o metacaractere ponto casa, entre outros, o caractere ponto.
+Como exemplos de uso do ponto, em um texto normal em português, você pode procurar palavras que
+não lembra se acentuou ou não, que podem começar com maiúsculas ou não, ou que foram escritas
+errado:
+n.o             não, nao, ...
+.eclado         teclado, Teclado, ...
+e.tendido       estendido, extendido, eztendido, ...
+Ou para tarefas mais específicas, procurar horário com qualquer separador, ou marcações ("tags") HTML:
+12.45           12:45, 12 45, 12.45, ...
+<.>       <B>, <i>, <p>, ...
+Resumão
+*	O ponto casa com qualquer coisa.
+*	O ponto casa com o ponto.
+*	O ponto é um curinga para casar um caractere.
+2.3 Lista: a exigente [...]
+Bem mais exigente que o ponto, a lista não casa com qualquer um. Ela sabe exatamente o que quer, e
+nada diferente daquilo, a lista casa com quem ela conhece.
+Ela guarda dentro de si os caracteres permitidos para casar, então algo como [aeiou] limita nosso
+casamento a apenas letras vogais.
+No exemplo anterior do ponto, sobre acentuação, tínhamos a ER n.o. Além dos casamentos desejados,
+ela é muito abrangente, e também casa coisas indesejáveis como neo, n-o, n5o e n o.
+Para que nossa ER fique mais específica, trocamos o ponto pela lista, para casar apenas o não e nao
+desejados, veja:
+n[ãa]o
+E assim como o n.o, todos os outros exemplos anteriores do ponto casam muito mais que o desejado,
+justo pela sua natureza "promíscua".
+Por isso que nos exemplos tinha os três pontinhos ... no final?
+Exatamente, eles indicam que havia mais possibilidades de casamento. Como o ponto casa com qualquer
+coisa, ele é nada específico. Então vamos impor limites às ERs:
+n[ãa]o          não, nao
+[Tt]eclado      Teclado, teclado
+e[sx]tendido    estendido, extendido
+12[:. ]45       12:45, 12.45, 12 45
+<[BIP]>   <B>, <I>, <P>
+Mas e aquele ponto na ER da hora, não casa com qualquer coisa?
+Pegadinha! Não. Registre em algum canto de seu cérebro: dentro da lista, todo mundo é normal.
+Repetindo: dentro da lista, todo mundo é normal. Então aquele ponto é simplesmente um ponto normal e
+não um metacaractere.
+No exemplo de marcação <[BIP]>, vemos que as ERs são sensíveis a maiúsculas e minúsculas, então se
+quisermos mais possibilidades, basta incluí-las:
+<[BIPbip]>        <B>, <I>, <P>, <b>, <i>, <p>
+Intervalos em listas
+Por enquanto, vimos então que a lista abriga todos os caracteres permitidos em uma posição. Como seria
+uma lista que dissesse que numa determinada posição poderia haver apenas números?
+Peraí que essa eu sei... deixa ver... [0123456789]. Acertei?
+Sim! Então para casar uma hora, qualquer que ela seja, fica como? Lembre que o formato é hh:mm.
+Tá. [0123456789][0123456789]:[0123 - argh! QUE SACO!
+Pois é! Assim também pensaram nossos ilustres criadores das ERs, e, para evitar esse tipo de listagem
+extensa, temos somente dentro da lista o conceito de intervalo.
+Lembra, que eu disse para você memorizar que dentro da lista, todo mundo é normal? Pois é, aqui temos
+a primeira exceção à regra. Todo mundo, fora o traço. Se tivermos um traço (-) entre dois caracteres, isso
+representa todo o intervalo entre eles.
+Não entendeu? É assim, olhe:
+[0123456789] é igual a [0-9]
+É simples assim. Aquele tracinho indica um intervalo, então 0-9 se lê: "de zero a nove".
+Voltando a nossa ER da hora, poderíamos fazer [0-9][0-9]:[0-9][0-9], mas veja que não é específico
+o bastante, pois permite uma hora como 99:99, que não existe. Como poderíamos fazer uma ER que case
+no máximo 23 horas e 59 minutos?
+Calma lá... [012][0-9]:[0-5][0-9]. Quase, só que tá pegando 29 horas...
+Excelente! Com o que aprendemos até agora, esse é o máximo de precisão que conseguimos. Mais
+adiante, quem poderá nos ajudar será o ou. Depois voltamos a esse problema.
+Esse intervalo funciona só para números? Algo como a-z também existe?
+Era isso que eu ia falar agora. Sim, qualquer intervalo é válido, como a-z, A-Z, 5-9, a-f, :-@, etc.
+De : até @?
+Sim. Por exemplo, se eu quiser uma lista que case apenas letras maiúsculas, minúsculas e números: [A-
+Za-z0-9].
+Sério, intervalo de : até @?
+Sim. Ah! E tem uma pegadinha. Como o traço é especial dentro da lista, como fazer quando você quiser
+colocar na lista um traço literal?
+Sei lá, eu queria saber sobre o intervalo do arroba...
+Espere um pouco. Basta colocar o traço no final da lista, assim [0-9-] casa números ou um traço. E tem
+os colchetes, que são os delimitadores da lista. Como incluí-los dentro dela?
+O colchete que abre não tem problema, pode colocá-lo em qualquer lugar na lista, pois ela já está aberta
+mesmo e não se pode ter uma lista dentro da outra.
+O colchete que fecha deve ser colocado no começo da lista, ser o primeiro item dela, para não confundir
+com o colchete que termina a lista. Então []-] casa um ] ou um -.
+Vamos juntar tudo e fazer uma lista que case ambos os colchetes e o traço: [][-]. Calma. Pare, pense,
+respire fundo, encare esta ER. Vamos lê-la um por um: o primeiro [ significa que é o começo de uma
+lista, já dentro da lista, temos um ] literal, seguido de um [ literal, seguido de um - literal, e por último o
+] que termina a lista. Intuitivo, não? &:)
+Tá, confundi tudo, mas que diabos tem entre o : e o @???
+Tudo bem, você venceu. Nesse intervalo tem : ; < = > ? @. Como saber isso? Os intervalos respeitam
+a ordem numérica da tabela ASCII, então basta tê-la em mãos para ver que um intervalo como A-z não
+pega somente as maiúsculas e minúsculas como era de se esperar.
+Para sua comodidade, a tabela está no fim do guia, e nela podemos ver que A-z pega também "[\]^_`" e
+não pega os caracteres acentuados como "áéóõç". Infelizmente, não há um intervalo válido para pegarmos
+todos os caracteres acentuados de uma vez. Mas já já veremos a solução...
+/!\ ATENÇÃO /!\ não use o intervalo A-z, prefira A-Za-z
+Dominando caracteres acentuados (POSIX)
+Como para nós brasileiros se a-z não casar letras acentuadas não serve para muita coisa, temos uns
+curingas somente para usar em listas que são uma mão na roda. Duas até.
+Eles são chamados de classes de caracteres POSIX. São grupos definidos por tipo, e POSIX é um
+padrão internacional que define esse tipo de regra, como será sua sintaxe, etc. Falando em sintaxe, aqui
+estão as classes:
+classe POSIX    similar         significa
+-----------------------------------------
+[:upper:]       [A-Z]           letras maiúsculas
+[:lower:]       [a-z]           letras minúsculas
+[:alpha:]       [A-Za-z]        maiúsculas/minúsculas
+[:alnum:]       [A-Za-z0-9]     letras e números
+[:digit:]       [0-9]           números
+[:xdigit:]      [0-9A-Fa-f]     números hexadecimais
+[:punct:]       [.,!?:...]      sinais de pontuação
+[:blank:]       [ \t]           espaço e TAB
+[:space:]       [ \t\n\r\f\v]   caracteres brancos
+[:cntrl:]       -               caracteres de controle
+[:graph:]       [^ \t\n\r\f\v]  caracteres imprimíveis
+[:print:]       [^\t\n\r\f\v]   imprimíveis e o espaço
+Note que os colchetes fazem parte da classe e não são os mesmos colchetes da lista. Para dizer
+maiúsculas, fica [[:upper:]], ou seja um [:upper:] dentro de uma lista [].
+/!\ ATENÇÃO /!\ o [[:upper:]] é uma classe POSIX dentro de uma lista.
+Então, em uma primeira olhada, [:upper:] é o mesmo que A-Z, letras maiúsculas. Mas a diferença é que
+essas classes POSIX levam em conta a localidade do sistema.
+Atenção para essa diferença, pois a literatura na língua inglesa sempre fala sobre esse assunto muito
+superficialmente, pois eles não utilizam acentuação e deve ser às vezes até difícil para quem está
+escrevendo o documento entender isso.
+Como nossa situação é inversa, e nossa língua é rica em caracteres acentuados, entender essa diferença é
+de suma importância.
+Como estamos no Brasil, geralmente nossas máquinas estão configuradas como tal, usando números no
+formato nnn.nnn,nn, a data é no formato dd/mm/aaaa, medidas de distância são em centímetros e outras
+coisinhas que são diferentes nos demais países.
+Entre outros, também está definido que áéíóú são caracteres válidos em nosso alfabeto, bem como
+ÁÉÍÓÚ.
+Então, toda essa volta foi para dizer que o [:upper:] leva isso em conta e inclui as letras acentuadas
+também na lista. O mesmo para o [:lower:], o [:alpha:] e o [:alnum:].
+/!\ ATENÇÃO /!\ nos Estados Unidos, [[:upper:]] é igual a [A-Z]. No Brasil, [[:upper:]] é igual [A-
+ZÁÃÂÀÉÊÍÓÕÔÚÇ...]
+Por isso para nós essas classes POSIX são importantíssimas, e sempre que você tiver de fazer ERs que
+procurarão em textos em português, prefira [:alpha:] em vez de A-Za-z, sempre.
+Então refazendo a ER que casava maiúsculas, minúsculas e números, temos:
+[[:upper:][:lower:][:digit:]], ou melhor: [[:alpha:][:digit:]], ou melhor ainda:
+[[:alnum:]]. Todas são equivalentes.
+Aaaaaaaah, chega de falar de lista!
+Tudo bem, acabou (será?). Mas não se assuste, a lista é o único metacaractere que tem suas próprias
+regras, funcionando como uma minilinguagem dentro das expressões regulares.
+Resumão
+*	A lista casa com quem ela conhece e tem suas próprias regras.
+*	Dentro da lista, todo mundo é normal.
+*	Dentro da lista, traço indica intervalo.
+*	Um - literal deve ser o último item da lista.
+*	Um ] literal deve ser o primeiro item da lista.
+*	Os intervalos respeitam a tabela ASCII (não use A-z).
+*	[:classes POSIX:] incluem acentuação, A-Z não.
+2.4 Lista negada: a experiente [^...]
+Nem tão exigente quanto a lista nem tão necessitada quanto o ponto, temos a lista negada, que pelas suas
+más experiências passadas, sabe o que não serve para ela casar.
+Ei ei ei, você falou que não ia mais falar sobre lista!!!
+É rapidinho. A lista negada é exatamente igual à lista, podendo ter caracteres literais, intervalos e classes
+POSIX. Tudo o que se aplica a lista normal, se aplica à negada também.
+A única diferença é que ela possui lógica inversa, ou seja, ela casará com qualquer coisa, fora os
+componentes listados.
+Observe que a diferença em sua notação é que o primeiro caractere da lista é um circunflexo, ele indica
+que esta é uma lista negada. Então se [0-9] são números, [^0-9] é qualquer coisa fora números. Pode
+ser letras, símbolos, espaço em branco, qualquer coisa, menos números.
+Mas tem de ser alguma coisa. Só porque ela é uma lista negada isso não significa que ela pode casar
+"nada".
+Explicando em outras palavras, se você diz "qualquer coisa fora números", deve haver outra coisa no
+lugar dos números e não simplesmente "se não houver números". Então essa ER não casaria uma linha
+vazia por exemplo.
+/!\ ATENÇÃO /!\ "qualquer coisa fora alguns caracteres" não inclui "nenhum caractere".
+Como o traço e o colchete que fecha, o circunflexo é especial, então para colocarmos um ^ literal em uma
+lista, precisamos pô-lo em qualquer posição que não seja a primeira. Assim [A-Z^] casa maiúsculas e o
+circunflexo e [^A-Z^] casa tudo fora isso.
+Ah! As classes POSIX também podem ser negadas, então [^[:digit:]] casa "qualquer coisa fora
+números".
+A lista negada é muito útil quando você sabe exatamente o que não pode ter em uma posição, como um
+erro ortográfico ou de escrita. Por exemplo, como mandam as regras da boa escrita, sempre após
+caracteres de pontuação como a vírgula ou o ponto, devemos ter um espaço em branco os separando do
+resto do texto. Então vamos procurar por qualquer coisa que não o espaço após a pontuação:
+[:;,.!?][^ ]
+Ou, ainda, explicitando melhor nosso objetivo:
+[[:punct:]][^ ]
+Resumão
+*	Uma lista negada segue todas as regras de uma lista normal.
+*	Um ^ literal não deve ser o primeiro item da lista.
+*	[:classes POSIX:] podem ser negadas.
+*	A lista negada sempre deve casar algo.
+2.5 Metacaracteres tipo Quantificador
+Aqui chegamos ao segundo tipo de metacaracteres, os quantificadores, que servem para indicar o número
+de repetições permitidas para a entidade imediatamente anterior. Essa entidade pode ser um caractere ou
+metacaractere.
+Em outras palavras, eles dizem a quantidade de repetições que o átomo anterior pode ter, quantas vezes
+ele pode aparecer.
+Os quantificadores não são quantificáveis, então dois deles seguidos em uma ER é um erro, salvo
+quantificadores não-gulosos, que veremos depois.
+E memorize, por enquanto sem entender o porquê: todos os quantificadores são gulosos.
+2.6 Opcional: o opcional ?
+O opcional é um quantificador que não esquenta a cabeça, para ele pode ter ou não a ocorrência da
+entidade anterior, pois ele a repete 0 ou 1 vez. Por exemplo, a ER 6? significa zero ou uma ocorrência do
+número 6. Se tiver um 6, beleza, casamento efetuado. Se não tiver, beleza também. Isso torna o 6
+opcional (daí o nome), que tendo ou não, a ER casa. Veja mais um exemplo, o plural. A ER ondas? tem a
+letra s marcada como opcional, então ela casa onda e ondas.
+/!\ ATENÇÃO /!\ cada letra normal é um átomo da ER, então o opcional é aplicado somente ao s e não à
+palavra toda.
+E essa tal de entidade pode ser um metacaractere então?
+Claro! Agora vamos começar a ver o poder de uma expressão regular. Já vimos o metacaractere lista e
+agora vimos o opcional, que tal fazermos uma lista opcional? Voltando um pouco àquele exemplo da
+palavra fala, vamos fazer a ER fala[r!]?. Mmmmmm, as ERs estão começando a ficar interessantes
+não? Mas antes de analisar essa ER, uma dica que vale ouro, memorize já: leia a ER átomo por átomo, da
+esquerda para a direita. Repetindo: leia a ER átomo por átomo, da esquerda para a direita.
+Como ler uma ER
+É bem simples, uma ER se lê exatamente como o robozinho (lembra quem ele é?) leria. Primeiro lê-se
+átomo por átomo, depois entende-se o todo e depois se analisa as possibilidades. Na nossa ER fala[r!]?
+em questão, sua leitura fica: um f seguido de um a, seguido de um l, seguido de um a, seguido de: ou r,
+ou !, ambos opcionais.
+Essa leitura é essencial para o entendimento da ER. Ela pode em um primeiro momento ser feita em voz
+alta, de maneira repetitiva, até esse processo se tornar natural. Depois ela pode ser feita mentalmente
+mesmo, e de maneira automática. É como você está fazendo agora repetindo mentalmente estas palavras
+escritas aqui enquanto as lê. Você não percebe, faz normalmente.
+Feita a leitura, agora temos de entender o todo, ou seja, temos um trecho literal fala, seguido de uma lista
+opcional de caracteres. Para descobrirmos as possibilidades, é o fala seguido de cada um dos itens da lista
+e por fim seguido por nenhum deles, pois a lista é opcional. Então fica:
+fala[r!]?       falar, fala!, fala
+Pronto! Desvendamos os segredos da ER. É claro, esta é pequena e fácil, mas o que são ER grandes senão
+várias partes pequenas agrupadas? O principal é dominar essa leitura por átomos. O resto é ler devagar até
+chegar ao final. Não há segredo.
+Então voltemos ao nosso exemplo de marcações HTML, podemos facilmente incluir agora as marcações
+que fecham o trecho, em que a única diferença é que vem uma barra / antes da letra:
+</?[BIPbip]>      </B>, </I>, </P>, </b>, </i>, </p>, <B>, <I>, <P>, <b>, <i>, <p>
+Por alguns segundos, contemple a ER anterior. Estamos começando a dizer muito com poucos caracteres,
+sendo específicos. Vamos continuar que vai ficar cada vez mais interessante.
+Resumão
+*	O opcional é opcional.
+*	O opcional é útil para procurar palavras no singular e plural.
+*	Podemos tornar opcionais caracteres e metacaracteres.
+*	Leia a ER átomo por átomo, da esquerda para a direita.
+*	Leia a ER, entenda o todo e analise as possibilidades.
+2.7 Asterisco: o tanto-faz *
+Se o opcional já não esquenta a cabeça, podendo ter ou não a entidade anterior, o asterisco é mais
+tranqüilo ainda, pois para ele pode ter, não ter, ou ter vários, infinitos. Em outras palavras, a entidade
+anterior pode aparecer em qualquer quantidade.
+6*0             0, 60, 660, 6660, ..., 666666666660, ...
+bi*p            bp, bip, biip, biiip, biiiip...
+b[ip]*          b, bi, bip, biipp, bpipipi, biiiiip, bppp, ...
+Como HTML é sempre um ótimo exemplo, voltamos ao nosso exemplo das marcações, que podem ter
+vários espaços em branco após o identificador, então <b > e </b > são válidos. Vamos colocar essa
+condição na ER:
+    </?[BIPbip] *>        </B>, </B >, </B  >, ..., <p         >, ...
+Note que agora com o asterisco, nossa ER já não tem mais um número finito de possibilidades. Vejamos
+como fica a leitura dessa ER: um <, seguido ou não de uma /, seguido de: ou B, ou I, ou P, ou b, ou i, ou
+p, seguido ou não de vários espaços, seguido de >.
+Apresentando a gulodice
+Pergunta: o que casará [ar]*a na palavra arara? Alternativas:
+1) a            [ar] zero vezes, seguido de a
+2) ara          [ar] duas vezes (a,r), seguido de a
+3) arara        [ar] quatro vezes (a,r,a,r), seguido de a
+4) n.d.a.
+Acertou se você escolheu a número 3. O asterisco repete em qualquer quantidade, mas ele sempre tentará
+repetir o máximo que conseguir. As três alternativas são válidas, mas entre casar a lista [ar] zero, duas
+ou quatro vezes, ele escolherá o maior número possível. Por isso se diz que o asterisco é guloso.
+Essa gulodice às vezes é boa, às vezes é ruim. Os próximos quantificadores, mais e chaves, bem como o
+opcional já visto, são igualmente gulosos. Mais detalhes sobre o assunto, confira mais adiante.
+Apresentando o curinga .*
+Vimos até agora que temos dois metacaracteres extremamente abrangentes, como o ponto (qualquer
+caractere) e o asterisco (em qualquer quantidade). E se juntarmos os dois? Teremos qualquer caractere,
+em qualquer quantidade. Pára um instante para pensar nisso. O que isso significa, tudo? Nada? A resposta
+é: ambos.
+O nada, pois "qualquer quantidade" também é igual a "nenhuma quantidade". Então é opcional termos
+qualquer caractere, não importa. Assim, uma ER que seja simplesmente .* sempre será válida e casará
+mesmo uma linha vazia.
+O tudo, pois "qualquer quantidade" também é igual a "tudo o que tiver". E é exatamente isso o que o
+asterisco faz, ele é guloso, ganancioso, e sempre tentará casar o máximo que conseguir. Repita comigo: o
+MÁXIMO que conseguir.
+/!\ ATENÇÃO /!\ o curinga .* é qualquer coisa!
+Assim, temos aqui o curinga das ERs, uma carta para se usar em qualquer situação. É muito comum ao
+escrever uma expressão regular, você definir alguns padrões que procura, e lá no meio, em uma parte que
+não importa, pode ser qualquer coisa, você coloca um .* e depois continua a expressão normalmente.
+Por exemplo, para procurar ocorrência de duas palavras na mesma linha, relatório.*amanhã serve para
+achar aquela linha maldita em que lhe pediram um trabalho "pra ontem". Ou, ainda, procurar acessos de
+usuários em uma data qualquer: 22/11/2001.*login.
+Resumão
+*	O asterisco repete em qualquer quantidade.
+*	Quantificadores são gulosos.
+*	O curinga .* é o tudo e o nada, qualquer coisa.
+2.8 Mais: o tem-que-ter +
+O mais tem funcionamento idêntico ao do asterisco, tudo o que vale para um, se aplica ao outro.
+A única diferença é que o mais não é opcional, então a entidade anterior deve casar pelo menos uma vez,
+e pode ter várias.
+Sua utilidade é quando queremos no mínimo uma repetição. Não há muito o que acrescentar, é um
+asterisco mais exigente...
+Só isso?
+Pois é...
+6+0             60, 660, 6660, ..., 666666660, ...
+bi+p            bip, biip, biiip, biiiip...
+b[ip]+          bi, bip, biipp, bpipipi, biiiiip, bppp, ...
+Resumão
+*	O mais repete em qualquer quantidade, pelo menos uma vez.
+*	O mais é igual ao asterisco, só mais exigente.
+2.9 Chaves: o controle {n,m}
+Aqui Chaves não é o au?tor mexicano preferido de 10 entre 10 brasileiros. As chaves são a solução para
+uma quantificação mais controlada, onde se pode especificar exatamente quantas repetições se quer da
+entidade anterior.
+Basicamente, {n,m} significa de n até m vezes, assim algo como 6{1,4} casa 6, 66, 666 e 6666. Só, nada
+mais que isso.
+Temos também a sintaxe relaxada das chaves, em que podemos omitir a quantidade final, ou ainda,
+especificar exatamente um número:
+{1,3}   de 1 a 3
+{3,}    pelo menos 3 (3 ou mais)
+{0,3}   até 3
+{3}     exatamente 3
+{1}     exatamente 1
+{0,1}   zero ou 1    (igual ao opcional)
+{0,}    zero ou mais (igual ao asterisco)
+{1,}    um ou mais   (igual ao mais)
+Note que o {1} tem efeito nulo, pois 6{1} é igual a 6. Pode ser útil caso você queira impressionar alguém
+com sua ER, pode encher de {1} que não mudará sua lógica. Mas observe os três últimos exemplos.
+Com as chaves, conseguimos simular o funcionamento de outros três metacaracteres, o opcional, o
+asterisco e o mais.
+Se temos as chaves que já fazem o serviço, então pra quê ter ou outros três? Você pode escolher a
+resposta que achar melhor. Eu tenho algumas:
+*	* é menor e mais fácil que {0,}
+*	As chaves foram criadas só depois dos outros
+*	Precisavam de mais metacaracteres para complicar o assunto
+*	*, + e ? são links para as chaves
+*	Alguns teclados antigos vinham sem a tecla {
+*	O asterisco é tão bonitinho...
+Como você pode perceber não há uma resposta certa. Então todas as especulações acima podem ser
+corretas. Invente uma e me mande, vamos fazer uma coleção!
+Ah, e sendo {0,} algo mais feio que um simples *, isso também pode ser usado para tornar sua ER
+grande e intimidadora. Só cuidado para não atirar no próprio pé e depois não conseguir entender sua
+própria criação...
+Resumão
+*	Chaves são precisas.
+*	Você pode especificar um número exato, um mínimo, um máximo, ou uma faixa numérica.
+*	As chaves simulam o *, o + e a ?.
+*	As chaves não são o Chaves.
+2.10 Metacaracteres tipo Âncora
+Bem, deixando os quantificadores de lado, vamos agora falar sobre os metacaracteres do tipo âncora.
+Por que âncora? Porque eles não casam caracteres ou definem quantidades, ao invés disso eles marcam
+uma posição específica na linha.
+Assim, eles não podem ser quantificados, então o mais, o asterisco e as chaves não têm influência sobre
+âncoras.
+2.11 Circunflexo: o início ^
+O nosso amigo circunflexo (êta nome comprido e chato) marca o começo de uma linha. Nada mais.
+Ei, mas o circunflexo não é o marcador de lista negada?
+Também, mas apenas dentro da lista (e no começo), fora dela ele é a âncora que marca o começo de uma
+linha, veja:
+^[0-9]
+Isso quer dizer: a partir do começo da linha, case um número, ou seja, procuramos linhas que começam
+com números. O contrário seria:
+^[^0-9]
+Ou seja, procuramos linhas que não começam com números. O primero circunflexo é a âncora e o
+segundo é o "negador" da lista. E como não poderia deixar de ser, é claro que o circunflexo como
+marcador de começo de linha só é especial se estiver no começo da ER. Não faz sentido procurarmos uma
+palavra seguida de um começo de linha, pois se tiver uma palavra antes do começo de uma linha, ali não é
+o começo da linha! Desse modo, a ER:
+[0-9]^
+Casa um número seguido de um circunflexo literal, em qualquer posição da linha. Com isso em mente,
+você pode me dizer o que casa a ER:
+^^
+Pois é, uma ER tão singela e harmônica como essa procura por linhas que começam com um circunflexo.
+Legal né? E para fechar, uma ER que em um email, casa as conversas anteriores, aquelas linhas que
+começam com aqueles sinais de maior >, abominados por muitos. Ei! Essa você mesmo pode fazer, não?
+Resumão
+*	Circunflexo é um nome chato, porém chapeuzinho é legal.
+*	Serve para procurar palavras no começo da linha.
+*	Só é especial no começo da ER.
+2.12 Cifrão: o fim $
+Similar e complementar ao circunflexo, o cifrão marca o fim de uma linha e só é válido no final de uma
+ER. Como o exemplo anterior, [0-9]$ casa linhas que terminam com um número. E o que você me diz
+da ER a seguir?
+^$
+Um começo de linha seguido de... mmmmmm... um fim de linha?
+Sim, e o que isso significa?
+Ah! Uma linha vazia!
+Isso! Essa ER é sempre bom ter na manga, pois procurar por linhas vazias é uma tarefa comum nas mais
+diversas situações. Podemos também casar apenas os cinco últimos caracteres de uma linha.
+.....$
+Ou, ainda, que tal casarmos linhas que tenham entre 20 e 60 caracteres?
+^.{20,60}$
+É comum pessoas (inclusive eu) chamarem o cifrão de "dólar". Vamos abolir essa prática. Chame até de
+"ésse riscado", mas dólar é feio. É como diria meu amigo Julio Neves, lugar de dólar é no bolso.
+Resumão
+*	Serve para procurar palavras no fim da linha.
+*	Só é especial no final da ER.
+*	É cifrão e não dólar.
+2.13 Borda: a limítrofe \b
+A outra âncora que temos é a borda, que como o próprio nome já diz, marca uma borda, mais
+especificamente, uma borda de palavra.
+Ela marca os limites de uma palavra, ou seja, onde ela começa e/ou termina. Muito útil para casar
+palavras exatas, e não partes de palavras. Veja como se comportam as ERs nas palavras dia, diafragma,
+radial, melodia e bom-dia!:
+dia             dia, diafragma, radial, melodia, bom-dia!
+\bdia           dia, diafragma, bom-dia!
+dia\b           dia, melodia, bom-dia!
+\bdia\b         dia, bom-dia!
+Assim vimos que a borda força um começo ou terminação de palavra. Entenda que "palavra" aqui é um
+conceito que engloba [A-Za-z0-9_] apenas, ou seja, letras, números e o sublinhado. Por isso \bdia\b
+também casa bom-dia! pois o traço e a exclamação não são parte de uma palavra.
+Ah! Dependendo do aplicativo, o sublinhado não faz parte de uma palavra.
+Resumão
+*	A borda marca os limites de uma palavra
+*	O conceito "palavra" engloba letras, números e o sublinhado
+*	A borda é útil para casar palavras exatas e não parciais
+2.14 Outros Metacaracteres
+Deixando as âncoras mergulhadas em nossa memória, agora já sabemos como casar algo, em alguma
+quantidade, em algum lugar na linha.
+Então vamos ver outros metacaracteres, que têm funções específicas e não relacionadas entre si, portanto
+não podem ser agrupados em outra classe fora a tradicional "outros".
+Mas atenção, isso não quer dizer que eles são inferiores, pelo contrário, o poder das ERs é multiplicado
+com seu uso e um mundo de possibilidades novas se abre a sua frente.
+E antes de ver o primeiro deles, o "criptonita", uma historinha para descontrair:
+Enquanto isso, na sala de justiça...
+- Garoto-prodígio, você sabe algo sobre essa pedra verde e brilhante?
+- Não sei homem-morcego.
+- Foi o homem-do-planeta-bizarro que deixou aqui...
+- Um presente! Vamos mostrá-la ao super-homem!
+E escancarando a porta do banheiro, Robin diz:
+- Ei super-homem, olhe que legal a pedra que o homem-do-pla...
+- Aaaaaaaaaaaaaaaaaaaargh...
+- Santa enfermidade Batman, ele derreteu!!!
+
+2.15 Escape: a criptonita \
+E tudo estava indo bem na sua vida nova de criador de ERs, quando de repente...
+Ó não, preciso colocar um * literal, o que fazer?
+Se você está atento, lembrará que a lista tem suas próprias regras e que...
+Dentro da lista, todo mundo é normal!
+Isso! Cara esperto. Precisou de um caractere que é um meta, mas você quer seu significado literal,
+coloque-o dentro de uma lista, então lua[*] casa lua*. O mesmo serve para qualquer outro
+metacaractere. Maaaaaas, para não precisar ficar toda hora criando listas de um único componente só para
+tirar seu valor especial, temos o metacaractere criptonita \, que "escapa" um metacaractere, tirando todos
+os seus poderes.
+Escapando, \* é igual a [*] que é igual a um asterisco literal. Similarmente podemos escapar todos os
+metacaracteres já vistos: \., \[, \], \?, \+, \{, \}, \^ e \$. E para você ver como são as coisas, o escape
+é tão poderoso que pode escapar a si próprio! O \\ casa uma barra invertida \ literal.
+Ah! É claro, escapar um circunflexo ou cifrão somente é necessário caso eles estejam em suas posições
+especiais, como casar o texto ^destaque^, em que ambos os circunflexos são literais, mas o primeiro será
+considerado uma âncora de começo de linha caso não esteja escapado.
+Então, agora que sabemos muito sobre ERs, que tal uma expressão para casar um número de RG? Lembre
+que ele tem o formato n.nnn.nnn-n, é fácil!
+[0-9]\.[0-9]{3}\.[0-9]{3}-[0-9]
+Resumão
+*	O escape escapa um metacaractere, tirando seu poder.
+*	\* = [*] = asterisco literal.
+*	O escape escapa o escape, escapando-se a si próprio simultaneamente.
+2.16 Ou: o alternativo |
+É muito comum em uma posição específica de nossa ER termos mais de uma alternativa possível, por
+exemplo, ao casar um cumprimento amistoso, podemos ter uma terminação diferente para cada parte do
+dia:
+boa-tarde|boa-noite
+O ou, representado pela barra vertical |, serve para esses casos em que precisamos dessas alternativas.
+Essa ER se lê: "ou boa-tarde, ou boa-noite", ou seja "ou isso ou aquilo". Lembre que a lista também é
+uma espécie de ou, mas apenas para uma letra, então:
+[gpr]ato  e  gato|pato|rato
+São similares, embora nesse caso em que apenas uma letra muda entre as alternativas, a lista é a melhor
+escolha. Em outro exemplo, o ou é útil também para casarmos um endereço de Internet, que pode ser uma
+página, ou um sítio FTP
+http://|ftp://
+Ou isso ou aquilo, ou aquele outro... E assim vai. Pode-se ter tantas opções quantas se precise. Não deixe
+de conhecer o parente de 1º grau do ou, o grupo, que multiplica seu poder. A seguir, neste mesmo canal.
+Resumão
+*	O ou indica alternativas.
+*	Lista para um caractere, ou para vários.
+*	O grupo multiplica o poder do ou.
+2.17 Grupo: o pop (...)
+Assim como artistas famosos e personalidades que conseguem arrastar multidões, o grupo tem o dom de
+juntar vários tipos de sujeitos em um mesmo local. Dentro de um grupo podemos ter um ou mais
+caracteres, metacarateres e inclusive outros grupos! Como em uma expressão matemática, os parênteses
+definem um grupo, e seu conteúdo pode ser visto como um bloco na expressão.
+Todos os metacaracteres quantificadores que vimos anteriormente, podem ter seu poder ampliado pelo
+grupo, pois ele lhes dá mais abrangência. E o ou, pelo contrário, tem sua abrangência limitada pelo grupo,
+e pode parecer estranho, mas é essa limitação que lhe dá mais poder.
+Em um exemplo simples, (ai)+ agrupa a palavra "ai" e esse grupo está quantificado pelo mais. Isso quer
+dizer que casamos várias repetições da palavra, como ai, aiai, aiaiai, ... E assim podemos agrupar tudo o
+que quisermos, literais e metacaracteres, e quantificá-los:
+(ha!)+                  ha!, ha!ha!, ha!ha!ha!, ...
+(\.[0-9]){3}            .0.6.2, .2.8.9, .6.6.6, ...
+(www\.)?zz\.com         www.zz.com, zz.com
+E em especial nosso amigo ou ganha limites e seu poder cresce:
+boa-(tarde|noite)       boa-tarde, boa-noite
+(#|n\.|núm) 6           # 6, n. 6, núm 6
+(in|con)?certo          incerto, concerto, certo
+Note que o grupo não altera o sentido da ER, apenas serve como marcador. Podemos criar subgrupos
+também, então imagine que você esteja procurando o nome de um supermercado em uma listagem e não
+sabe se este é um mercado, supermercado ou um hipermercado.
+(super|hiper)mercado
+Consegue casar as duas últimas possibilidades, mas note que nas alternativas super e hiper temos um
+trecho per comum aos dois, então podíamos "alternativizar" apenas as diferenças su e hi:
+(su|hi)permercado
+Precisamos também casar apenas o mercado sem os aumentativos, então temos de agrupá-los e torná-los
+opcionais:
+((su|hi)per)?mercado
+Pronto! Temos a ER que buscávamos e ainda esbanjamos habilidade utilizando um grupo dentro do outro.
+Ei! E se tivesse minimercado também?
+(mini|(su|hi)per)?mercado
+E assim vai... Acho que já deu para notar quão poderosas e complexas podem ficar nossas ERs ao
+utilizarmos grupos, não? Mas não acaba por aqui! Acompanhe o retrovisor na seqüência.
+Espera! E se eu quiser casar um par de parênteses literais?
+Ah! Lembra-se do escape criptonita? Basta tirar o poder dos parênteses, escapando-os. Veja um exemplo
+na ER para procurar declarações de função em códigos de programas como Minha_Funcao()
+[A-Za-z0-9_]+\(\)
+Ou ainda, caso acentuação seja permitida em nomes de função (lembre-se das classes POSIX!):
+[[:alnum:]_]+\(\)
+Resumão
+*	Grupos servem para agrupar.
+*	Grupos são muito poderosos.
+*	Grupos podem conter grupos.
+*	Grupos são quantificáveis.
+2.18 Retrovisor: o saudosista \1 ... \9
+Já vimos o poder do grupo, e várias utilidades em seu uso. Mas ainda não acabou! Se prepare para
+conhecer o mundo novo que o retrovisor nos abre. Ou seria mundo velho?
+Ao usar um (grupo) qualquer, você ganha um brinde, e muitas vezes nem sabe. O brinde é o trecho de
+texto casado pela ER que está no grupo, que fica guardado em um cantinho especial, e pode ser usado em
+outras partes da mesma ER!
+Mmmmmmmmmm, ficou meio confuso
+Então vamos tentar de novo. Como o nome diz, é retrovisor porque ele "olha pra trás", para buscar um
+trecho já casado. Isso é muito útil para casar trechos repetidos em uma mesma linha. Veja bem, é o trecho
+de texto, e não a ER.
+Como exemplo, em um texto sobre passarinhos, procuramos o quero-quero. Podemos procurar
+literalmente por quero-quero, mas assim não tem graça, pois somos mestres em ERs e vamos usar o
+grupo e o retrovisor para fazer isso:
+(quero)-\1
+Então o retrovisor \1 é uma referência ao texto casado do primeiro grupo, nesse caso quero, ficando, no
+fim das contas, a expressão que queríamos. O retrovisor pode ser lembrado também como um link ou um
+ladrão, pois copia o texto do grupo.
+Mas esse \1 não é o tal do escape?
+Pois é, lembra que o escape \ servia para tirar os poderes do metacaractere seguinte. Então, a essa
+definição agora incluímos: a não ser que este próximo caractere seja um número de 1 a 9, então estamos
+lidando com um retrovisor.
+Notou o detalhe? Podemos ter no máximo 9 retrovisores por ER, então \10 é o retrovisor número 1
+seguido de um zero. Alguns aplicativos novos permitem mais de nove.
+Não era muito mais fácil escrever quero-quero direto?
+Nesse caso sim. Mas este é só um exemplo didático. O verdadeiro poder do retrovisor é quando não
+sabemos exatamente qual texto o grupo casará. Vamos estender nosso quero para "qualquer palavra":
+([A-Za-z]+)-\1
+Percebeu o poder dessa ER? Ela casa palavras repetidas, separadas por um traço, como o próprio quero-
+quero, e mais: bate-bate, come-come, etc. Mas, e se tornássemos o traço opcional?
+([A-Za-z]+)-?\1
+Agora, além das anteriores, nossa ER também casa bombom, lili, dudu, bibi e outros apelidos e nomes de
+cachorro.
+Com uma modificação pequena, fazemos um minicorretor ortográfico para procurar por palavras
+repetidas como como estas em um texto:
+([A-Za-z]+) \1
+Mas lembre-se que procuramos por palavras inteiras e não apenas trechos delas, então precisamos usar as
+bordas para completar nossa ER:
+\b([A-Za-z]+) \1\b
+Legal né? Note como vamos construindo as ERs aos poucos, melhorando, testando e não simplesmente
+escrevendo tudo de uma vez. Esta é a arte ninja de se escrever ERs.
+Mais detalhes
+Como já dito, podemos usar no máximo nove retrovisores. Vamos ver uns exemplos com mais de um de
+nossos amigos novos:
+(lenta)(mente) é \2 \1  lentamente é mente lenta
+((band)eira)nte \1 \2a  bandeirante bandeira banda
+in(d)ol(or) é sem \1\2  indolor é sem dor
+((((a)b)c)d)-1 = \1,\2,\3,\4    abcd-1 = abcd,abc,ab,a
+Para não se perder nas contagens, há uma dica valiosa: conte somente os parênteses que abrem, da
+esquerda para a direita. Este vai ser o número do retrovisor. E o conteúdo é o texto casado pela ER do
+parêntese que abre até seu correspondente que fecha.
+/!\ ATENÇÃO /!\ o retrovisor referencia o texto casado e não a ER do grupo.
+Nos nossos exemplos acima ocorre a mesma coisa porque a ER dentro do grupo já é o próprio texto, sem
+metacaracteres. Veja, entretanto, que ([0-9])\1 casa 66 mas não 69.
+E se eu colocar um retrovisor em uma ER que não tem grupo?
+Vai dar pau &:)
+Apenas como lembrete, algumas linguagens e programas, além da função de busca, têm a função de
+substituição. O retrovisor é muito útil nesse caso, para substituir "alguma coisa" por "apenas uma parte
+dessa coisa", ou seja, extrair trechos de uma linha. Mais detalhes sobre isso adiante.
+Resumão
+*	O retrovisor só funciona se usado com o grupo.
+*	O retrovisor serve para procurar palavras repetidas.
+*	Numeram-se retrovisores contando os grupos da esquerda para a direita.
+*	Temos no máximo 9 retrovisores por ER.
+3. Mais sobre Metacaracteres
+Ufa! Terminamos nossa "metacaractere tour". Você gostou do passeio?
+Sempre que tiver dúvida ou esquecimento, reveja essa parte e relembre as funções de cada um, as quais
+você só vai memorizar com o uso contínuo das ERs. Pratique, pratique, pratique.
+É importante que o que vimos até aqui esteja bem entendido para seguirmos adiante.
+Não deixe de conferir também a tabela com o resumão de todos os metacaracteres no final do guia.
+Como a insaciabilidade humana supera qualquer empenho, o assunto metacaracteres ainda não acabou e
+temos muito mais para conhecer, vamos lá?
+3.1 Épocas e aplicativos diversos, Metacaracteres distorcidos
+Agora que já aprendemos todos aqueles metacaracteres, sua sintaxe, suas regras, seus detalhes, é hora de
+aplicar na prática esse conhecimento. E aí é que vem a surpresa, quando você percebe que alguns
+metacaracteres não funcionam direito... O que acontece?
+O que acontece é que existe uma diferença brutal de sintaxe entre aplicativos, em que cada um coloca sua
+personalidade, e temos várias maneiras de representar o mesmo metacaractere.
+Por exemplo: o opcional é ? no Python, Perl e linguagens de programação mais novas. Mas em
+aplicativos mais antigos como o grep e o sed, ele é escapado \?, sendo ? uma mera interrogação literal. Já
+no editor de textos vim, o opcional é representado pelo esquisito \=. Vai entender?
+O motivo mais comum para isso acontecer são as razões históricas. Voltando no tempo, na época em que
+os primeiros programas começavam a ter suporte a expressões regulares, basicamente o que era comum
+de se fazer em um editor de textos eram códigos de programas, e não textos normais da linguagem falada.
+Assim, como era (e ainda é) muito comum de se ter os caracteres ?, +, {, ( e | nos códigos de programas,
+era comum eles fazerem parte da ER por seu valor literal, ou seja, procurar por uma interrogação, por
+uma barra vertical, etc. Então, no começo de tudo, esses metacaracteres eram todos escapados para serem
+especiais: \?, \+, \{, \( e \|.
+Já aplicativos e linguagens mais novos, criados em um mundo onde a editoração eletrônica avançou
+muito e um "texto de computador" não era apenas um código de programa, todos os escapes foram
+retirados e os metacaracteres ficaram mais simples.
+Aqueles aplicativos antigos, porém, continuam até hoje utilizando os escapes, pois têm de manter a
+compatibilidade com versões anteriores. Alguns são mais espertos e suportam ambas as sintaxes,
+escolhendo via configuração ou opção de linha de comando.
+Toda essa historinha, além de curiosidade, está aqui para que você saiba o porquê das coisas, e isso o
+ajuda na hora da dúvida, pois se você sabe que o aplicativo é antigo, provavelmente os metacaracteres
+devem ser escapados. Ou ainda, se você viu que o opcional ? precisou ser escapado, outros
+provavelmente precisarão também.
+Concluindo, ora razões históricas ora vaidade do autor, o fato é que a diversidade impera e você vai ter de
+se acostumar com isso e aprender as diferenças de cada aplicativo que for utilizar. Bem-vindo ao mundo
+caótico da implementação das expressões regulares.
+Mas para ajudar nesse reconhecimento da diferença, no final do guia há uma daquelas tabelinhas mágicas,
+que parece simples, mas demora dias para fazer, e pode e deve ser consultada em caso de dúvida.
+Estão registradas todas as diferenças encontradas em vários aplicativos e linguagens. Com ela em mãos,
+você não precisa mais se preocupar com isso. O nome é "Diferenças de Metacaracteres Entre
+Aplicativos".
+3.2 Quantificadores gulosos
+Como já vimos, todos os quantificadores são gulosos, pois sempre casam o máximo possível. Mas por
+que isso? Como isso acontece? Acompanhe um passo-a-passo para esclarecer o assunto e nunca mais
+sofrer por não entender a gulodice.
+Para a demontração, vamos pegar uma frase:
+um <b>negrito</b> aqui.
+E supondo que nosso objetivo seja casar os marcadores <b> e </b> para apagá-los. Mas ao aplicarmos a
+ER <.*>, vemos que ela casou além, pegando de uma vez todo o trecho <b>negrito</b>. O que
+aconteceu?
+Aconteceu que o asterisco, como todo quantificador, é guloso e casou o máximo que conseguiu. Vamos
+entrar na abstração da abstração e entender como isso aconteceu.
+Imaginemos que somos o próprio robozinho, então como aplicaremos a ER no texto?
+um <b>negrito</b> aqui.
+^                           <.*>
+Temos a frase e o circunflexo logo abaixo indica onde está o foco da ER e mais à direita está nossa ER.
+Estamos no estado inicial, parados no começo da linha, e agora vamos tentar casar a expressão. A
+primeira coisa que temos para casar, é o <.
+Como a primeira letra da frase é um u, mudamos o foco para o próximo caractere, pois este não é o < que
+procuramos:
+um <b>negrito</b> aqui.
+.^                          <.*>
+Mmmmmmm, ainda não deu, então continuamos assim, um por um, até conseguirmos um casamento:
+um <b>negrito</b> aqui.
+..^                         <.*>
+...^                        <.*>
+Opa, agora achamos um <! Conseguimos casar o primeiro átomo de nossa ER. Então marcamos como
+casado esses caracteres e seguimos adiante para o próximo:
+um <b>negrito</b> aqui.
+...x^                       "<".*>
+Os trechos já casados são representados pelos x marcando a frase e as aspas marcam a ER. Os pontinhos
+representam apenas os "rastros" do foco, as partes já visitadas e não casadas.
+A próxima parte da ER a ser casada é o curinga, que casa qualquer caractere em qualquer quantidade.
+Então, procurando qualquer caractere, nosso curinga segue casando:
+um <b>negrito</b> aqui.
+...x^                       "<.*">
+...xx^                      "<.*">
+...xxx^                     "<.*">
+...xxxx^                    "<.*">
+Ei! Mas ele passou batido pelo > que a gente queria! Por quê? Lembre-se de que o ponto casa qualquer
+caractere? E por acaso o > também não é qualquer caractere? É, então o ponto casa ele também, seguindo
+guloso até o fim da linha:
+um <b>negrito</b> aqui.
+...xxxxxxxxxxxxxxxxxxxx^    "<.*">
+Pronto. Como bateu lá no final e não tem mais caracteres para casar, o asterisco sossega. Mas ainda temos
+um componente da ER para casar, o >. E agora?
+Bem, o asterisco é guloso, mas não é egoísta, então se ele precisar ceder alguma coisa, ele cede. E assim
+acontece, ele vai devolvendo até satisfazer o próximo componente da ER:
+um <b>negrito</b> aqui.
+...xxxxxxxxxxxxxxxxxxx^     "<.*">
+...xxxxxxxxxxxxxxxxxx^      "<.*">
+...xxxxxxxxxxxxxxxxx^       "<.*">
+...xxxxxxxxxxxxxxxx^        "<.*">
+...xxxxxxxxxxxxxxx^         "<.*">
+...xxxxxxxxxxxxxx^          "<.*">
+...xxxxxxxxxxxxx^           "<.*">
+Opa, agora o asterisco devolveu um > que servirá para casar o último átomo de nossa ER:
+um <b>negrito</b> aqui.
+...xxxxxxxxxxxxxx^          "<.*>"
+Pronto! Nossa ER agora está casada por inteiro, então não temos mais o que fazer, fim do processo.
+Agora ficou fácil entender essa gulodice? É sempre assim, casa o máximo possível, e se precisar, devolve
+alguns caracteres para satisfazer o resto da expressão.
+Por causa dessa gulodice e da subseqüente procura de trás para frente é que acaba se casando além do
+desejado. Exatamente assim também funcionam todos os outros quantificadores: mais, chaves e opcional.
+Sempre casam o máximo possível. Então, em uma visão diferente, vamos ver o que cada parte da ER
+casou na frase:
+um <b>negrito</b> aqui.
+...x                        <
+....xxxxxxxxxxxx            .*
+................x           >
+Quando o que normalmente se esperava conseguir era:
+um <b>negrito</b> aqui.
+...x.........x              <
+....x.........xx            .*
+.....x..........x           >
+Para o asterisco ter esse comportamento, ou você faz uma ER mais específica, ou usa um quantificador
+não-guloso, se o aplicativo suportá-lo. Vamos conhecê-los!
+3.3 Quantificadores não-gulosos
+A gulodice dos quantificadores é algo geralmente benéfico, mas em certas situações, como a do negrito
+anterior, você quer o oposto: o menor casamento possível.
+Apenas presente em linguagens e aplicativos mais recentes, essa opção de metacaracteres tem uma
+sintaxe fácil de lembrar, basta acrescentar uma interrogação logo após os quantificadores normais:
+meta    mnemônico
+----------------------------------
+??      opcional não-guloso
+*?      asterisco não-guloso
++?      mais não-guloso
+{n,m}?  chaves não-gulosas
+Não há muito o que demonstrar, visto que já esmiuçamos a gulodice. A não-gulodice é o efeito contrário,
+um quantificador "tímido", que só casa se o próximo átomo da ER não estiver precisando daquele
+caractere. Veja a comparação entre ambos os tipos de gulodice em todos os quantificadores, aplicados ao
+texto aaaaa:
+gulosos
+---------------------
+a.*             aaaaa
+a.+             aaaaa
+a.?             aa
+a.{1,3}         aaaa
+não-gulosos
+---------------------
+a.*?            a
+a.+?            aa
+a.??            a
+a.{1,3}?        aa
+3.4 Metacaracteres tipo barra-letra
+Os metacaracteres do tipo barra-letra são átomos representados por uma barra invertida \ seguida de uma
+letra qualquer, como \s e \W. Dependendo da letra, muda-se o significado desse metacaractere.
+Contando que o alfabeto nos dá 26 letras e que maiúsculas são diferentes de minúsculas, duplicamos para
+52 metacaracteres novos. Calma, nem todas as letras estão ocupadas... Ainda &:)
+Tudo começou nas linguagens de programação com os printf da vida, que começaram a interpretar
+coisas, como \n e \t, para significar quebra de linha e TAB, pois visualmente é ambíguo se "1 2" é um,
+TAB, dois ou um, espaços, dois.
+Exceto estes, havia outros barra-letra para representar aqueles caracteres de controle chatos que de vez em
+quando aparecem em nossa vida e são difíceis de ver e representar.
+Essa representação simplificada e útil se tornou padrão e hoje a grande maioria dos aplicativos os
+entende. Eis a lista:
+b-l     nome            tradução
+----------------------------------------------------
+\a      alert           alerta (bipe)
+\b      backspace       caractere Backspace
+\e      escape          caractere Esc
+\f      form feed       alimentação
+\n      newline         linha nova
+\r      carriage ret    retorno de carro
+\t      htab            tabulação horizontal
+\v      vtab            tabulação vertical
+Como esses barra-letras também poderiam ser muito úteis para escrever nossas expressões regulares, os
+robozinhos começaram a ter suporte a eles também, ou senão a linguagem recebe a ER como um dado do
+tipo string e os interpreta, passando ao robozinho seus valores literais. Mais detalhes sobre isso no tópico
+"ERs Pré-Processadas e Cruas" adiante.
+Ah! Note que o \b se confunde com a borda. Cada aplicativo trata essa exceção à sua maneira: ou só é
+válido dentro da lista, ou depende do contexto, ou...
+Aí é aquela história: onde passa boi, passa boiada. Observaram bem as classes POSIX, com aquela
+representação extensa e feia, depois compararam com os barra-letra, que são curtos e charmosos e foi um
+estalo: criaram barra-letras novos para representar as classes mais utilizadas.
+São como "apelidos", pois têm a mesma funcionalidade de seu equivalente POSIX, levando em conta a
+localização do sistema (acentuação), o que muito nos interessa.
+b-l     POSIX equiv.    mnemônico
+-------------------------------------------
+\d      [[:digit:]]     dígito
+\D      [^[:digit:]]    não-dígito
+\w      [[:alnum:]_]    palavra
+\W      [^[:alnum:]_]   não-palavra
+\s      [[:space:]]     branco
+\S      [^[:space:]]    não-branco
+/!\ ATENÇÃO /!\ geralmente um barra-LETRA é a negação de um barra-letra.
+A grande diferença desses barra-letras para as classes POSIX, é que eles são válidos fora das listas.
+Dependendo do aplicativo, eles são válidos dentro das listas também, bagunçando aquela regra que vimos
+de que dentro da lista todo mundo é normal. Dependendo também, o sublinhado faz parte ou não do \w.
+Com os poderes barra-letrísticos recém-adquiridos, podemos diminuir nossa ER para casar o RG:
+[0-9]\.[0-9]{3}\.[0-9]{3}-[0-9]
+\d\.\d{3}\.\d{3}-\d
+Mas aí, como já estava feita a festa e ainda sobravam muitas letras do alfabeto, começaram a aparecer
+barra-letras aleatórios. Segue uma coletânea misturada deles, encontrados apenas em alguns poucos
+aplicativos, então confirme antes de usá-los:
+b-l     significado             similar
+-----------------------------------------------------
+\a      alfabeto                [[:alpha:]]
+\A      não-alfabeto            [^[:alpha:]]
+\h      cabeça de palavra       [[:alpha]_]
+\H      não-cabeça de palavra   [^[:alpha:]_]
+\l      minúsculas              [[:lower:]]
+\L      não-minúsculas          [^[:lower:]]
+\u      maiúsculas              [[:upper:]]
+\U      não-maiúsculas          [^[:upper:]]
+\o      número octal            [0-7]
+\O      não-número octal        [^0-7]
+\B      não-borda
+\A      início do texto
+\Z      fim do texto
+\l      torna minúscula
+\L      torna minúscula até \E
+\u      torna maiúscula
+\U      torna maiúscula até \E
+\Q      escapa até \E
+\E      fim da modificação
+\G      fim do casamento anterior
+Conclusão: agora lhe resta procurar na documentação de seu aplicativo, se os barra-letras são suportados,
+se sim, se pelo robozinho ou pela interpretação de strings, quais barra-letras, e se são válidos dentro e/ou
+fora das listas.
+Nossa! Essa "padronização" das implementações de expressões regulares realmente impressiona...
+3.5 Metacaracteres modernosos
+Bem, tem gente que não sossega mesmo.
+Talvez até pelo fato de ser gostoso brincar com ERs, com o passar do tempo, desenvolveu-se uma
+tendência de "ERs são a solução da fome mundial, elas têm de fazer tudo", e o conceito foi maculado.
+Hoje, além de simplesmente casar um trecho de texto, criaram conceitos como:
+*	Case esta ER somente se seguinda de tal coisa.
+*	Case esta ER somente se não precedida de tal coisa.
+*	O "tal coisa" pode ser uma ER mais complicada que a original.
+*	Grupos nomeáveis que geram pseudovariáveis (veja Python).
+*	Grupos que não são acessíveis por retrovisores.
+*	Case isso somente se o grupo anterior também casou.
+*	Estrutura de "if-then-else" dentro de ERs.
+*	A "configuração" de apenas partes da ER.
+*	Execução de trechos de linguagem de programação no meio de ERs.
+E como tudo isso exige vários metacaracteres novos, alguns compostos de até cinco caracteres, exceto o
+conteúdo, as ERs ficaram muito feias e complexas, exercendo funções que a linguagem de programação
+deveria fazer, como condicionais, atrelamentos e definição de variáveis.
+Daí, para tentar domar o monstro ilegível que eles próprios criaram (como "eles", entenda Perl e Python),
+agora temos também:
+*	Comentários no meio das ERs.
+*	ERs estruturadas (com "indent"), ocupando várias linhas.
+Pela mãe do guarda! É o progresso, daqui a pouco teremos ERs executáveis, ERs orientadas a objeto, ERs
+com botões e janelas, jogos 3D multijogadores pela Internet feitos somente com ERs...
+Tá, não vou reclamar mais. Que fique aqui registrado meu protesto contra essa generalização das
+expressões regulares, já que elas não podem se defender.
+Como Perl e Python estão ditando o rumo das ERs, e essas "novidades" tendem a virar padrão em todos
+os outros aplicativos, vamos conhecê-los. Primeiramente, todos esses metacaracteres novos só foram
+possíveis, pois as ERs têm certas brechas em construções antes impossíveis, que agora viraram a base
+para criações novas. Aqui está:
+(?...)
+Esta era uma estrutura inválida, pois você não pode tornar opcional a abertura de um grupo. Então, usá-la
+não teria problemas de compatibilidade, pois ainda não existia, foi esta a escolhida. Então os
+metacaracteres novos têm a estrutura:
+(?<identificador><conteúdo>)
+Onde identificador é o que realmente diz com que tipo de metacaractere estamos lidando, e conteúdo
+é o que será manipulado por esse metacaractere, e pode ser texto normal, outros metacaracteres, opções e
+até códigos de linguagem externa. Vamos utilizar os personagens amarelos como nossas cobaias de testes.
+(?#texto)
+Onde texto é um comentário, que não pode ter o caractere ) e é simplesmente ignorado pelo robozinho.
+Assim, pode-se colocar lembretes na ER como em (?#o nome)Homer (?#e agora o
+sobrenome)Simpson, que sem os comentários é Homer Simpson.
+(?:ER)
+É como um grupo normal () só que não é guardado nem incluído na contagem de grupos, ou seja, não é
+acessível com retrovisores ou $1, pode ser considerado um grupo fantasma. Assim ^(Homer) (?:J\.)
+(Simpson) casa o nome completo, mas \1 e \2 contém Homer e Simpson, respectivamente.
+(?=ER)
+Não casa caracteres na posição atual, mas dá uma "espiada" adiante e caso a ER embutida case, retorna
+sucesso. É como só apostar na loteria se você já souber o resultado. Por exemplo a ER Homer
+(?=Simpson) só casará o Homer se for seguido de Simpson. Mas o sobrenome não faz parte do trecho
+casado, serviu apenas para checagem.
+(?!ER)
+É o contrário do anterior, só casando um trecho se este não for seguido da ER embutida. Então Homer
+(?!morreu) casa o Homer do texto Homer comeu, mas não do Homer morreu. Para memorizar os dois
+últimos metacaracteres, veja seus identificadores: = e !, que lembram os operadores == e !=.
+(?<=ER)
+(?<!ER)
+Estes dois são complementares aos dois anteriores, a diferença é que em vez de espiar para frente, eles
+espiam para trás (note o < apontando para a esquerda). Então (?<!Barney) Simpson casará Simpson em
+Homer Simpson, mas não em Barney Simpson.
+(?modificador)
+Pode-se "configurar" uma parte da ER precedendo-a com esta construção, e modificador pode ser um
+único caractere, entre:
+*	i: ignorar a diferença entre maiúsculas e minúsculas;
+*	m: trata o texto como multilinha;
+*	s: trata o texto como uma única linha;
+*	x: permite inclusão de espaços e comentários;
+*	L: levar em conta a localização do sistema (somente Python).
+(?(condição)ER-sim|ER-não)
+E aqui está o transgênico mutante, o "if-then-else" dos metacaracteres.
+A condição geralmente é um número, que referencia a um grupo prévio. Se esse grupo casou, a condição
+é verdadeira e ER-sim é a ER "da vez". Se a condição falhar, a ER-não é utilizada. Isso é basicamente
+usado para fazer amarrações e balanceamentos, utilizando condicionais.
+É algo como "case um número entre possíveis parênteses, mas se tiver tem de ter o parênteses que abre E
+o que fecha", ou seja, 669 e (669) são válidos, mas (669 e 669) não. Veja como fica a ER: (\()?[0-
+9]+(?(1)\)). Isso porque nem preenchemos a possibilidade ER-não...
+Se isso não é exagero eu quero ser jardineiro, pois as plantas não terão teclados no futuro (será?). Ih, eu
+tinha dito que não reclamaria mais né, foi mal.
+(?{código})
+E agora, a prova de que isso já foi longe demais, e o marco da perda definitiva de compatibilidade de ERs
+entre aplicativos: a possibilidade de colocar códigos Perl para serem executados no meio da ER. Por
+enquanto é só o Perl que ousou fazer isso.
+Dá até coceira de estar escrevendo sobre isso, mas você pode colocar trechos de um mesmo código, como
+um contador incremental, em várias partes de uma mesma ER.
+Vou colocar aqui um exemplo tirado do manual do Perl, estruturado e comentado, veja com seus próprios
+olhos:
+$_ = 'a' x 8;
+m<
+  (?{ $cnt = 0 })             #inicializa
+  (
+   a
+    (?{
+       local $cnt = $cnt + 1; #incrementa
+    })
+  )*
+  aaaa
+  (?{ $res = $cnt })  # se ok, copia para
+                      # uma var não-local
+ >x;
+3.6 Precedência entre metacarateres
+Falamos falamos, mas para fechar o estudo dos metacaracteres, faltou conhecer os relacionamentos entre
+eles, quem é mais forte, mais fraco, quem arrasta os outros...
+É bem simples, sabe na matemática, onde temos as ordens de precedência entre a adição e a
+multiplicação, onde esta é mais "forte" que aquela?
+Por exemplo "2+4*6", é "quatro vezes seis, e depois soma com o dois". Mesmo vindo depois, a
+multiplicação tem preferência. Com as ERs acontece o mesmo, seguindo estas regras:
+tipo de meta    exemplo precedência
+quantificador   ab+     maior
+concatenação    ab      média
+ou              ab|c    menor
+Ou seja, na situação ab* não é "a com b, em qualquer quantidade", e sim "a, seguido de b em qualquer
+quantidade", ou seja, a concatenação a seguido de b não é mais forte que a quantificação, que rouba o b
+para ela.
+Na última ab|c em vez de "a, seguido de b ou c" é na verdade "ab ou c", pois o ou é o mais fraquinho de
+todos, não puxa nada para o cesto dele.
+Por isso que boa-tarde|boa-noite funciona, pois os caracteres se juntam e se grudam uns com os
+outros, e o ou não tem força para quebrar isso.
+E como na matemática também, os parênteses servem para juntar na marra e dar força aos fracos. Por isso
+se diz que o grupo aumenta o poder do ou.
+Só com a dobradinha grupo+ou é possível algo como boa-tard(e|b)oa-noite, o que não faz sentido,
+mas mostra que juntos eles conseguem quebrar a união da concatenação.
+Com isso em mente, como fica a relação de forças em ab|cd*? Vamos colocar os "amigos" entre chaves
+para ilustrar essa quebra de braço:
+ab|c{d*}
+O d é do * pela quantificação ser mais forte que a concatenação, então o c coitado não tem força para
+puxar o seu amigo d para o seu lado.
+ab|{c{d*}}
+Agora o c fica na dúvida, mas se juntar com o | não dá, pois ele é o mais fraquinho de todos, então ele se
+junta com o d quantificado. Como o | já perdeu a briga à direita, ele olha para o outro lado e...
+{ab}|{c{d*}}
+O b rapidinho se junta com o a (concatenação) para fugir do fracote. É como no primário onde sempre
+tem aquele cara desengonçado que fica por último na escolha dos jogadores para o futebol com bola de
+meia, o | fica com o que sobrou, de um lado ab e do outro cd*.
+Esse mundo é mesmo muito cruel com os mais fracos, até os metacaracteres sofrem com essa
+discriminação &:)
+4. Os 6 mandamentos do Criador
+No mundo das ERs, temos diversas "leis" não escritas que ora ou outra vão bater a sua porta e você verá
+que segui-las fará com que suas ERs sejam mais precisas e não falhem.
+Essas leis são um misto de dicas de prevenção de problemas e ganhos de performance. Se você está
+começando, não se preocupe com essas regras. Mas se você já tem uma experiência grande com ERs,
+verá que essas leis podem lhe poupar estresse.
+Sobre a performance, em situações normais, não é necessário se preocupar com a velocidade de uma ER,
+pois independentemente de como você a faça, o resultado virá instantaneamente. Mas quando aplicadas a
+vários arquivos, ou a um arquivo muito extenso, a demora pode ser grande.
+Temos técnicas simples e complicadas de otimização. Como as complicadas são de díficil implementação
+e manutenção, às vezes não compensando o custo-benefício de seu uso, não vamos vê-las. O assunto é
+simples e vamos tratá-lo de forma simples, sem testes gratuitos de performance ("benchmark"), detalhes
+específicos de certos programas e exceções raras. Ficou muito na cara de quem estou falando? &:)
+As dicas que seguem, no geral podem ser usadas em qualquer tipo de programa ou linguagem, pois são
+detalhes conceituais e não dependentes de implementacão.
+4.1 Não complique
+Ao construir uma ER, lembre-se que um dia alguém, provavelmente você mesmo, terá de dar manutenção
+a ela, para arrumar algum problema ou incrementá-la. Tendo isso em mente, evite fazer construções
+complicadas desnecessariamente. Nem sempre a menor ER é a melhor, tudo vai depender do quão
+comentada ela está ou das habilidades de quem for mantê-la. Vamos ver um exemplo bem simples.
+Lembra na explicação do escape, quando vimos uma ER que casava um número de RG?
+[0-9]\.[0-9]{3}\.[0-9]{3}-[0-9]
+Note que o trecho para casar um ponto e três números seguidos \.[0-9]{3} se repete duas vezes, então
+podemos agrupá-lo e aplicar as chaves, diminuindo o tamanho da ER:
+[0-9](\.[0-9]{3}){2}-[0-9]
+Note, porém, que nesse caso, essa "simplificação" da expressão acabou ficando não tão simples assim, e
+exige um pouco de reflexão até você pescar exatamente o que ela faz. Foi vantagem ter diminuído seu
+tamanho? Isso é questionável, mas geralmente não. E aquela do mercado?
+(mini|(su|hi)per)?mercado
+Será que se a deixássemos mais simples, não ficaria mais fácil entendê-la? A mudança é pequena, mas
+veja como visualmente fica mais agradável e fácil:
+(mini|super|hiper)?mercado
+/!\ ATENÇÃO /!\ nem sempre a ER menor é a melhor.
+Então muito cuidado ao colocar grupos dentro de grupos, quantificar grupos, usar chaves quando se pode
+usar o asterisco, entre outros. Procure manter sua ER simples. Como dizem os gringos: KISS ("Keep It
+Simple, Stupid"), traduzindo: "deixe simples, estúpido".
+4.2 Use o circunflexo
+Sempre que possível, comece sua ER com o circunflexo. Como já vimos, o robozinho vai tentando casá-
+la, caractere por caractere, da esquerda para a direita, a partir do começo da linha. Então, o ponto inicial
+de pesquisa, é o começo de linha.
+Se você não coloca o circunflexo em sua ER, o robozinho tentará casá-la em qualquer parte da linha. Isso
+significa ir varrendo a linha, um por um, até chegar no final e caso não encontre o padrão, retorna falha na
+pesquisa.
+Se você coloca o circunflexo na sua ER, forçando o casamento do começo de linha, se o primeiro
+componente da ER após o ^ já não casar com o primeiro caractere da linha, dali mesmo já retorna falha de
+pesquisa, sem precisar varrer o resto da linha.
+Por exemplo, se você procura valores em reais "R$", pode simplesmente dizer R\$. Mas se você sabe que
+os reais que lhe interessam estão sempre no começo da linha, digam isso com sua ER: ^R\$. Assim, em
+um exemplo como:
+R$ 200,00 : fósforos e velas
+  essenciais na crise de energia.
+  comprados das marcas mais baratas.
+R$ 100,00 : caixas de ovos vazias
+Ambas as ERs casam as linhas 1 e 4 imediatamente, pois têm o R$ já no começo. Mas nas linhas 2 e 3,
+onde não há nossos reais desejados, a primeira ER seria tentada em ambas, em todas as posições, até o
+final, para ver que falhou. Já a segunda, ao encontrar um espaço em branco no começo da linha, já retorna
+falha, pois ele não é um R.
+Em um exemplo mais palpável, suponha que seu chefe tenha uma mesa enorme, com oito gavetas. E se
+ele lhe falar: "Me traga a pasta verde, está na minha gaveta", ou então "Me traga a pasta verde, que está
+na última gaveta. Na última hein? Não fuçe no resto de minhas coisas!". Tem uma diferença, não? &:)
+4.3 Evite a lista negada
+A lista negada é um grande aliado quando não se sabe exatamente que tipo de dados estão em uma
+determinada posição.
+Mas lembre-se: a tabela ASCII tem 255 caracteres. Dizer algo como [^:] significa negar um caractere e
+permitir outros 254, o que muitas vezes é um exagero.
+Essa abrangência toda pode trazer resultados negativos, casando partes incorretas. Sempre que possível,
+tente descobrir quais as possibilidades válidas de dados em uma determinada posição e cadastre todas elas
+dentro de uma lista normal.
+Nesse exemplo, se o tipo de dados que não pode ser os dois pontos forem letras, números e alguns
+símbolos, liste-os: [A-Za-z0-9,.()%!].
+Assim, mais descritivo e preciso, se tiver algum caractere que não os listados, a ER vai falhar e você
+saberá que alguém fez caca onde não devia. Do contrário, o erro passaria despercebido.
+/!\ ATENÇÃO /!\ não tenha preguiça de descobrir todas as possibilidades de uma posição.
+4.4 Evite o curinga
+Quando pegamos o jeito com expressões regulares e as usamos regularmente, é comum usar o .* para
+qualquer situação, pois como todo curinga que se preze, é uma mão na roda. Mas à medida que você vai
+usando ERs para coisas mais complicadas e mais intensivamente, você começa a perceber que grande
+parte de seus problemas foi ter usado o curinga guloso e genérico, onde você poderia ter sido mais
+específico, e ele casou o que não devia.
+Nem sempre é fácil trocar um curinga por outra coisa. Supõe-se que se você já o usou, é porque precisava
+de "qualquer coisa". Mas pare para pensar, esse qualquer coisa é realmente QUALQUER coisa? Lembre
+que isso é muito abrangente, o tudo e o nada. Não seria apenas "qualquer letra em qualquer quantidade"
+ou "quaisquer caracteres fora espaços em branco"?
+Percebeu? As listas são nossa opção para tirar o curinga, trocando-o por algo não tão abrangente. Então,
+se em um texto normal, você procura parte de uma frase, o restante dela até o ponto final não diga que é
+.*\., mas [^.]*\., ou melhor: [A-Za-z ,]*\.. Isso evita de o curinga casar além do ponto final da
+frase e ir até o ponto final do parágrafo.
+Lembra a nossa demonstração da gulodice em que o asterisco casou demais? Podemos evitar isso sendo
+mais específicos em nossa ER. Em vez de dizer <.*>, ou seja, uma marcação pode ter "qualquer coisa"
+antes do >, dizemos que pode ter "qualquer coisa fora o fechamento da marcação". Invocaremos a lista
+negada para nos ajudar nessa supertarefa, assim: <[^>]*>, ou mais visual:
+um <b>negrito</b> aqui.
+...xxxxxxxxxxxxxx           <.*>
+...xxx.......xxxx           <[^>]*>
+4.5 Seja específico
+E agora a regra de ouro, aquela que acaba resumindo as outras, a mãe de todas: seja específico. Memorize
+bem isso: seja específico. De novo: seja específico.
+Se você sempre tiver esta regra em mente ao construir uma ER, as chances de falha ficam muito
+reduzidas. Os metacaracteres são vários e servem para criarmos um universo de possibilidades para
+casarmos um texto, então o quente é fazer um universo restrito, onde todos os componentes fazem sua
+parte no todo, cada um com seu pedacinho.
+Algumas regrinhas e dicas de como ser específico já foram vistas, mas basicamente para isso, primeiro
+você deve saber exatamente que tipo de dados procura. Um conhecimento do trecho que se quer casar
+acontece quando se pode responder a estas três perguntas:
+*	O que você quer casar?
+*	Em que quantidade?
+*	Em qual contexto ou posição?
+Sabendo o que se quer, basta traduzir isso para uma ER, lembrando sempre de evitar generalizações como
+o ponto, o curinga, a lista negada, ignorar maiúsculas e minúsculas, não usar âncoras. Sempre descreva
+em detalhes suas intenções, delimitando e especificando bem sua ER.
+Em outras palavras, se você está com fome, não diga simplesmente "Quero uma pizza", diga: "Quero uma
+pizza de calabreza, sem cebola, tamanho médio, cortada em 8 pedaços e com borda de catupiry".
+Percebeu a diferença? &:)
+4.6 Não seja afobado, seja ninja
+"Encere à direita, lixe à esquerda e pinte para cima e para baixo."
+Vamos ver uma maneira diferente e interessante de mostrar exemplos de expressões regulares: mostrando
+como funciona o processo criativo, passo a passo. A arte ninja milenar de criar ERs do nada, pela
+primeira vez demonstrada.
+Mentalizando seu objetivo (data, horário, email, número, telefone), comece a primeira tentativa tímida e
+abrangente, usando o ponto para se ter um esqueleto genérico do que se quer casar. Teste a ER assim
+mesmo.
+Deu certo? Então agora você trocará alguns dos pontos para ser mais específico, de acordo com as regras
+do tipo de dado que você quer casar. E assim segue, devagar, sempre testando cada modificação e
+seguindo a passos curtos, com modificações pequenas.
+Ao chegar em um ponto onde já está bem específico, procure por alternativas, exceções, elas sempre
+existem. Aquele trecho da ER é realmente obrigatório, não seria opcional? E quando você acha que a ER
+está pronta, chega um dado novo um pouquinho diferente e você vê que tinha esquecido que aquilo
+também era válido. Para incrementar a ER, suas armas são os grupos, o ou, o opcional e as chaves.
+Quando sua ER ficar grande e cheia de alternativas, é sinal de que você está conseguindo dizer ao
+robozinho exatamente o que quer. E assim é que se fazem ERs complicadas Daniel San, de grão em grão!
+Tolo daquele que senta e quer escrever o todo de uma vez! A arte de criar ERs deve ser saboreada, sem
+pressa, e com inspiração.
+"Dê um passo após o outro pequeno gafanhoto."
+
+
+
+
+dd/mm/aaaa
+        ../../....
+        [0-9]{2}/[0-9]{2}/[0-9]{4}
+        [0123][0-9]/[0-9]{2}/[0-9]{4}
+        [0123][0-9]/[01][0-9]/[0-9]{4}
+        [0123][0-9]/[01][0-9]/[12][0-9]{3}
+        ([012][0-9]|3[01])/[01][0-9]/[12][0-9]{3}
+        ([012][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}
+        (0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}
+hh:mm
+        ..:..
+        [0-9]{2}:[0-9]{2}
+        [012][0-9]:[0-9]{2}
+        [012][0-9]:[0-5][0-9]
+        ([01][0-9]|2[0-3]):[0-5][0-9]
+usu@dom.zz
+        .*@.*
+        [^@]*@[^@]*
+        [^@]+@[^@]+
+        [A-Za-z0-9_.-]+@[A-Za-z0-9_.]+
+        [A-Za-z0-9_.-]+@[A-Za-z0-9_]+\.[a-z]{2,3}
+        [A-Za-z0-9_.-]+@([A-Za-z0-9_]+\.)+[a-z]{2,3}
+        [A-Za-z0-9_.-]+@([A-Za-z0-9_]+\.)+[A-Za-z]{2,3}
+        [A-Za-z0-9_.-]+@([A-Za-z0-9_]+\.)+[A-Za-z]{2,4}
+números
+        [0-9]
+        [0-9]+
+        -?[0-9]+
+        [-+]?[0-9]+
+        [-+]?[0-9]+,[0-9]{2}
+        [-+]?[0-9]+(,[0-9]{2})?
+        [-+]?[0-9]+\.[0-9]+(,[0-9]{2})?
+        [-+]?[0-9]+\.[0-9]{3}(,[0-9]{2})?
+        [-+]?[0-9]{3}\.[0-9]{3}(,[0-9]{2})?
+        [-+]?[0-9]{1,3}\.[0-9]{3}(,[0-9]{2})?
+        [-+]?[0-9]{1,3}(\.[0-9]{3})?(,[0-9]{2})?
+telefone
+        ...-....
+        [0-9]{3}-[0-9]{4}
+        [0-9]{4}-[0-9]{4}
+        \(..\)[0-9]{4}-[0-9]{4}
+        \(..\) ?[0-9]{4}-[0-9]{4}
+        \(0xx..\) ?[0-9]{4}-[0-9]{4}
+        \(0xx[0-9]{2}\) ?[0-9]{4}-[0-9]{4}
+        (\(0xx[0-9]{2}\) ?)?[0-9]{4}-[0-9]{4}
+5. Como lidar com...
+Esta seção nos traz várias táticas e dicas para tratarmos de problemas genéricos e freqüentes, que apesar
+de comuns, geram muitas dúvidas na hora de construir a ER.
+Nada muito complicado, é simples até, mas são dicas que geralmente a documentação dos programas não
+nos dá.
+Ao contrário dos mandamentos anteriores, em que sua vida pode seguir tranqüila sem nunca conhecê-los,
+as dicas que seguem podem fazer a diferença de uma noite bem ou mal dormida &:)
+5.1 Problemas com maiúsculas e minúsculas
+Verdade absoluta: as ERs são sensíveis a letras maiúsculas e minúsculas, levando em conta sua diferença.
+Esse detalhe pode ajudar ou atrapalhar, dependendo da atenção do criador da ER, ou da estabilidade dos
+dados pesquisados.
+É muito comum às vezes, após meses de funcionamento sem problemas, uma ER falhar. Depois de
+quebrar a cabeça nas partes mais complicadas dela, você percebeu foi uma falha simples de maiúsculas e
+minúsculas, pois uma parte de sua ER era o trecho jipe 4x4 e no texto agora estava jipe 4X4.
+Este é um erro muito difícil de perceber, por ser tão trivial e visualmente difícil de detectar, sobretudo se
+você estiver sob pressão para "arrumar isso logo". Encontrado o problema, usamos a lista para saná-lo:
+jipe 4[xX]4. Mas um mês depois o texto muda novamente para Jipe 4X4, e assim vai... Como descobrir
+isso rapidamente?
+Vários aplicativos e linguagens, como veremos adiante, têm modificadores para ignorar essa diferença
+entre maiúsculas e minúsculas ("ignore case"), e essa é nossa chave de ouro para descobrir se o problema
+é esse.
+É simples. Se há algo errado e você não sabe o que é, dê este chute, colocando a opção de ignorar essa
+diferença e veja se o problema some. Se sim, bingo! Basta revisar cada parte de sua ER que contenha
+letras ou listas e confira o texto pesquisado para ver o que mudou.
+Encontrado o problema, arrume-o e desligue a opção "ignorante". São várias letras? Não tem
+[Pr][Rr][Oo][Bb][Ll][Ee][Mm][Aa]. Fica feio? Fica, mas é seguro, portanto desligue a opção.
+Conclusão: ignore apenas se for algo temporário, para testes, ou se você tem muita certeza do que está
+fazendo.
+5.2 ERs pré-processadas e cruas
+Algumas linguagens recebem a ER como um dado do tipo "string", e não simplesmente como uma ER
+pronta. Essa string é primeiramente interpretada pela linguagem, e só depois é passada ao robozinho. Mas
+o que exatamente isso quer dizer? Muitas coisas.
+Primeiro, esse tratamento prévio não é algo específico das ERs, pois também acontece com qualquer
+string na linguagem, seja para ecoar uma mensagem na tela, seja para fazer indexação. Trechos da ER
+podem ser confundidos com variáveis e outras estruturas especiais, como, por exemplo, a ER $nome
+poderia ser expandida para o conteúdo da variável $nome. Mas o que geralmente pega mesmo é a
+interpretação de escapes, incluindo os barra-letras.
+Isso nos afeta diretamente ao escrever uma ER, pois imagine que queremos casar um \t literal, então
+escapamos o escape: \\t. Mas ao receber essa string, a linguagem primeiro a interpreta, e quando vê dois
+escapes seguidos, o que faz? O troca por apenas um, pois \\ representa um escape literal. Com isso nosso
+robozinho recebe a ER \t, que por sua vez será interpretado como um TAB literal e nossa busca falhará.
+Nesse caso, temos de prever o pré-processamento e escapar duplamente \\\\t, para que o robozinho
+receba o \\t que queríamos.
+Felizmente, para que não precisemos ficar escapando tudo duplicado, a maioria dessas linguagens tem
+maneiras de se especificar uma "string crua" ("raw string"), que não é interpretada e é passada
+diretamente ao robozinho. Detalhes de como fazer isso estão no capítulo específico da cada linguagem,
+mais adiante. Mas essa característica também tem seu lado bom. Como alguns robozinhos não suportam
+os barra-letras, esse pré-processamento os reconhece e os converte, passando-os literais para o robô.
+Concluindo, se a linguagem que você usa recebe as ERs como strings, descubra como deixá-las cruas, ou
+fique com dor de cabeça de tanto escapar os escapes...
+5.3 Negação de uma palavra
+Vamos agora esclarecer um mito da mitologia ERística: como negar uma palavra. Resposta: depende.
+Depende da posição dela na linha ou se seu aplicativo suporta os metacaracteres modernosos. Por
+enquanto esquecendo estes, temos que o único metacaractere que proíbe alguma coisa é a lista negada,
+mas ela vale apenas para a posição de um caractere, não tendo como proibir uma palavra. Intuitivamente e
+de sopetão, as tentativas de negar a palavra aqui poderiam ser coisas como:
+[^aqui], (^aqui) e [^(aqui)]
+O que, como sabemos, são inválidos pois o primeiro nega os quatro caracteres em qualquer ordem, para
+uma posição, o segundo é um grupo que casa a palavra no começo da linha e o último é uma viagem
+astral, simplesmente negando todos os caracteres da lista, em qualquer ordem. O que fazer então? Se, e
+somente se a palavra sempre estiver no começo ou fim da linha, a âncora nos dá a base e podemos fazer
+uma seqüência de listas negadas de um caractere, completando a palavra, assim:
+^[^a][^q][^u][^i]
+Mas como cada lista é independente uma da outra, qualquer uma que falhe é suficiente para falhar a ER
+toda. Isso significa que qualquer linha que comece com a, seja aonde, agora ou assim, falhará a primeira
+lista negada e com ela toda a ER. Para lidar com isso, precisamos amarrar a seqüência das letras, em uma
+ER gigante, feia e literal, mas que funciona:
+^( [^a] | a[^q] | aq[^u] | aqu[^i] )
+Note que os espaços em branco foram colocados para facilitar a leitura apenas, eles não fazem parte da
+ER. Vamos fazer a leitura dela para clarificar. A primeira letra da linha não pode ser um a. Se for, este
+não pode ser seguido de um q. Se for, este aq não pode ser seguido por um u, mas caso seja, em hipótese
+alguma a próxima pode ser um i. Se for, falhou a ER e conseguimos ignorar a palavra aqui no começo
+da linha. Ufa! Se a palavra fosse no fim da linha, basta usar o cifrão, aliás, acho que nem precisava falar
+isso né? E se você não quisesse a palavra chato também?
+^([^a]|a[^q]|aq[^u]|aqu[^i]|[^c]|c[^h]|ch[^a]|...)
+E assim vai, podendo ficar quilométrica. Mas funciona. Se for no meio da linha, esqueça, pois qualquer
+linha casará, mesmo as que contenham a palavra proibida. Tome como exemplo a frase "o aqui é
+proibido.". Aplicando a ER quilométrica apresentada, mesmo sem a âncora ela casa no começo da linha
+na maior cara-de-pau:
+o aqui é proibido.
+xxxx
+Então a ER casa o aq, considerando a frase válida e o que era para ser proibido, passou... O motivo é
+simples e esse problema nunca terá solução, pois as ERs são orientadas a caracteres e repetições para
+casar um texto. O que precisaríamos aqui é algo que não case caracteres em seqüência, sob qualquer
+contexto. As ERs não foram feitas para isso.
+/!\ ATENÇÃO /!\ negar uma palavra, só no começo ou fim da linha.
+Mas como não poderia deixar de ser, esta regra também tem uma exceção. Legal né? Você se lembra do
+tópico dos metacaracteres modernosos? Mais especificamente o (?!...). No nosso exemplo em questão,
+a ER ficaria (?!aqui), pois esse metacaractere fará a ER falhar caso encontre um aqui na linha.
+Para ficar mais simples, você pode considerar essa construção uma "lista negada de ERs", que casa
+qualquer coisa fora o que casar a ER contida. Em nosso caso as ER eram apenas caracteres literais, mas
+poderia ser uma ER tão complicada quanto se precise. Levando-se isso em conta, fica aqui nossa
+conclusão:
+/!\ ATENÇÃO /!\ há como negar uma ou mais palavras, em apenas alguns aplicativos.
+5.4 Multilinha
+Algumas linguagens possuem modificadores para que sua ER consiga lidar com um texto de várias
+linhas. Geralmente são dois os modificadores, um para tratar estas várias linhas como apenas uma, em
+que o metacaractere ponto também casa o \n (quebra de linha), e outra complementar para tratar como
+várias linhas, onde o circunflexo e o cifrão podem casar começo e final de qualquer uma dessas linhas
+contidas no texto, chamado multilinha. Vejamos:
+$a = $b = $c = "linha 1\nlinha 2\nlinha 3";
+$a =~ s/^.*/!!/g ; print "$a\n-------\n";
+$b =~ s/^.*/!!/gs; print "$b\n-------\n";
+$c =~ s/^.*/!!/gm; print "$c\n-------\n";
+
+# RESULTADO (normal, uma linha, multilinha)
+
+!!
+linha 2
+linha 3
+-------
+!!
+-------
+!!
+!!
+!!
+-------
+Ah, nada como um exemplo para ilustrar conceitos... Esse trecho em Perl casa a ER ^.* no texto de três
+linhas, fazendo substituições globais (modificador g), primeiro normal, depois com o modificador uma
+linha, e depois o multilinha.
+Como era de se esperar, o primeiro, como não sabe o que é multilinha casou apenas a primeira e não
+tocou nas outras linhas.
+O segundo, como o ponto casa a quebra de linha, considerou o texto todo como apenas uma única linha e
+casou tudo, trocando todas por apenas um !!.
+Já o último, que é multilinha, considerou o \n o fim de uma linha e casou as três linhas separadamente.
+5.5 Acentuação
+Use classes POSIX. Use \w. Ponto final.
+Maaaaaaas se seu aplicativo não reconhece ambos, ou seu sistema não está configurado para a localidade
+correta, há um remendo que não é 100%, mas pode ajudar.
+Você pode usar uma lista com um intervalo aproximado, que pega todos os caracteres acentuados que
+queremos, porém traz consigo alguns lixinhos no meio.
+Confira na tabela ASCII no fim do guia, que podemos usar o intervalo À-ú para englobar todos os
+acentuados, ou ainda À-Ú e à-ú caso se queria só maiúsculas ou minúsculas. Os lixos que ganhamos de
+brinde usando esses intervalos são coisas como "äåæËÎÏÐðÑ×÷ØÝÞß", mas como eles não são muito
+comuns em nossos documentos, a princípio não há muito problema em utilizá-los.
+Mas fique atento, se alguma coisa estiver errada pode ser que por azar o texto contenha um desses
+caracteres, e você não possa usar o remendo, mas é difícil. Então, vamos à listagem:
+classe POSIX    remendo
+-----------------------------------
+[[:lower:]]     [a-zà-ú]
+[[:upper:]]     [A-ZÀ-Ú]
+[[:alpha:]]     [A-Za-zÀ-ú]
+[[:alnum:]]     [A-Za-zÀ-ú0-9]
+6. Editores de texto
+Como já vimos em sua história, as expressões regulares surgiram como parte de um editor de textos, e
+hoje, décadas depois, são utilizadas nos mais diversos programas, como navegadores de Internet, leitores
+de e-mail, linguagens de programação e várias outras tarefas que envolvam manipulação de dados.
+Porém, como poucas outras coisas nesse planeta, as expressões regulares ainda são fiéis a sua origem e
+ainda reinam absolutas nos editores de texto, auxiliando as tarefas de procura de texto, substituição de um
+texto por outro, ou aplicar comandos diversos em partes específicas do documento.
+Temos como exemplo o ed, um editor que ainda hoje só altera texto por meio de comandos de
+substituição utilizando ERs, mesmo que seja só para colocar um simples ponto final esquecido, você tem
+de fazer um s/$/./.
+Alguns outros editores atuais ainda têm um suporte bem tímido às ERs, principalmente os gráficos e
+voltados ao usuário doméstico, como é o caso do MS Word. Já outros, como o vim e o emacs, as utilizam
+massivamente para as mais diversas tarefas, tendo os programadores como seu público-alvo. Vamos dar
+uma olhadinha neles?
+6.1 Vim
+O vim herdou a base das expressões do vi e estendeu muito seu poder, criando metacaracteres novos e
+permitindo o uso de ERs na maioria de seus comandos, como endereçamento. Tudo o que você precisa
+saber sobre ERs no vim está documentado no próprio programa, bastando digitar :help regexp para ter
+acesso a essas informações.
+A primeira dica é ligar duas opções imbatíveis que são a hlsearch e incsearch. A primeira deixa
+iluminado ("highlight") o texto casado, para termos uma visualização do que nossa ER casou, e a segunda
+faz o vim ir iluminando e mostrando o texto casado dinamicamente, enquanto você digita a ER!
+Experimente, é muito bom: :set hls is.
+Além destas, temos opções que modificam a sintaxe dos metacaracteres, são elas: magic e nomagic. A
+primeira é a opção-padrão, e é a que se aconselha usar, não mude. Ao usar a segunda, suas ERs serão tão
+cheias de escapes que serão imprestáveis em outros programas.
+A função de pesquisa é feita pelo comando / e o ? e a de substituição pelo :s///. O detalhe é que a
+substituição vale apenas para a linha atual onde está o cursor, a não ser que você selecione o texto
+desejado, ou aplique um endereçamento que dirá ao comando s em quais linhas fazer a substituição.
+Esse endereçamento vem imediatamente após o : e pode ser números de linha, padrões de texto entre
+barras, e alguns caracteres representantes de: linha atual (.), última linha ($) e arquivo todo (%).Veja
+alguns exemplos:
+:s/a/b/g        troca todos os a por b na linha atual
+:1,5s/^/#/      comenta as 5 primeiras linhas
+:.,$s/^/#/      comenta até o final do arquivo
+:%s/^.//        apaga a primeira letra de cada linha
+:%s/^./\u&/c        torna maiúsculo o 1° caractere
+Esse último é utilíssimo. Colocando um c no final de qualquer substituição, o vim mostrará um "prompt"
+na tela e lhe pedirá uma confirmação antes de fazer qualquer uma das substituições. Você vai
+respondendo sim ou não e vai vendo o texto ser alterado. Evita substituições cegas e vicia, cuidado! Veja
+:help :s_flags para conhecer outros modificadores.
+No vim apenas as chaves têm similares não-gulosos. Mas como já vimos que com elas conseguimos
+emular todos os outros quantificadores, isso não é problema. A sintaxe é simplesmente adicionar um traço
+como primeiro caractere dentro delas.
+meta            mnemônico
+------------------------------------------
+\{-,1}          opcional não-guloso
+\{-}            asterisco não-guloso
+\{-1,}          mais não-guloso
+\{-n,m}         chaves não-gulosas
+Ele possui também diversos arquivos de sintaxe para vários tipos de arquivo, que é onde são guardadas as
+regras complicadas que dizem "o quê é válido onde", e fazem os arquivos ficarem coloridos, respeitando
+a sintaxe da linguagem de programação ou arquivo de registros ou configuração sendo editados.
+Adivinha como são feitas essas regras complicadas? Com ERs, é claro! Este é um tópico muito
+interessante e exige conhecimentos sólidos do assunto. Caso queira dar uma olhada, todos os arquivos de
+sintaxe estão no subdiretório syntax e têm a extensão .vim.
+A central vim encontra-se em http://www.vim.org.
+6.2 Emacs
+Chamar o emacs de editor de texto é ser superficial, pois editar texto parece ser a coisa menos interessante
+para fazer neste programa que também lê e-mails, acessa a Internet, faz ftp, entre outros. Mas como nosso
+interesse aqui é ERs, é isso o que veremos. Contrastando-as com a abundância de funcionalidades, as ERs
+no emacs são diferentes em alguns aspectos e não têm as chaves!
+As ERs são tratadas como strings, então valem as dicas já vistas para lidar com isso. Para complicar, ele
+usa a notação antiga, em que a maioria dos metacaracteres deve ser escapada para serem especiais.
+Então juntando esses dois fatos, precisamos fazer \\[\\(.*\\)\\] para agrupar o conteúdo de um par de
+colchetes, o que normalmente seria \[(.*)\].
+Há vários comandos que trabalham com ERs, sendo re-search-forward e re-search-backward os
+comandos de busca nas linhas adiante e anteriores, respectivamente. Mas melhores do que estes são os
+comandos similares que procuram enquanto você digita, já sabendo se sua ER está funcionando ou não
+antes de finalizá-la: isearch-forward-regexp e isearch-backward-regexp.
+Como um editor de texto serve para alterar texto, temos o comando replace-regexp que se encarrega de
+fazer a substituição de padrões:
+M-x replace-regexp <enter> \(Gentalha!\) <enter> \& \1 Prrrr! <enter>
+Com essa seqüência agrupamos a palavra gentalha! e com o especial \& que referencia todo o trecho
+casado e o retrovisor um, que neste caso têm mesmo conteúdo, obtemos a frase clássica que o Seu
+Madruga ouve após apanhar: "Gentalha! Gentalha! Prrrr!".
+O que é realmente diferente de tudo no emacs são suas "classes de sintaxe", que são seus similares para as
+classes POSIX e um algo mais. A sintaxe para acessar essas classes é \s<identificador>, em que o
+identificador pode ser:
+ident.  nome            casa um caractere que...
+--------------------------------------------------
+/       charquote       escapa o próximo caractere
+\       escape          inicia um escape tipo C
+(       open            abre um bloco
+)       close           fecha de um bloco
+<    comment         inicia um comentário
+>    endcomment      termina um comentário
+,       quote           marca um texto normal
+"       string          delimita uma string
+-       whitespace      é branco
+.       punct           é pontuação
+w       word            é parte de uma palavra
+_       symbol          não é parte de palavra
+O detalhe é que você mesmo pode alterar o conteúdo dessas classes antes de utilizá-las, dependendo de
+suas necessidades. O comando describe-syntax mostra os valores atuais dessas classes, para
+conferência.
+E como era de se esperar \S (com S maiúsculo) casa exatamente o oposto, sendo \S- qualquer coisa fora
+brancos, e assim vai...
+Ops, quase me esqueci do mais importante: é GNU emacs...
+*	http://www.gnu.org/software/emacs/emacs.html
+6.3 MS Word 2000
+Finalmente, após anos de atraso, usuários do Word versão 2000 também podem usufruir dos poderes da
+ERs. Faltam algumas funções, uns metacaracteres são diferentes, outros são iguais, mas agem diferente,
+outros são mais limitados, enfim, há muitas diferenças. Normal.
+As ERs no Word são usadas nas funções Localizar e Substituir, ambas dentro do menu Editar. Basta
+selecionar a opção usar caracteres curinga. Aqui vai uma tabela comparativa dos metacaracteres normais
+e os do Word:
+meta    word    mnemônico
+-----------------------------------
+.       ?       ponto
+[]      []      lista
+[^]     [!]     lista negada
+\       \       escape
+?       -       opcional
+*       -       asterisco
++       @       mais
+{,}     {;}     chaves
+^       -       circunflexo
+$       -       cifrão
+\b      <>        borda
+|       -       ou
+()      ()      grupo
+\N      \N      retrovisor
+
+.*       *      curinga
+Então aqui vão 15 dicas valiosas se você pretende usar ERs no Word:
+*	Alguns metacaracteres são diferentes, como ., [^], e +, que são ?, [!] e @.
+*	A sintaxe das chaves usa ponto-e-vírgula em vez de vírgula para separar os números.
+*	Dentro da lista, o !, se não for o primeiro caractere (lista negada) deve ser escapado. O traço pode
+ser colocado no final ou escapado também. Assim, [abc\!-], [!abc\-\!] estão corretos.
+*	O opcional e o asterisco não existem, e não se pode usar as chaves para simulá-los, pois elas não
+aceitam zero, então {0;1} e {0;} são inválidos. Assim, não há como dizer que algo é opcional,
+ou pode não existir.
+*	O ou também não existe, então não é possível colocar alternativas simples como sim|não
+*	Não há âncoras de linha! É impossível procurar uma palavra no começo ou fim da linha. Há um
+^| para indicar quebra de linha, e um ^n que indica quebra de coluna, mas ambos não
+funcionaram como âncora de fim de linha.
+*	É impossível colocar um grupo dentro do outro, então (sala ([0-9])) é inválido.
+*	Não temos o asterisco, mas temos .*. O curinga no Word é somente *, como para especificar
+arquivos: *.txt.
+*	O * e o @ só são gulosos quando necessário. Assim em uma palavra como aaab, tanto a* quanto
+a@ casam somente a, enquanto a*b e a@b casam aaab.
+*	E contrariando o * e o @, as chaves são sempre gulosas. Assim, na mesma palavra aaab, o a{1;3}
+casará aaa.
+*	A borda é feita com < e >, então <tecla> casa somente a palavra tecla, e não teclado.
+*	No botão Especial há vários metacaracteres diferentes que se pode incluir como travessão,
+elemento gráfico e espaço não-separável.
+*	Na ajuda do Word (em português), diz-se que as bordas devem ser usadas com os grupos, assim:
+<(tecla)>, mas apenas ignore, não é necessário.
+*	Na ajuda do Word também se diz que é impossível procurar por um espaço em branco e que isso
+deve ser feito na forma {1;}. Ignore e inclua o espaço normalmente.
+*	E, por fim, na ajuda também em todos os exemplos de uso das chaves, os números são separados
+por vírgulas. Ignore e use o ; que é o correto.
+Para obter mais informações no próprio Word sobre o assunto, procure na ajuda por "caracteres curinga",
+ou siga o roteiro:
+*	Aperte F1.
+*	Espere o clipe animado fazer os fru-frus.
+*	Pesquise por: caracteres curinga.
+*	Escolha localizar e substituir texto ou formatação.
+*	Escolha ajustar uma pesquisa usando caracteres curinga.
+*	Clique em digite um caractere curinga.
+ou ainda, acesse http://www.microsoft.com.br.
+
+7. Linguagens de programação
+E como não podemos viver só editando trabalhos escolares e relatórios técnicos, nada como uma
+codificada em um final de semana chuvoso. E para nossa alegria, lá estão a ERs de novo.
+Várias linguagens de programação possuem suporte às expressões regulares, seja nativo, como módulo
+importável, como biblioteca carregável, como objeto instanciável, como ... Ou seja, opções há várias.
+Como cada linguagem tem sua maneira específica de receber e tratar ERs, vamos dar uma geral nas mais
+usadas, com dicas de uso e "pegadinhas" que podem assustar quem está começando.
+Para facilitar a consulta posterior, cada linguagem tem logo no começo sua tabelinha, em que estão
+resumidas todas as informações que geralmente nos importam para lidar com ERs. Estas informações são:
+busca           como buscar, casar um texto
+substituição    como substituir um texto por outro
+divisão         como dividir um texto em partes
+ER crua         como especificar uma ER crua
+ignore M/m      como ignorar diferença maiúsculas/minúsculas
+global          como fazer uma substituição global
+Dica: como regra geral, nas funções de substituição de padrões temos o formato:
+troque('isso', 'por isso', $aqui)
+
+7.1 Python
+característica  como fazer
+----------------------------------------------
+busca           métodos match, search
+substituição    métodos sub, subn
+divisão         método split
+ER crua         r'entre aspas raw'
+ignore M/m      modificadores re.I, (?i)
+global          é o padrão
+Usando basicamente a mesma definição de metacaracteres que aprendemos, sua sintaxe é tranqüila, mas
+por manipular as ER como objetos, acessando métodos, o veremos em detalhes. Como primeira dica, para
+evitar o pré-processamento da ER pela linguagem, basta colocar o modificador r (do inglês "raw", cru)
+imediatamente antes das aspas, assim: r'^\.[0-9]'.
+O módulo que trata das ERs é o re, então antes de mais nada: import re. As funções principais são:
+match, que casa a ER no começo da linha, search que casa em qualquer parte da linha e sub que faz a
+substituição de padrões. Em Python podemos compilar uma ER e guardá-la em uma variável, podendo
+reutilizá-la quantas vezes se precisar:
+>>> import re
+>>> txt = 'Maçã'
+>>> ER1 = re.compile('[a-z]', re.I)
+>>> print ER1.sub('.', txt)
+..çã
+>>> ER2 = re.compile(r'\w', re.L)
+>>> print ER2.sub('.', txt)
+....
+>>> uau = r'((((((((((.))))))))))\10'
+>>> re.sub(uau, '.', 'zz')
+'.'
+Temos vários conceitos demonstrados nesse exemplo. Primeiro temos um padrão de texto diversificado,
+com acentuação. Depois compilamos a expressão, colocando-a no objeto ER1. Note que ao compilar,
+temos algumas opções modificadoras, como o re.I que ignora a diferença entre maiúsculas e minúsculas.
+Depois na linha seguinte, chamamos o método sub, substituindo cada letra casada por um ponto. Pelo
+resultado podemos ver que o [a-z] casou a letra M maiúscula, como esperado.
+Depois compilamos um segundo objeto, com a ER \w que está no formato cru (modificador r). Logo
+após, temos o modificador re.L, que força o uso da localização. Você se lembra das classes POSIX? O
+Python não tem [:alpha:], tem \w, re.L, que não é completamente similar, mas também inclui
+acentuação, como visto na saída ...., casando também os caracteres çã. E para fechar, vemos que o
+Python suporta tranqüilamente mais de 9 retrovisores.
+Temos também outros modificadores de compilação, como o DOTALL, para o metacaractere ponto também
+casar a quebra de linha, o MULTILINE que faz as âncoras ^ e $ casar começo e fim de linha dentro do
+texto, separados pelo \n e o VERBOSE, que permite colocar comentários no meio da expressão regular.
+Esses modificadores, com o I e L, podem ser especificados direto na ER, sem compilação, pelo grupo
+vazio (?Z) em que Z é uma das letras "iLmsx" que identificam estes modificadores.
+E para fechar, extrapolando um conceito, no Python você pode nomear partes da ER, e recuperar o texto
+casado por este nome, ou seja, você já define pseudovariáveis na própria ER. Podemos chamá-los de
+retrovisores nomeáveis. Veja um exemplo para extrair dados de uma data:
+>>> data = '31/12/2001'
+>>> ### expressão normal: ../../....
+>>> ### agora ela com as partes nomeadas
+>>> z='(?P<dd>..)/(?P<mm>..)/(?P<aaaa>....)'
+>>> RE3 = re.compile(z)
+>>> casamento = RE3.search(data)
+>>> print casamento.group('dd')
+31
+>>> print casamento.group('mm')
+12
+>>> print casamento.group('aaaa')
+2001
+Mais informações em:
+*	http://python.org/doc/howto/regex
+*	http://www.python.org/doc/current/lib/module-re.html
+7.2 Perl
+característica  como fazer
+-------------------------------------------------------
+busca           comando m//
+substituição    comando s///
+divisão         comando split
+ER crua         'entre aspas simples'
+ignore M/m      modificadores i, (?i)
+global          modificador g
+(m-i:3) Como resumir o básico sobre ERs do Perl em algumas linhas? Vou tentar. Vamos ver o básico do
+básico, sem entrar em exceções e sem mostrar as duzentas e sessenta e sete outras maneiras de se fazer a
+mesma coisa.
+Para ignorar a diferença entre maiúsculas e minúsculas, temos o modificador i, ou o metacaractere (?i),
+e para especificarmos uma ER no formato cru, devemos colocá-la entre 'aspas simples'. Atenção especial
+aqui, pois o Perl tem a interpretação de strings e a interpretação de /ERs/ também e ambas fazem
+expansão de variáveis:
+*	/duh!/: ER normal, interpretada pelo robozinho;
+*	"duh!": string, interpretada pela linguagem;
+*	'duh!': ER crua, não interpretada;
+Outros modificadores possíveis são o x para poder colocar #comentários no meio da ER e o m do modo
+multilinha. Esses modificadores também podem ser aplicados apenas em partes da ER com o grupo vazio
+(?Z), em que Z pode ser uma das seguintes opções: "imsx". Vamos ver um exemplo simples:
+$_ = "homer, diga duh";
+$curinga = '.*';
+if ( m/$curinga ($curinga)/ ) {
+  print "$1!\n";
+}
+
+s{ $curinga}' $curinga é massa!';
+print "$_\n";
+print "e o \$1? <$1>\n";
+
+# resultado:
+#duh!
+#homer, $curinga é massa!
+#e o $1? <>
+Primeiro gravamos a variável mágica $_ com nosso texto. Depois jogamos nosso super curinga das ERs
+em outra variável. Na linha seguinte, usamos o comando m//, para casar a ER .* (.*) na variável $_.
+Opa! Há muita coisa nessa frase. Primeiro, a ER ficou assim, pois como usamos as barras como
+delimitadoras, então o robozinho fez a interpretação da variável $curinga. Com essa ER, estamos nos
+aproveitando da gulodice do curinga para guardar no grupo a última palavra da frase.
+Mas onde dissemos que era para casar com o texto da variável $_? Não dissemos. Ela é a variável-padrão
+de comparação. Como a busca deu certo, foi impressa a última palavra. Note que ao usarmos grupos, são
+gravadas as variáveis $1, $2, etc. para podermos utilizar o conteúdo desses grupos em outras partes do
+programa.
+Em seguida pode não parecer, mas fizemos uma substituição. O comando s/// ficou um pouco
+desfigurado, pois na primeira parte, onde vai a ER. Precisávamos que a variável $curinga fosse
+interpretada, então usamos as chaves como delimitador. Na segunda parte, usamos as aspas simples como
+delimitador, pois não queríamos a interpretação.
+Mas só dissemos "troque {isso} por 'aquilo'", onde ele trocou, e para onde foi o resultado? Você se
+lembra da variável padrão $_? Como não especificamos onde trocar, ela é assumida, e como a
+substituição regrava o resultado na própria variável do texto original, lá se foi o resultado para o $_.
+E o nosso $1? No último print vimos que ele sumiu! Mesmo a substituição não tendo usado grupo
+algum, a variável foi regravada. Que isso nos sirva de lição: se quiser usar os $1 da vida em outras partes
+do programa, copie-o para outra variável.
+Além de mais de uma dezena de livros sobre Perl que há na O'Reilly, aqui vão algumas páginas:
+*	http://www.perl.com
+*	http://virtual.park.uga.edu/humcomp/perl/regex2a.html
+7.3 Ruby (NOVO!)
+característica  como fazer
+------------------------------------------------
+busca           método scan
+substituição    métodos sub, sub!, gsub e gsub!
+divisão         método split
+ER crua         'entre aspas simples'
+ignore M/m      modificador i e $=
+global          modificador g, método gsub
+Ruby é uma linguagem nova, que nasceu para ser um Perl orientado a objeto, em 1993. Desde então
+evoluiu bastante, com um desenvolvimento muito ativo, sendo considerada por muitos a nova estrela das
+linguagens interpretadas.
+Para ignorar a diferença entre maiúsculas e minúsculas, pode ser utilizado o modificador i, ou basta
+definir a variável $= como true.
+Na substituição, temos o sub e o gsub, sendo a única diferença entre eles que o gsub faz uma substituição
+global, ou seja, troca todas as ocorrências do padrão, e não apenas a primeira. A exclamação no nome
+indica que o método é "destrutiva", pois o resultado da substituição é gravado direto no objeto, ao invés
+de ser um valor de retorno.
+puts 'Ruby & Perl'.gsub!(/r/i,'.')   # mostra: .uby & Pe.l
+Assim como Perl, aceita os modificadores x para comentários e m para multilinha, e os retrovisores são
+$1, $2, ... e \1, \2, ..., sendo também idêntica a busca com o ~=:
+if comida ~= /macarronada|churrasco/ then
+  puts "me convide!"
+end
+Se tiver macarronada ou churrasco na comida, me convide! &:) Para a busca também pode ser utilizado
+o formato if /er/ que significa o mesmo que if $_ ~= /er/. Ou ainda, temos o método scan, que
+retorna uma matriz ("array") com o conteúdo dos grupos da expressão:
+er_hora = /(..):(..)/
+matriz = "23:59".scan(er_hora)
+
+# matriz vai conter [ "23", "59" ]
+Temos ainda o método index para saber a posição de um padrão e o split para fazer a divisão, que pode
+receber o número máximo de divisões a serem feitas:
+"bacana".index(/ca/)       # retorna 2 (a contagem começa em zero)
+"1:2:3:4:5".split(':',3)   # retorna a matriz [ "1", "2", "3:4:5" ]
+Na omissão do padrão, o split usa o valor da variável $;, ou ainda o espaço em branco.
+Encontre mais informações em:
+*	http://www.ruby-lang.org
+*	http://www.pragmaticprogrammer.com/ruby/downloads/book.html
+7.4 Php
+característica  como fazer
+------------------------------------------------
+busca           função ereg
+substituição    função ereg_replace
+divisão         função split
+ER crua         'entre aspas simples'
+ignore M/m      funções eregi, eregi_replace
+global          é o padrão
+Safo em Internet e banco de dados, o Php é a escolha de uma legião de programadores ao redor do mundo
+para comércio eletrônico e transações de dados. E claro, como não poderia deixar de ser, também tem
+suporte às ERs.
+As funções quentes são ereg para busca, ereg_replace para substituição e o split para divisão. Sua
+sintaxe é bem tranqüila, sem esquisitices e bem coberta pela própria documentação que acompanha a
+linguagem.
+Um detalhe muito interessante é que ao casar um padrão, você pode opcionalmente colocar os conteúdos
+dos grupos em posições de uma matriz ("array"), numerada de acordo com o número dos grupos abertos.
+É uma maneira fácil de declarar diversas variáveis de uma vez.
+$hora = "12:34";
+$er = "([0-9]{2}):([0-9]{2})";
+
+if (ereg($er, $hora, $matriz)){
+  echo "em brasília $matriz[1] horas, ";
+  echo "$matriz[2] minutos.\n";
+}
+O jeito php de ignorar a diferença entre maiúsculas e minúsculas é, no mínimo, diferente. É feito no
+próprio nome da função, adicionando um i, ficando eregi, eregi_replace e spliti(php4). A maneira
+de utilizá-las é a mesma. No exemplo seguinte, todas as letras do padrão HeyHo são trocadas por .
+print eregi_replace("[A-Z]", ".", "HeyHo");
+Para se especificar uma ER crua, basta colocá-la entre 'aspas simples'.
+E olha só que interessante, o Php tem funções específicas para usuários de Perl, que aceitam uma sintaxe
+bem próxima à utilizada nessa linguagem. Para quem tiver curiosidade sobre esse frankenstein, confira as
+funções preg_match, preg_match_all, preg_replace e preg_split.
+A página oficial e fonte inicial de pesquisa sobre a linguagem é:
+*	http://www.php.net
+7.5 Javascript
+característica  como fazer
+-------------------------------------------------------
+busca           métodos test, search, exec, match
+substituição    método replace
+divisão         método split
+ER crua         /entre barras/
+ignore M/m      modificador i
+global          modificador g
+O suporte a ERs no Javascript foi incluído nos dois navegadores mais famosos desde as seguintes
+versões: Netscape 4.0x e Internet Explorer 4.0, e o nosso personagem principal agora vai ser o objeto
+global RegExp.
+Para definir uma ER no formato cru, basta colocá-la entre /barras/, e logo após a segunda barra, podemos
+colocar os modificadores de maiúsculas e minúsculas e substituição global, assim: /[a-z]/ig.
+Para criar um objeto do tipo RegExp, basta definir uma variável com uma /ER/. O método test é um dos
+que fazem a busca de padrões:
+var er = /^[a-z]+$/i;
+if (er.test("JAVA"))
+  alert("casou!");
+Fácil, não? Então para complicar, se você quiser fazer uma substituição, o método replace deve ser
+usado. Detalhe: ele é um método de uma string e não de uma /ER/, mas recebe ERs. Não entendeu? Veja:
+var eu = "estou com fome";
+document.write(eu.replace(/....$/, "sono"));
+Em Javascript, temos uma simetria entre os objetos regexp e string, com métodos de mesma função,
+mas nomes diferentes. Os "gêmeos siameses" são test e search para busca simples e exec e match para
+busca com pescagem de dados. E lembre-se de que um método regexp recebe como parâmetro uma
+string e vice-versa, veja:
+regexp.test("string")
+string.search(/regexp/)
+
+regexp.exec("string")
+string.match(/regexp/)
+Cuidado para não confundir! Falando em confundir, vamos ver o mais complicado de todos: o exec, que,
+além de fazer o casamento, povoa uma matriz com vários dados que podem ser recuperados
+posteriormente. Acompanhe o exemplo a seguir e note que o matriz[1] é o similar Javascript para o
+retrovisor \1:
+var er = /^(\w+) (\w+)/;
+var matriz = er.exec("um dois três");
+document.write(matriz.index, "<BR>",
+               matriz.input, "<BR>",
+               matriz[0],    "<BR>",
+               matriz[1],    "<BR>",
+               matriz[2]);
+
+//Resultado:
+// 0              // índice do casamento
+// um dois três   // texto original
+// um dois        // trecho casado
+// um             // conteúdo do grupo 1
+// dois           // conteúdo do grupo 2
+Mais informações podem ser encontradas em:
+*	http://www.webreference.com/js/column5
+*	http://www.zdnet.com/devhead/stories/articles/0,4413,2354285,00.html
+7.6 VBscript
+característica  como fazer
+-------------------------------------------
+busca           método Test
+substituição    método Replace
+divisão         método Execute
+ER crua         -
+ignore M/m      propriedade IgnoreCase
+global          propriedade Global
+Demorou, mas em 1999 finalmente os usuários do Visual Basic® Scripting Edition puderam
+experimentar o tão desejado recurso de expressões regulares, implementado na versão 5.0 do Microsoft®
+Scripting Engines. O nome do objeto que trata das expressões é RegExp, e para o alívio dos
+programadores, a sintaxe e a funcionalidade das ERs no VBScript são similares ao Perl, então não precisa
+aprender uma linguagem nova.
+Assim, se na sintaxe da ER não há novidade, podemos nos concentrar em como utilizar esse objeto.
+Dentro dele os métodos que temos são Test e Execute para busca e Replace para substituições. Para
+ignorar maiúsculas e minúsculas e fazer substituições globais, temos as duas propriedades booleanas
+IgnoreCase e Global, que devem ser definidas como true para entrarem em ação.
+Como peculiaridade, a ER não pode ser passada diretamente ao método, ela precisa primeiro ser definida
+na propriedade Pattern. Vamos a um exemplo:
+Dim er, texto
+Set er = new regexp
+texto = "visual"
+
+er.Pattern = "^[A-Z]+$"
+er.IgnoreCase = true
+
+if er.Test(texto) then
+  msgbox ("casou!")
+end if
+Então instanciamos o objeto er e definimos um texto qualquer a ser casado. Depois definimos a ER, uma
+linha toda de maiúsculas, na propriedade Pattern e ligamos a opção de "ignorância". Por fim, fazemos o
+Test da ER no texto. O Replace funciona de maneira similar, sem surpresas.
+O método Execute funciona como um split ao contrário, em que você informa o padrão e não o
+separador. Ele casa a ER no texto e retorna todos os pedaços de texto em que a ER casou de maneira
+organizada, seguindo uma hierarquia. Ele retorna um objeto "collection" chamado Matches que, por sua
+vez, contém zero ou mais objetos Match. Cada um desses Match contém um pedaço casado, que além do
+texto propriamente dito, também tem a posição de início do casamento no texto original e o tamanho
+desse trecho. Vamos ver um exemplo que separa os trechos por espaços em branco, com um diagrama de
+brinde no cabeçalho:
+' --- hierarquia do Execute e seus objetos
+'
+' Execute
+'    |
+' Matches ---> Count, Item
+'    |
+'  Match  ---> FirstIndex, Lenght, Value*
+'
+' * o Value é o padrão de acesso
+'
+Dim er, texto
+er = new regexp
+texto = "um dois três"
+er.Pattern = "[^ ]+"
+
+z = er.Execute(texto)      'retorna 3 objetos Match
+for i = 0 to (z.Count - 1) 'para cada Match,
+  msgbox z.Item(i)         'mostre o trecho casado
+next
+Você pode ter mais informações e exemplos em:
+*	http://msdn.microsoft.com/scripting/vbScript/doc/vsobjRegExp.asp
+*	http://msdn.microsoft.com/scripting/vbScript/doc/vscolMatches.asp
+*	http://msdn.microsoft.com/scripting/vbScript/doc/vsobjMatch.asp
+7.7 Tcl
+característica  como fazer
+--------------------------------------
+busca           função regexp
+substituição    função regsub
+divisão         -
+ER crua         {entre chaves}
+ignore M/m      opção -nocase
+global          opção -all
+A linguagem Tcl não podia ficar de fora da festa.
+Bem, de cara aquela dica que é sempre importante: para deixar a ER no formato cru, evitando pré-
+processamento, basta colocá-la entre {chaves}.
+As funções que nos interessam são regexp para busca e regsub para substituição. O grande problema da
+Tcl é que ela não tem suporte às classes POSIX, nem às bordas nem às chaves! Fora isso, a busca de
+padrões é tranqüila:
+if [regexp -nocase {^[a-z][a-z]$} "OI"] {
+  puts "casou!"
+}
+Então, para ignorar maiúsculas e minúsculas, usamos a opção -nocase, que deve ser colocada logo após
+o nome da função. Em seguida, colocamos nossa ER no formato cru para evitar problemas, e como não
+podemos usar as chaves, fazemos a repetição manual, duplicando a lista.
+Já uma substituição é muito mais chata de fazer, o formato genérico é regsub -opção ER $texto
+textonovo variávelnova, veja:
+prompt$ tclsh
+% regsub -all {[A-Z]} "eScaMOSO" "." sobra
+5
+% puts $sobra
+e.ca....
+A função regsub retornou o número de substituições efetuadas: cinco. Mas observe o trabalho para fazer
+isso, pois colocamos a opção -all para trocar todas as ocorrências, depois nossa ER crua, depois o texto
+original a ser trocado, depois o texto novo que será colocado na troca e, por último, o nome de uma
+variável para colocar o texto modificado.
+Aí usamos o puts para nos mostrar o conteúdo da variável sobra e finalmente conferir o que nossa ER
+fez.
+Mais informações são encontradas em:
+*	http://www.scriptics.com.
+7.8 Awk
+característica  como fazer
+--------------------------------------
+busca           função match
+substituição    funções sub, gensub
+divisão         função split
+ER crua         /entre barras/
+ignore M/m      variável IGNORECASE
+global          função gsub, opção "g"
+A awk é uma linguagem antiga (1977) que combina processamento de texto com estruturas de uma
+linguagem genérica, possuindo condicionais, operações aritméticas e afins.
+Temos cinco funções que utilizam ERs no awk: match, sub, gsub, gensub e split. Em todas elas, para
+ignorar a diferença entre maiúsculas e minúsculas, basta definir algum valor para a variável IGNORECASE,
+que é vazia por padrão e, para colocar a ER no formato cru basta colocá-la entre /barras/.
+As funções sub e gsub não retornam o texto alterado, e sim o número de substituições efetuadas. E ainda,
+o texto alterado é gravado diretamente na própria variável que continha o texto original. Uma grande
+limitação de ambas as funções é que elas não têm suporte a retrovisores.
+texto = "a1b2c3"
+n = gsub("[0-9]", ".", texto)
+print n,texto
+Esse trecho de código imprime 3 a.b.c., ou seja, o número de substituições efetuadas, seguido do texto
+modificado. A diferença entre as duas é que sub troca só a primeira ocorrência e gsub é global, troca
+todas.
+Mas como essas funções são muito chatas de usar, no awk da GNU tem uma melhor, a gensub. Esta é
+normal, retorna o texto modificado, não regrava a variável com o texto original, a globalidade do
+comando é definida com um argumento (g ou um número), e tem suporte a retrovisores. Veja um
+exemplo completo:
+print gensub(/(\w)/, "\\1.", "g", "abc")
+Vamos à nossa dissecação. A ER \w, que casa um caractere componente de uma palavra, está no formato
+cru, além de agrupada. A substituição do trecho casado é feita pelo conteúdo do grupo 1, seguido de um
+ponto literal.
+Note que o escape do número um está duplicado, pois como apenas a ER pode ser colocada no formato
+cru, esse texto primeiro será interpretado pela linguagem, para depois ser mandado à função gensub.
+Segue o g que indica que é uma substituição global e por fim, o texto original a ser alterado. Ah! O
+resultado da substituição é a.b.c., antes que eu me esqueça...
+A awk da GNU é encontrada no repositório da GNU:
+*	http://www.gnu.org/software/gawk/gawk.html
+*	news://comp.lang.awk
+7.9 Sed
+característica  como fazer
+--------------------------------------
+busca           /endereçamento/
+substituição    comando s///
+divisão         -
+ER crua         já é crua
+ignore M/m      modificador I
+global          modificador g
+Bem, eu sou meio suspeito para falar do sed, pois é meu programa preferido, então vou tentar ser breve.
+O sed é um editor de texto não-interativo, orientado a linha, que usa uma linguagem de programação em
+que se definem as regras de edição. Pode-se usar ERs delimitadas por barras para endereçar as linhas nas
+quais o comando será aplicado.
+sed '1,/[0-9]\{3\}/d' arquivo.txt
+Este sed lê dados do arquivo.txt e apaga (comando d) desde a primeira linha, até a linha que contenha 3
+números seguidos, jogando o resultado na tela. Se quiser gravar o resultado, redirecione-o para outro
+arquivo, não o próprio arquivo.txt.
+A substituição de padrões é feita com o comando s///, em que as barras separam a ER do trecho
+substituto. Como exemplo, vamos trocar duas letras de lugar:
+prompt$ echo ZZzz | sed 's/\([a-z]\)\1/./Ig'
+..
+Note lá no final os modificadores I para ignorar a diferença de maiúsculas e minúsculas e o g para
+substituir todas as ocorrências encontradas.
+O sed também é útil para testes dinâmicos de ERs, em que você digita o texto e ele aplica a ER na hora.
+Basta omitir o nome do arquivo, então ele esperará os dados do teclado. Assim:
+prompt$ sed 's/$/!!!/; s/[0-9]\+//g'
+exclamação no fim
+exclamação no fim!!!
+e números 1, 23 e 4567 são apagados
+e números ,  e  são apagados!!!
+^c
+Então após cada linha que você digita, o sed já a edita e coloca o resultado embaixo. Note que temos dois
+comandos de substituição que são aplicados seqüencialmente, então testes de várias ERs em um mesmo
+texto são triviais.
+Bom para testes rápidos de ERs recém-construídas, ou até para tentar adivinhar o que faz uma ER pronta
+que você não conseguiu entender direito.
+Mais informações sobre obtenção e uso do sed você encontra no sed-HOWTO (em português):
+*	http://aurelio.net/sed/sed-HOWTO
+8. Bibliotecas e programas relacionados
+Todos os programas e bibliotecas listados aqui são softwares completos e de código aberto, ou seja, você
+tem acesso aos fontes e não precisa pagar para utilizá-los. E, além de tudo, são de excelente qualidade.
+8.1 Bibliotecas
+O pacotão de funções para lidar com ERs nos programas em C tem duas versões: o regex original de 1986
+do Henry Spencer, atualizado ( ftp://ftp.zoo.toronto.edu/%2f/pub/regex.shar) e o rx da GNU (
+http://www.gnu.org/directory/rx.html). Essas bibliotecas são "plug'n'play", basta incluir o diretório com
+os fontes de seu programa, sem maiores traumas.
+Para java tem o jakarta regexp ( http://jakarta.apache.org/regexp), um pacote completo feito pela equipe
+de desenvolvimento do apache.
+E para C++ tem a biblioteca Regexx ( http://bazar.conectiva.com.br/~niemeyer/projects/regexx) que é
+uma solução completa com execução, busca, substituição, divisão e fácil acesso aos textos casados.
+8.2 Programas
+O programa txt2regex ( http://txt2regex.sourceforge.net) é um assistente ("wizard") que constrói ERs em
+que você apenas responde perguntas (em português inclusive) e a ER vai sendo construída. Por conhecer
+metacaracteres de diversos aplicativos, também é útil para tirar dúvidas de sintaxe.
+E para fechar, o Visual REGEXP ( http://laurent.riesterer.free.fr/regexp) que mostra graficamente, em
+cores distintas, cada parte da ER e o que ela casa em um determinado texto. Simples e muito útil, bom
+para iniciantes e ERs muito complicadas.
+9. Onde obter mais informações
+Antes de mais nada, a errata, informações complementares e a versão HTML deste guia estão em
+http://aurelio.net/er.
+No capítulo de cada linguagem de programação há dicas de como encontrar mais informações. A
+documentação que acompanha cada aplicativo também pode ajudar bastante. Aqui seguem então dicas de
+informações relacionadas às expressões regulares em geral:
+9.1 Livros
+Não há dúvidas, sobre expressões regulares desde tópicos simples até os mais avançados e viajantes, com
+detalhes de funcionamento e testes de performance, leia a bíblia: "Mastering Regular Expressions", de
+Jeffrey E. F. Friedl (ISBN 1-56592-257-3).
+Outro livro que trata bem o assunto é "Programming Perl", de Larry Wall, Tom Christiansen, e Randal L.
+Schwartz (ISBN 1-56592-149-6). Ambos são da editora O'Reilly ( http://www.oreilly.com).
+Para saber como funcionam internamente e como são implementados os robozinhos, o assunto é
+"autômatos finitos determinísticos e não-determinísticos", que consta em qualquer livro que explique
+como escrever compiladores.
+9.2 Listas
+A lista sed-br é sobre o sed, mas é aberta para discussões gerais sobre ERs (em português). Para se
+inscrever, mande um e-mail para sed-br-subscribe@yahoogrupos.com.br ou visite a página com histórico
+em http://br.groups.yahoo.com/group/sed-br.
+Fora esta, temos outras listas nacionais sobre linguagens e editores de texto em que dúvidas sobre como
+aplicar a ER neles podem ser sanadas:
+*	http://groups.yahoo.com/group/perl-br
+*	http://groups.yahoo.com/group/vi-br
+*	http://groups.yahoo.com/group/emacs-br
+*	http://groups.yahoo.com/group/dsjava
+*	http://groups.yahoo.com/group/listadeweb
+*	http://lists.allfinder.com.br/php
+9.3 Páginas
+Páginas aleatórias para ler com calma, infelizmente todas em inglês...
+*	http://www.linux-learn.org/regexp.tut
+*	http://www.cs.rochester.edu/u/leblanc/csc173/fa/re.html
+*	http://news.tucows.com/ext2/99/10/articles/ext210311999.shtml
+*	http://www.phpbuilder.com/columns/dario19990616.php3
+*	http://www.zdnet.com/devhead/stories/articles/0,4413,2266839,00.html
+10. E por hoje é só pessoal
+Bem, o papo está bom mas uma hora tem de acabar, não? Então é hora de dizer tchau.
+Aproveito este espaço para os agradecimentos:
+        valeu mesmo!
+        carinho         Milene
+        bom-humor       Julio Cezar Neves
+        incentivo       Wanderlei Cavassin
+                        Osvaldo Santana
+        apoio           Família
+                        Conectiva
+        oportunidade    Editora Novatec
+        marcas do PM6   equipe do PageMaker®
+Foram 96 horas prazerosas de escrita, corridas em dois meses, de um texto escrito do zero. Como
+ferramentas, o bom e velho vim, e os superconversores de /texto/ *estruturado* txt2{sgml,html} e
+txt2pagemaker que foram subprodutos desse guia, me mostrando como ia ficar o resultado final. Nada
+contra o produto da Adobe®, mas foi um prazer não ter digitado uma frase sequer nele graças a sua
+linguagem <b>marcada<p>.
+Ah! Tenho de falar sobre o autor (verde (a) aurelio net):
+Aurélio Marinho Jargas trabalha com pesquisa e desenvolvimento em Linux, programando em Bash, Sed,
+Php e Python no modo texto, sem X nem mouse. Tem 3 anos de experiência com expressões regulares e é
+autor do documento sed-HOWTO e do programa txt2regex. Nas horas vagas ele vive BEM longe do
+computador.
+11. Tabelas
+Você deve estar se perguntando: "Mas por que esse cara colocou essas tabelas aqui no final?".
+Bem, um guia de referência é para se encontrar rapidamente o que se procura, certo? Não é irritante ficar
+folheando algo procurando uma tabela perdida em meio a um texto? E quando tem, o índice das tabelas
+nunca nos dá descrições muito claras do conteúdo.
+Então, por isso, elas estão todas aqui. Após a leitura, você vai jogar este livrinho em um canto e só vai vê-
+lo novamente quando precisar tirar alguma dúvida que geralmente está respondida em uma das tabelas.
+Nessa hora de aperto basta ver as últimas páginas, simples como expressões regulares!
+Guarde-as com carinho, mande para os amigos, grude em seu monitor ou mande ampliar e faça um
+quadro &:)
+11.1 Diferenças de Metacaracteres entre aplicativos
+      prog        opc  mais   chaves  borda   ou    grupo
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      awk          ?     +     -        -      |     ()
+
+      ed          \?    \+    \{,\}    \b     \|    \(\)
+
+      egrep        ?     +     {,}     \b      |     ()
+
+      emacs        ?     +     -       \b     \|    \(\)
+
+      expect       ?     +     -        -      |     ()
+
+      find         ?     +     -       \b     \|    \(\)
+
+      gawk         ?     +     {,}     \<\>    |     ()
+
+      grep        \?    \+    \{,\}    \b     \|    \(\)
+
+      javascript   ?     +     {,}     \b      |     ()
+
+      lex          ?     +     {,}      -      |     ()
+
+      mawk         ?     +     -        -      |     ()
+
+      perl         ?     +     {,}     \b      |     ()
+
+      php          ?     +     {,}     \b      |     ()
+
+      python       ?     +     {,}     \b      |     ()
+
+      sed         \?    \+    \{,\}    \<\>   \|    \(\)
+
+      tcl          ?     +     -        -      |     ()
+
+      vbscript     ?     +     {,}     \b      |     ()
+
+      vim         \=    \+    \{,}     \<\>   \|    \(\)
+
+
+      NOTA1: . * [] [^] ^ $ e \ são iguais pra todos.
+11.2 Resumão dos Metacaracteres e seus detalhes
+     meta  mnemônico      dicas
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+       .   ponto          curinga de um caractere
+
+      []   lista          dentro todos são normais,
+                          traço é intervalo ASCII,
+                          [:POSIX:] tem acentuação
+
+     [^]   lista negada   sempre casa algo, [^[:POSIX:]]
+
+       ?   opcional       guloso, 0 ou 1, pode ter ou não
+
+       *   asterisco      guloso, 0 ou mais,
+                          repete em qualquer quantidade
+
+       +   mais           guloso, 1 ou mais,
+                          repete em qualquer quantidade,
+                          pelo menos uma vez
+
+     {,}   chaves         guloso, número exato, mínimo,
+                          máximo, ou uma faixa numérica
+
+       ^   circunflexo    casa o começo da linha,
+                          especial no começo da ER
+
+       $   cifrão         casa o fim da linha,
+                          especial no fim da ER
+
+      \b   borda          limita uma palavra
+                          (letras, números e sublinhado)
+
+       \   escape         escapa um meta, tira seu poder
+                          escapa a si mesmo \\
+
+       |   ou             indica alternativas,
+                          poder multiplicado pelo grupo
+
+      ()   grupo          agrupa, é quantificável,
+                          pode conter outros grupos
+
+      \1   retrovisor     usado com o grupo, máximo 9,
+                          conta da esquerda para direita
+
+      .*   curinga        qualquer coisa, o tudo e o nada
+
+      ??   opcional       não-guloso, 0 ou 1,
+                          casa o mínimo possível
+
+      *?   asterisco      não-guloso, 0 ou mais,
+                          casa o mínimo possível
+
+      +?   mais           não-guloso, 1 ou mais,
+                          casa o mínimo possível
+
+     {}?   chaves         não-guloso, numérico,
+                          casa o mínimo possível
+11.3 POSIX, barra-letras e outros aliens
+      POSIX        similar        significa
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      [:upper:]    [A-Z]          letras maiúsculas
+      [:lower:]    [a-z]          letras minúsculas
+      [:alpha:]    [A-Za-z]       maiúsculas e minúsculas
+      [:alnum:]    [A-Za-z0-9]    letras e números
+      [:digit:]    [0-9]          números
+      [:xdigit:]   [0-9A-Fa-f]    números hexadecimais
+      [:punct:]    [.,!?:...]     caracteres de pontuação
+      [:blank:]    [ \t]          espaço em branco e TAB
+      [:space:]    [ \t\n\r\f\v]  caracteres brancos
+      [:cntrl:]    -              caracteres de controle
+      [:graph:]    [^ \t\n\r\f\v] caracteres imprimíveis
+      [:print:]    [^\t\n\r\f\v]  imprimíveis e o espaço
+
+
+      b-l    nome                 tradução
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      \a     alert                alerta (bipe)
+      \b     backspace            caractere Backspace
+      \e     escape               caractere Esc
+      \f     form feed            alimentação
+      \n     newline              linha nova
+      \r     carriage ret         retorno de carro
+      \t     htab                 tabulação horizontal
+      \v     vtab                 tabulação vertical
+
+
+      b-l    POSIX equiv.         mnemônico
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      \d      [[:digit:]]         dígito
+      \D     [^[:digit:]]         não-dígito
+      \w      [[:alnum:]_]        palavra
+      \W     [^[:alnum:]_]        não-palavra
+      \s      [[:space:]]         branco
+      \S     [^[:space:]]         não-branco
+
+
+      b-l    significado          similar
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      \a     alfabeto             [[:alpha:]]
+      \A     não alfabeto         [^[:alpha:]]
+      \h     cabeça de palavra    [[:alpha]_]
+      \H     não cab. de palavra  [^[:alpha:]_]
+      \l     minúsculas           [[:lower:]]
+      \L     não minúsculas       [^[:lower:]]
+      \u     maiúsculas           [[:upper:]]
+      \U     não maiúsculas       [^[:upper:]]
+      \o     número octal         [0-7]
+      \O     não número octal     [^0-7]
+      \B     não-borda
+      \A     início do texto
+      \Z     fim do texto
+      \l     torna minúscula
+      \L     torna minúscula até \E
+      \u     torna maiúscula
+      \U     torna maiúscula até \E
+      \Q     escapa até \E
+      \E     fim da modificação
+      \G     fim do casamento anterior
+11.4 Modernosos, remendos e precedência
+
+
+    meta            significado
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    (?#texto)       texto é um comentário
+    (?:ER)          grupo fantasma, retrovisor não conta
+    (?=ER)          casa se ER casar adiante          ==
+    (?!ER)          casa se ER não casar adiante      !=
+    (?<=ER)         casa se ER casar antes           <--
+    (?<!ER)         casa se ER não casar antes       <--
+    (?letra)        letra é um modificador: imsxL
+    (?{código})     executa código Perl
+    (?(cond)s|n)    if-then-else
+
+
+    classe POSIX    remendo
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    [[:lower:]]     [a-zà-ú]
+    [[:upper:]]     [A-ZÀ-Ú]
+    [[:alpha:]]     [A-Za-zÀ-ú]
+    [[:alnum:]]     [A-Za-zÀ-ú0-9]
+
+
+    tipo de meta    exemplo    precedência
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    quantificador   ab+        maior
+    concatenação    ab         média
+    ou              ab|c       menor
+11.5 Caracteres ASCII imprimíveis
+      32       64  @    96  `   162  ¢   194  Â   226  â
+      33  !    65  A    97  a   163  £   195  Ã   227  ã
+      34  "    66  B    98  b   164  ¤   196  Ä   228  ä
+      35  #    67  C    99  c   165  ¥   197  Å   229  å
+      36  $    68  D   100  d   166  ¦   198  Æ   230  æ
+      37  %    69  E   101  e   167  §   199  Ç   231  ç
+      38  &    70  F   102  f   168  ¨   200  È   232  è
+      39  '    71  G   103  g   169  ©   201  É   233  é
+      40  (    72  H   104  h   170  ª   202  Ê   234  ê
+      41  )    73  I   105  i   171  «   203  Ë   235  ë
+      42  *    74  J   106  j   172     204  Ì   236  ì
+      43  +    75  K   107  k   173     205  Í   237  í
+      44  ,    76  L   108  l   174  ®   206  Î   238  î
+      45  -    77  M   109  m   175  ¯   207  Ï   239  ï
+      46  .    78  N   110  n   176  °   208  Ð   240  ð
+      47  /    79  O   111  o   177  ±   209  Ñ   241  ñ
+      48  0    80  P   112  p   178  ²   210  Ò   242  ò
+      49  1    81  Q   113  q   179  ³   211  Ó   243  ó
+      50  2    82  R   114  r   180  ´   212  Ô   244  ô
+      51  3    83  S   115  s   181  µ   213  Õ   245  õ
+      52  4    84  T   116  t   182     214  Ö   246  ö
+      53  5    85  U   117  u   183  o   215  ×   247  ÷
+      54  6    86  V   118  v   184  ¸   216  Ø   248  ø
+      55  7    87  W   119  w   185  ¹   217  Ù   249  ù
+      56  8    88  X   120  x   186  º   218  Ú   250  ú
+      57  9    89  Y   121  y   187  »   219  Û   251  û
+      58  :    90  Z   122  z   188  ¼   220  Ü   252  ü
+      59  ;    91  [   123  {   189  ½   221  Ý   253  ý
+      60  <    92  \   124  |   190  ¾   222  Þ   254  þ
+      61  =    93  ]   125  }   191  ¿   223  ß   255  ÿ
+      62  >    94  ^   126  ~   192  À   224  à
+      63  ?    95  _   161  ¡   193  Á   225  á
+

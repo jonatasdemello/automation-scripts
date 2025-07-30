@@ -1,0 +1,45 @@
+
+# create a new app
+
+ng new angular-docker --ssr false --routing true --style scss
+
+npm start
+
+http://localhost:4200/
+
+# create docker
+
+touch Dockerfile
+
+-------------------------------------------------------------------------------------------------------------------------------
+FROM node:alpine
+
+WORKDIR /usr/src/app
+
+COPY . /usr/src/app
+
+RUN npm install -g @angular/cli
+
+RUN npm install
+
+EXPOSE 4200
+
+CMD ["ng", "serve", "--host", "0.0.0.0"]
+-------------------------------------------------------------------------------------------------------------------------------
+
+# create image
+
+docker build -t angular-docker .
+
+# check
+
+docker images
+
+# run docker container
+
+docker run -p 4201:4200 angular-docker
+
+# check
+
+docker ps
+

@@ -1,0 +1,70 @@
+openSSL commands that will save you time looking them up:
+
+========================================
+GENERATE A CERTIFICATE AUTHORITY
+========================================
+#create the CA key
+openssl genrsa -out ./ca.key 4096
+
+#create a CA cert signed by the CA key
+openssl req -key ca.key -new -x509 -days 7300 -sha256 -out ca.cert -extensions v3_ca
+
+note: if you get an error message about v3_ca, check openssl config file for teh following block:
+[ v3_ca ]
+basicConstraints = critical,CA:TRUE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+=========================================
+CERTIFICATE SIGNING REQUEST TEMPLATE FOR CNF FILE
+=========================================
+[ req ]
+default_bits = 2048
+default_md = sha256
+prompt = no
+distinguished_name = subject
+req_extensions = req_ext
+x509_extensions = x509_ext
+string_mask = utf8only
+
+[ subject ]
+countryName = []
+stateOrProvinceName = []
+localityName = []
+organizationName = []
+emailAddress = []
+commonName = []
+
+[ x509_ext ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth, clientAuth
+subjectAltName = @alternate_names
+
+[ req_ext ]
+subjectKeyIdentifier = hash
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth, clientAuth
+subjectAltName = @alternate_names
+
+[ alternate_names ]
+DNS.1 = []
+IP.1 = []
+
+#fill out with appropriate values
+===================================
+GENERATE PRIVATE KEY AND CERTIFICATE SIGNING REQUEST
+===================================
+
+#creates a client private key and certificate signing rquest
+openssl req -new -nodes -keyout x.key -out x.csr -config x.cnf
+
+
+===================================
+GENERATE CERTIFICATE SIGNED BY CA WITH SAN INFO
+===================================
+
+#uses the CA and CSR to create an X.509 cert signed by the CA
+openssl x509 -req -CA X.crt -CAkey X.key -CAcreateserial -in X.csr -out X.crt -days 825 -sha256 -extfile X.cnf -extensions x509_ext

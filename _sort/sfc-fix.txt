@@ -1,0 +1,20 @@
+1. Type "cmd" in windows search bar
+2. Right click on "Command Prompt"
+3. Select "Run as Administrator"
+4. Type "sfc /scannow" without quote and press ENTER
+
+Then :
+
+1. Type "cmd" in windows search bar
+2. Right click on "Command Prompt"
+3. Select "Run as Administrator"
+4. Type "DISM /Online /Cleanup-Image /CheckHealth" without quote and press ENTER
+5. Type "DISM /Online /Cleanup-Image /ScanHealth" without quote and press ENTER
+6. Type "DISM /Online /Cleanup-Image /RestoreHealth" without quote and press ENTER
+
+
+sfc /scannow
+
+DISM /Online /Cleanup-Image /CheckHealth
+DISM /Online /Cleanup-Image /ScanHealth
+DISM /Online /Cleanup-Image /RestoreHealth

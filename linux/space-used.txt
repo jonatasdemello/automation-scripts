@@ -1,0 +1,28 @@
+du -h --max-depth=1 ./
+
+72K     ./languages
+2.1G    ./uploads
+232M    ./webp-express
+8.0K    ./wp-rocket-config
+3.2G    ./plugins
+52K     ./mu-plugins
+322M    ./themes
+212K    ./cache
+5.2G    ./ai1wm-backups
+4.0K    ./upgrade
+32K     ./w3tc-config
+11G     ./
+
+
+How to Get the Size of a Directory in Linux
+sudo du -sh /var
+sudo du -shc /var/*
+sudo du -h --max-depth=1 /var
+sudo du -sh --apparent-size /var
+
+# to print the 5 largest directories within the /var directory
+sudo du -h /var/ | sort -rh | head -5
+
+
+df -h
+

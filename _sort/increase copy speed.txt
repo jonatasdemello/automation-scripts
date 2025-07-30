@@ -1,0 +1,284 @@
+https://www.raymond.cc/blog/12-file-copy-software-tested-for-fastest-transfer-speed/view-all/
+
+https://www.stcleaner.com/blog/2018/09/01/increase-copying-speed-in-windows-10/
+
+Increase Copying Speed in Windows 10
+Tired of slow file copying speed in Windows 10? On a daily basis we transfer or copy hundreds of
+files from one folder to the other and our core purpose is to improve productivity.
+But some files are quite voluminous, and it takes a lot of time on the computer’s
+part and patience on the user’s part for them to be copied to their newest location.
+
+Even though Windows has tried to improve this process in its latest version,
+still the performance is unbearable when you have to transfer very heavy files.
+
+So in this guide, we will tell a few ways in which you can increase
+the copy-paste speed in Windows 10 by almost 50%!
+
+
+Software to Boost Speed
+Windows has a basic version to transfer files from one folder to the next.
+However, if you are not happy with that you can easily boost the speed by downloading
+a file transfer speed optimizing software called TeraCopy.
+It is famous among Windows users as it speeds up the entire process and helps users save up
+a tremendous amount of time.
+
+
+Set Explorer Settings to Realtime
+If you are not in favor of a third-party software solution and would like to speed up
+the entire process by virtue of a tweak, then simply change the Explorer settings to real-time.
+The process is fairly simple.
+
+Simply open the Task Manager by pressing the Ctrl + Alt + Delete keys simultaneously.
+Click the Details tab. Now scroll down and select explorer.exe.
+Right-click it and point to Set priority and select Realtime.
+That’s it. This way you will have all the resources dedicated to speeding up explorer related processes.
+As the copy pasting function is part of the explorer process,
+it will automatically begin to perform much faster than before.
+
+
+
+Change USB format to NTFS
+There is also a chance that file transfer speed of files from USB drives is slow. There is one way to increase that without purchasing any extravagant software program. Simply change the file format of the USB drive to NTFS. You can do so either from This PC or Command Prompt.
+
+Note: Please remember that formatting means that your entire data in the USB drive will be deleted. So basically this solution will speed up file transfers from the next time onwards.
+
+Open This PC, right-click your USB drive and select Format.
+Select NTFS in the File system drop-down menu and click Start.
+If you want to use the Command Prompt route, here is what you need to do:
+
+Click Start, type CMD and press Enter to open it.
+Type the following command and press Enter to execute it:
+convert drive: /fs:ntfs
+
+
+Get an SSD Drive
+SSD drives are a much faster than regular hard drives. The HDD drives are made on metallic disk platters. They are hard moving surfaces so the speed of transfer is slow. However, SSD drives on the other hand are made on a single silicon chip. That makes them a lot faster.
+
+You can easily replace your drive with an SSD to increase system performance. Now SSD drives are available at a lower price than before because of the availability of improved technology for their mass production.
+
+
+
+Increase RAM
+Another way to speed up data transfer speed on your system is by increasing the RAM in your system. If you are already using 2GB to 4GB of RAM in your system, it is highly recommended you double it. Most users have reported that getting a higher quality RAM brought about a significant difference in file transfer speed.
+
+
+
+Turn off Auto-Tuning
+Some users have reported on Windows official forum that by turning off the Auto-Tuning facility, they were able to increase the copy speed of file transfer.
+
+Here is how you can do it too:
+
+Press Windows Key + X and select Command Prompt (Admin).
+Now type in
+
+	netsh int tcp set global autotuninglevel=disabled
+
+and press Enter to execute the command.
+Now transfer files between folders or drives and notice the much improved speed for data transfer.
+To enable the Auto-Tuning feature again, simply go to Command Prompt in the manner before, and type in
+
+	netsh int tcp set global autotuninglevel=normal
+
+and press Enter. This will turn on Auto-Tuning again.
+
+
+Turn on Better Performance for USB drives
+If you are transferring data from a USB and the transfer is too slow then just turn on the Better Performance option in the USB to get a big speed boost. Here is how to achieve that:
+
+Open This PC, right-click the USB and select Properties.
+Click the Hardware tab and then select Properties under the Device Properties section.
+Click the Change settings button and a new window will open up.
+Click the Policies tab, and finally select the Better Performance feature.
+Click OK | OK.
+
+
+Defragment Drives
+If nothing else is working, you have the option to defragment the whole drive or selected partitions. There are certain reasons that lead to fragmentation within the drive. These include cookies, junk files, broken paths and so much more. Defragmentation removes all of this and increases system performance.
+
+Defragging the drives
+Defragging the drives
+
+
+Final Word
+These are some of the best ways to increase the speed of the copy-paste process for files in Windows 10. The following methods will also work with USB and mobile transfers to the computer.
+
+
+
+Method 1:
+
+Run System Maintenance Troubleshooter
+
+Follow these steps to run System Maintenance troubleshooter.
+
+a.      Press Windows key + W and type troubleshooting.
+b.      Select troubleshooting.
+c.       Select View all on the top left corner.
+d.      Run System Maintenance trouble shooter.
+
+Method 2:
+
+I would suggest you to turn off the Auto tuning feature and then try to transfer the files.
+Follow these steps to turn off Auto-tuning:
+
+a.      Press Windows key + X and select Command Prompt(Admin).
+b.      Type “netsh int tcp set global autotuninglevel=disabled” and press Enter.
+c.       Now try to transfer the files and check the data transfer speed.
+d.      Again go to Command Prompt(Admin) and type “netsh int tcp set global autotuninglevel=normal” and press Enter.
+e.      This will turn on the Auto tuning again.
+
+Method 3:
+
+I would suggest you to disable Remote Differential Compression and check. Remote Differential Compression (RDC) allows data to be synchronized with a remote source using compression techniques to minimize the amount of data sent across the network. RDC is different from patching-oriented differencing mechanisms, such as Binary Delta Compression (BDC), that are designed to operate only on known versions of a single file.
+
+Follow these steps to do so:
+
+a.      Press Windows key + W and type “turn windows features on”.
+b.      Select Turn Windows features on or off.
+c.       Uncheck the box for Remote Differential Compression and click Ok.
+d.      Restart the computer and then try transferring the files.
+
+Hope this helps. If you face any issues with Windows, do get back to us. We will be happy to assist you.
+
+
+
+
+Best Tools for Copying a Large Number of Files in Windows
+Third-party apps for Windows 7 users
+
+Author avatar
+Written by: Aseem Kishore, Twitter: @akishore
+Posted on: March 20th, 2014 in: Software Reviews
+
+
+If you’ve been using Windows 8 as your main PC, you have probably noticed the vastly upgraded performance and user interface when copying files. Finally, Microsoft decided to revamp some of the core functions of the OS, which makes using Windows 8 so much better than Windows 7…sometimes.
+
+Unfortunately, even with all the great new security and updates to core features, Windows 8 has been hampered by the dual desktop and Start Screen interfaces. I personally switched back to Windows 7 because I find the Start Screen and lack of the Start button frustrating. However, back on Windows 7, I no longer have the new more-reliable copying functions of Windows 8.
+
+In addition to faster performance, Windows 8 also handles file conflicts and other errors way better than previous operating systems. The best part is that you can actually pause and resume copy operations, which is really useful.
+
+copying files windows 8
+
+However, until Microsoft fixes Windows 8 the right way, I’m going to stick with Windows 7 and that means having to use third-party apps for copying large number of files. In this post, I’m going to list some of the best file copying utilities currently out there that you can use for Windows. Depending on your copying needs, some programs are better than others. I can’t say there is one copying program that’s the “best”.
+
+Instead of just listing them out in random order, which doesn’t really help anybody, I’m going to break them down into categories: fastest (local), fastest (network), handling corrupted data, and most features.
+
+Fastest File Copiers (Local)
+
+1. FastCopy
+
+fast copy
+
+FastCopy has been tested by many people and the results show that it is far the fastest copying program out there for Windows. If you just need raw speed, then this program is the best.
+
+Pros: copies extremely fast, shell integration, x64 capabilities, runs without installation, strong command line support, NSA file wiping utility for secure deleting, handles long path well, ability to see what files/folders will be affected before executing using the listing button.
+
+Cons: Interface is very bare bones and not very intuitive, unable to pause a transfer, uninstalling is not intuitive.
+
+Download FastCopy
+
+2. ExtremeCopy Standard
+
+extremecopy
+
+ExtremeCopy Standard is a free and does a very good job of doing local data transfers really fast. For whatever reason, it’s pretty terrible for network transfers, so don’t bother downloading this program if you have to transfer data across your LAN. It’s faster than TeraCopy and very close to FastCopy.
+
+Pros: copies data fast, integrates directly into Explorer so you can copy and paste like normal, x64-bit version, ability to pause copy operations.
+
+Cons: standard version has no user interface, except for options, bad for network transfers, pro features are available for free in other copying programs, must install program to run.
+
+Download ExtremeCopy Standard
+
+3. KillCopy
+
+killcopy
+
+KillCopy has a horrific looking interface when you copy files, but it gets the job done very fast. It’s also kind of old and isn’t updated like TeraCopy, UltraCopier and other popular copy programs.
+
+Pros: can resume copy on crash, parallel read/write, resolution options in case of errors or file conflicts, some boost options for faster performance, great network performance when copying, ability to securely wipe data before copying.
+
+Cons:  terrible looking interface, doesn’t get updated very often, must be installed in order to run.
+
+Download KillCopy
+
+Fastest File Copiers (Network)
+1. RichCopy 4
+
+richcopy
+
+This tool was created internally by a Microsoft employee and wasn’t released to the public until years later. It’s a bit old and hasn’t been updated since 2009, but it’s ultra fast for network transfers. However, it’s very slow for local copying, so don’t use this for anything other than network transfers.
+
+Pros: Very fast for network copying, parallel copying, ability to pause and resume copying, ability to continue copying even if network connection lost, clean interface.
+
+Cons: hasn’t been updated in a long time, very slow for local copying.
+
+Download RichCopy 4
+
+2. KillCopy – KillCopy is just a tad slower than RichCopy when performing network transfers. Unfortunately, because of it’s horrible looks and lack of updates, it’s not that popular even though it’s very fast.
+
+3. FastCopy – This is your best bet if you’re looking for one copying program to use on a regular basis. It’s not the fastest for network transfers, but it’s very close and since it’s the fastest for local transfers, it’s probably the best copying utility overall.
+
+4. Ultracopier
+
+ultracopier
+
+UltraCopier is fast, but speed is not it’s main selling point. It’s got a nice interface and has a lot of useful features. Development has slowed down, but it still gets updates every 6 months or so.
+
+Pros: works on Linux and Mac too, supports third-party plugins to extend functionality, start/stop copy, limit speed, search through copy list, simple and clean interface.
+
+Cons: speed is above average, but nothing special.
+
+Download Ultracopier
+
+Copying Corrupted Data
+1. Unstoppable Copier
+
+unstoppable copier
+
+This is pretty much the only program that you can use to copy not only a large number of files, but also corrupt files. In terms of copying speed, it’s very slow compared to all the other programs, but that’s because it is the most reliable of all copiers. If you have any data that you believe could be corrupt like data stored on a hard drive with bad sectors or on a scratched CD or DVD, then you should use Unstoppable Copier.
+
+Pros: can recover data from corrupt files while copying, batch mode, various settings for data recovery
+
+Cons: very slow in terms of copying speed
+
+Download Unstoppable Copier
+
+File Copiers – Most Features
+1. TeraCopy
+
+teracopy
+
+If you’re looking for a more full-featured and fancier-looking copier, then TeraCopy is the best choice. It would actually be the best one overall if it’s copying speeds were on par with FastCopy, however, it’s only about average. Where it makes up is all the features and the nice interface.
+
+Pros: very nice interface, integrates fully with Windows, works with Windows 8 x64, stop and start, ability to recover from errors, failed file list, very actively updated.
+
+Cons: copying speed is only average.
+
+Download TeraCopy
+
+Alternatives
+Beyond just the above-mentioned file copiers, there are some other programs that can help you copy files in different ways. Here are two of my favorites.
+
+1. XXCOPY
+
+xxcopy
+
+XXCOPY is a command line copier program with no GUI interface. However, if you know how to use the command line, it has over 230 command line switches you can use to create very specific copy operations that you can’t do with any other program. Want to copy only the files older than a certain date, larger than a certain size and with a certain word in the file name? XXCOPY can do that.
+
+Pros: huge command line options, works with all versions of Windows, access remote network storage
+
+Cons: only non-stop copying, can’t recover from errors, can’t pause and resume
+
+Download XXCOPY
+
+2. Beyond Compare
+
+beyond compare
+
+Another smart way to copy files is to just compare two folders and see what’s different. That’s how Beyond Compare works. Even if it crashes in the middle or there is some sort of error, you can always just run it again and since it’s comparing everything, it’ll copy over any remaining items. This is the only program that doesn’t have a free version, though, so you’d have to cough up $30 for it. However, there are lots of programmers and IT Pros that overwhelmingly vouch for this program.
+
+Download Beyond Compare
+
+There are a bunch of other file copier programs out there, but there’s really no point in mentioning all of them because you’ll be better off using one from the list above. If you use a file copier not mentioned above or prefer one over another, let us know in the comments. Enjoy!
+
+
+

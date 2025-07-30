@@ -1,0 +1,36 @@
+
+RUN:
+ms-settings:optionalfeatures
+
+Remote Desktop Connection: mstsc.exe
+
+
+try the FQDN instead? domain.local
+
+-----------------------------------------------------------------------
+
+Get-ComputerInfo | Select-Object -ExpandProperty WindowsVersion
+net localgroup adminstrators /add "AzureAD\username@AzureADTennantDomain.com"
+
+-----------------------------------------------------------------------
+
+net localgroup administrators AzureAD\JohnDoe /add
+
+net localgroup "Remote Desktop Users" /add "AzureAD\the-UPN-attribute-of-your-user"
+
+Add-LocalGroupMember -Group administrators -Member AzureAD\*UPN*
+
+
+When prompted for credentials, specify your user name in
+either user@domain.com or AzureAD\user@domain.com format.
+
+try the FQDN instead? domain.local
+
+
+
+net localgroup administrators AzureAD\JohnDoe /add
+net localgroup "Remote Desktop Users" /add "AzureAD\the-UPN-attribute-of-your-user"
+
+PS> ([adsi]"WinNT://./Hyper-V Administrators,group").Add("WinNT://$env:UserDomain/$env:Username,user")
+
+-----------------------------------------------------------------------

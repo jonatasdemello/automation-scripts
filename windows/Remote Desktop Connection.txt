@@ -1,0 +1,42 @@
+
+
+https://support.microsoft.com/en-us/topic/credssp-updates-for-cve-2018-0886-5cbf9e5f-dc6d-744f-9e97-7ba400d6d3ea
+https://appuals.com/fix-the-remote-computer-requires-network-level-authentication/
+
+
+[Window Title]
+Remote Desktop Connection
+
+[Content]
+An authentication error has occurred.
+The function requested is not supported
+
+Remote computer: 172.16.10.72
+This could be due to CredSSP encryption oracle remediation.
+For more information, see https://go.microsoft.com/fwlink/?linkid=866660
+
+[OK]
+
+----------
+WarningMsg
+06/29/2021 15:36:19
+RDP disconnected!
+2825 The remote computer requires Network Level Authentication, which your computer does not support. For assistance, contact your system administrator or technical support.
+----------
+
+open up gpedit.msc on your machine
+change the following GPO
+
+Computer Config \ Admin Templates \ System \ Credentials Delegation
+Then enable Encryption Oracle Remediation
+
+You'll need to do a full restart afterwards
+- and maybe use the IP of the machine first but then it will clear
+
+
+
+choco install dotnet-5.0-windowshosting --version=5.0.6 --force -y
+choco install dotnetcore-2.2-aspnetruntime --force -y
+
+
+choco upgrade chocolatey --cache-location c:\somelocation

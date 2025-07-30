@@ -1,0 +1,73 @@
+
+The server is configured to use pass-through authentication with a built-in account to access the specified physical path.
+However, IIS Manager cannot verify whether the built-in account has access.
+Make sure that the application pool identity has Read access to the physical path.
+If this server is joined to a domain, and the application pool identity is NetworkService or LocalSystem,
+verify that <domain>\<computer_name>$ has Read access to the physical path.
+Then test these settings again.
+
+
+
+
+%IIS_USER_HOME% - The IIS Express home directory for the user
+%IIS_SITES_HOME% - The default home directory for sites
+%IIS_BIN% - The location of the IIS Express binaries
+%SYSTEMDRIVE% - The drive letter of %IIS_BIN%
+
+
+The following three environment variables are set by iisexpress.exe during the process startup.
+
+    %IIS_BIN% - refers to IIS Express installation folder (%PROGRAMFILES%\IIS Express)
+    %IIS_USER_HOME% - %USERPROFILE%\Documents\IISExpress
+    %IIS_SITES_HOME% - %USERPROFILE%\Documents\My Web Sites
+
+%SYSTEMDRIVE% - is a standard windows system environment variable
+
+
+
+IIS Express:
+C:\Program Files\IIS Express\iisexpress.exe
+
+C:\Users\jonatas\Documents\My Web Sites\WebSite1
+
+netstat -ano | findstr /C ":80"
+netsh http show servicestate
+
+C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\aspnet_regiis.exe -i
+
+C:\WINDOWS\Microsoft.NET\Framework64\v2.0.50727\aspnet_regiis.exe -i
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis.exe -i
+
+
+Uninstall ASP.NET by using the following command: aspnet_regiis /u
+Re-install ASP.NET by using the following command: aspnet_regiis /i
+
+iisreset /noforce
+
+
+netstat -aon | findstr :80
+
+-a displays all connections and listening ports.
+-o displays the owning process ID associated with each connection.
+-n displays addresses and port numbers in numerical form.
+
+
+
+netstat -anb >%USERPROFILE%\ports.txt
+
+$proc = @{};
+Get-Process | ForEach-Object { $proc.Add($_.Id, $_) };
+netstat -aon | Select-String "\s*([^\s]+)\s+([^\s]+):([^\s]+)\s+([^\s]+):([^\s]+)\s+([^\s]+)?\s+([^\s]+)" | ForEach-Object {
+    $g = $_.Matches[0].Groups;
+    New-Object PSObject |
+        Add-Member @{ Protocol =           $g[1].Value  } -PassThru |
+        Add-Member @{ LocalAddress =       $g[2].Value  } -PassThru |
+        Add-Member @{ LocalPort =     [int]$g[3].Value  } -PassThru |
+        Add-Member @{ RemoteAddress =      $g[4].Value  } -PassThru |
+        Add-Member @{ RemotePort =         $g[5].Value  } -PassThru |
+        Add-Member @{ State =              $g[6].Value  } -PassThru |
+        Add-Member @{ PID =           [int]$g[7].Value  } -PassThru |
+        Add-Member @{ Process = $proc[[int]$g[7].Value] } -PassThru;
+#} | Format-Table Protocol,LocalAddress,LocalPort,RemoteAddress,RemotePort,State -GroupBy @{Name='Process';Expression={$p=$_.Process;@{$True=$p.ProcessName; $False=$p.MainModule.FileName}[$p.MainModule -eq $Null] + ' PID: ' + $p.Id}} -AutoSize
+} | Sort-Object PID | Out-GridView
+

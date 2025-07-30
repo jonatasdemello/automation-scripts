@@ -1,0 +1,140 @@
+
+Exceptions in .NET can be very expensive when it comes to CPU cycles.
+Try-Parse Pattern
+
+Exception Throwing
+https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/exception-throwing
+https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/exceptions-and-performance
+
+https://mattwarren.org/2016/12/20/Why-Exceptions-should-be-Exceptional/
+https://docs.microsoft.com/en-us/archive/blogs/ricom/the-true-cost-of-net-exceptions-solution
+
+Book
+https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/
+https://www.amazon.co.uk/Framework-Design-Guidelines-Conventions-Libraries/dp/0321545613/ref=as_li_ss_tl?ie=UTF8&linkCode=sl1&tag=mattonsoft-21&linkId=2c18fb45d3806403d0eb7d1c87d181c5
+
+
+https://stackify.com/csharp-exception-handling-best-practices/
+https://stackify.com/finding-hidden-exceptions-application-performance-problems-apm/
+
+
+To access Exception Settings, go to Debug -> Windows -> Exception Settings
+
+
+.NET Framework TryXXX() Pattern
+
+In .NET, the recommended was to avoid exceptions in normal code flow is to use the TryXXX() pattern.
+As pointed out in the guideline section on Exceptions and Performance, rather than writing code like this, which has to catch the exception when the input string isn’t a valid integer:
+
+try
+{
+    int result = int.Parse("IANAN");
+    Console.WriteLine(result);
+}
+catch (FormatException fEx)
+{
+    Console.WriteLine(fEx);
+}
+
+You should instead use the TryXXX API, in the following pattern:
+
+int result;
+if (int.TryParse("IANAN", out result))
+{
+    // SUCCESS!!
+    Console.WriteLine(result);
+}
+else
+{
+    // FAIL!!
+}
+
+
+public DateTime? GetDate(SqlDataReader reader, string columnName)
+{
+   DateTime? value = null;
+   try
+   {
+      value = DateTime.Parse(reader[columnName].ToString());
+   }
+   catch
+   {
+   }
+   return value;
+}
+
+try
+{
+   //do something
+}
+catch (Exception ex)
+{
+   //LOG IT!!!
+   Log.Error(string.Format("Excellent description goes here about the exception. Happened for client {0}", _clientContext.ClientId), ex);
+   // or
+   log.Error("Error trying to do something", new { clientid = 54732, user = "matt" }, ex);
+
+   throw; //can rethrow the error to allow it to bubble up, or not, and ignore it.
+}
+
+
+var user = await _tokenRepo.GetCacheUserAccount("xx");
+var user = await _tokenRepo.GetCacheUserAccount("xx");
+
+
+---------------------------
+Microsoft Visual Studio
+---------------------------
+No Managed Heap data was collected.  This feature requires .NET v4.5 or greater.
+---------------------------
+OK
+---------------------------
+Cannot obtain value of the local variable or argument because it is not available at this instruction pointer, possibly because it has been optimized away.
+
+
+https://docs.microsoft.com/en-us/azure/virtual-machines/sizes-b-series-burstable
+
+
+services.AddMvc(setup =>
+{
+    // TODO: dotnetcore - remove this for ASP.NET CORE 2.1
+    // Add [FromBody] to HttpPost and HttpPut params as needed
+    // asp.net core 2.0 requires FromBody to bind JSON to model but upcoming
+    // asp.net 2.1 does not https://blogs.msdn.microsoft.com/webdev/2018/02/27/asp-net-core-2-1-web-apis/
+    // This should be able to be removed when moving to 2.1
+    //setup.UseFromBodyBinding(
+    //    actionPredicate: a =>
+    //   ((a.ActionMethod.GetCustomAttribute(typeof(HttpPostAttribute)) != null ||
+    //    a.ActionMethod.GetCustomAttribute(typeof(HttpPutAttribute)) != null) &&
+    //    !a.ActionName.Contains("upload", StringComparison.OrdinalIgnoreCase)));
+
+    setup.Filters.Add(new SanitizeUserInputFilter(new SanitizeUserInputHelper()));
+    setup.Filters.Add(new ModelValidationFilter());
+    setup.Filters.Add(typeof(TokenAuthenticationFilter));
+})
+
+
+"LoginLocal": {
+  "ApiKey":"XXX-XXX-XXX"
+}
+
+public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+
+    WebHost.CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
+        .ConfigureAppConfiguration((context, config) => config.AddRegistry(RegistryConfigurationExtensions.DefaultSubKey)) // comment on MAC #mac
+        .ConfigureLogging((ctx, logging) =>
+        {
+            //logging.ClearProviders();
+            //logging.AddConsole();
+
+            // using Elmah.Io.Extensions.Logging
+            //logging.AddElmahIo(options => ctx.Configuration.GetSection("ElmahIo").Bind(options));
+            //logging.AddFilter<ElmahIoLoggerProvider>(null, LogLevel.Warning);
+        });
+
+    if (model.ApiKey != "XXX-XXX-XXX")
+    {
+        _logger.LogWarning($"login/local failed: username: {model.Username} password: {model.Password}  apikey: {model.ApiKey}");
+        return Unauthorized();
+    }

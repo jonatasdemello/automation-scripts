@@ -1,0 +1,19 @@
+evenv.exe /ResetSettings
+devenv.exe /ResetUserData
+
+
+Right-clicking "devenv.exe" and choosing "Run as Administrator"
+
+devenv.exe /setup
+devenv.exe /ResetSettings
+devenv.exe /ResetSkipPkgs
+devenv.exe /SafeMode
+
+
+---------------------------
+Microsoft Visual Studio
+---------------------------
+The Application Data folders for Visual Studio could not be removed. This usually means another instance of Visual Studio is running.
+---------------------------
+OK
+---------------------------

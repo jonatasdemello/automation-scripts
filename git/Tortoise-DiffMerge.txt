@@ -1,0 +1,35 @@
+choco install diffmerge
+
+TortoiseGit + DiffMerge
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+first
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+second
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+merge tool
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Using Winmerge:
+
+first
+	C:\Program Files\WinMerge\WinMergeU.exe /r /e /x /u /wl %base %mine
+second
+	-
+merge tool
+	C:\Program Files\WinMerge\WinMergeU.exe /e /x /ub /dl %tname /dr %yname %theirs %mine
+
+
+Diff Viewer
+	C:\Users\jonatas\AppData\Local\Programs\WinMerge\WinMergeU.exe -e -ub -dl %bname -dr %yname %base %mine
+	C:\Users\jonatas\AppData\Local\Programs\WinMerge\WinMergeU.exe /e /ub /fr /wl /wm /dl %bname /dm %tname /dr %yname  %base %theirs %mine /o %merged /ar
+
+
+Merge Tool
+	C:\Users\jonatas\AppData\Local\Programs\WinMerge\WinMergeU.exe /e /u %merged
+
+
+%theirs %mine %merged

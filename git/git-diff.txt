@@ -1,0 +1,215 @@
+
+diff A B
+diff A..B
+log A...Base
+
+diff A...B
+log A..B
+
+Log A B
+
+
+
+	git diff --ignore-space-at-eol.
+
+Windows and UNIX system don't use same line-ending, to prevent conflict from happening based on these, you should setup you git config this way:
+
+	Windows : git config --global core.autocrlf true
+	Unix : git config --global core.autocrlf input
+
+Next, to make sure we only commit with ideal whitespace rules, you can set this config option:
+
+	git config --global core.whitespace trailing-space,space-before-tab,indent-with-non-tab
+
+
+choco install diffmerge
+
+TortoiseGit + DiffMerge
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+first
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+second
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+merge tool
+	C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+
+
+using Winmerge:
+first
+	C:\Program Files\WinMerge\WinMergeU.exe /r /e /x /u /wl %base %mine
+second
+	-
+merge tool
+	C:\Program Files\WinMerge\WinMergeU.exe /e /x /ub /dl %tname /dr %yname %theirs %mine
+
+
+Compare diff between branches
+git diff master..branch
+git log master..branch
+git shortlog master..branch
+git diff master..branch | grep "^diff"
+
+
+
+
+
+Compare branches
+git diff branch1..branch2
+
+git config --global diff.tool meld
+
+git difftool branch1..branch2
+
+git difftool -t meld branch1..branch2
+
+git log A..B
+git log A...B
+
+> gitk branch1 branch2
+
+
+To see a visual diff of all differences between two branches I like to merge the two branches - WITHOUT committing the merge - and then use git gui or git Extensions to get an overview of the differences.
+
+Git command line for merging without commiting:
+
+git checkout branchA
+git merge --no-commit --no-ff branchB
+
+Then when done, you can undo the merge with
+
+git merge --abort
+
+
+
+
+
+# Git Commit Viewer
+
+gitk --all
+
+git diff master..otherbranch > myDiffFile.diff
+git difftool -d master otherbranch
+
+
+git diff --stat --color  master..laureate
+
+
+git diff master..branch
+git log master..branch
+git shortlog master..branch
+
+git diff master..branch | grep "^diff"
+git diff --name-status master..branchName
+git diff --stat --color master..branchName
+git diff --stat --color branchName..master
+
+git checkout ba
+git checkout -b ba-merge
+git merge master
+.... review new code and fix conflicts....
+git commit
+git checkout ba
+git merge ba-merge
+git branch -d ba-merge
+git merge master
+
+
+$ git config merge.conflictstyle diff3
+
+After setting this, retry the merge (git reset --hard; git merge master) and examine the conflicting file again:
+
+$ git mergetool
+
+
+
+
+git config --get-all
+
+git config --global -e
+
+git config --global core.editor code
+
+git config --global --get diff.tool
+
+git config --global diff.tool default-difftool
+
+git log --oneline
+
+# remove prompt for each file:
+git config --global difftool.prompt false
+git config --global --get difftool.prompt false
+
+
+git difftool --tool-help
+git help config
+
+# open winmerge for file
+git difftool --tool=winmerge
+
+git difftool details.html
+
+git diff HEAD
+git status -s
+
+git difftool HEAD HEAD~1
+
+
+git config --global --list
+
+git config --global merge.tool code
+git config --global mergetool.code.cmd "code --wait \"$MERGED\""
+git config --global mergetool.prompt false
+git config --global mergetool.keepbackup false
+
+git reflog
+git reflog HEAD@{20}
+git reflog HEAD@{3.days.ago}
+
+git diff HEAD@{5} HEAD@{4}
+git diff HEAD@{1.min.ago} HEAD@{1.week.ago}
+
+
+
+
+
+#original file:
+#-----------------------------
+
+[user]
+	name=user
+	email=user@mail.com
+[winUpdater]
+	recentlySeenVersion = 2.19.1.windows.1
+[core]
+	autocrlf=true
+[diff]
+	tool = winmerge
+[difftool "winmerge"]
+    cmd = "'C:/Program Files (x86)/WinMerge/WinMergeU.exe'" -e "$LOCAL" "$REMOTE"
+[difftool]
+	prompt = false
+
+#-----------------------------
+
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
+
+
+[diff]
+    tool = winmerge
+[difftool "winmerge"]
+    cmd = "'C:/Program Files (x86)/WinMerge/WinMergeU.exe'" -e "$LOCAL" "$REMOTE"
+
+[diff]
+    guitool = winmerge
+[difftool "winmerge"]
+    path = c:/Program Files (x86)/winmerge/winmergeu.exe
+    cmd = \"c:/Program Files (x86)/winmerge/winmergeu.exe\" \"$LOCAL\" \"$REMOTE\"
+
+#-----------------------------
+

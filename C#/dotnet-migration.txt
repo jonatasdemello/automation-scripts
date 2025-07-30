@@ -1,0 +1,384 @@
+https://hackernoon.com/how-to-migrate-project-from-aspnet-mvc-to-aspnet-core-qt1ks31zn
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+So, the first thing I did in the file was removing the references to
+
+Microsoft.AspNetCore.Mvc to use Microsoft.Extensions.Hosting:
+
+
+So if you’re in the same boat as me and just need to get something out the door. The first thing you need is to install the following Nuget package :
+
+Install-Package Microsoft.AspNetCore.Mvc.NewtonsoftJson
+
+Then you need to add a specific call to your IMVCBuilder. This will differ depending on how you have set up your project. If you are migrating from an existing project you’ll have a call to “AddMvc()” which you can then tack onto it like so :
+
+services.AddMvc().AddNewtonsoftJson();
+
+However in new .NET Core 3+ projects, you have a different set of calls replace MVC. So you’ll probably have one of the following :
+
+services.AddControllers().AddNewtonsoftJson();
+services.AddControllersWithViews().AddNewtonsoftJson();
+services.AddRazorPages().AddNewtonsoftJson();
+
+If this is an API you will likely have AddControllers, but depending on your project setup you could have the others also. Tacking on AddNewtonsoftJson()  to the end means it will “revert” back to using Newtonsoft over System.Text.Json
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+https://www.c-sharpcorner.com/article/upgrade-net-core-2-12-2-application-to-net-core-3-1/
+
+Or you can search for tag <TargetFramework> in the .csproj file and change its value to "netcoreapp3.1" as shown below:
+
+
+Remove "Microsoft.AspNetCore.App"from your project Dependencies or .csproj file:
+
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+
+Remove "Microsoft.AspNetCore.App.Razor.Design" from your project Dependencies or .csproj file:
+
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" />
+
+Update NuGet package references (If applicable, Either in .csproj file or directly in your project Dependencies)
+
+
+Swagger
+
+It is used for API Documentation. If you are using then update to version “Swashbuckle.AspNetCore” to version 5.5.1
+There are many changes in Swagger configuration in .NET core 3.1
+
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+
+
+NewtonSoft / Any JSON Serializer
+
+If you are using any JSON serializer, then add the reference of “Microsoft.AspNetCore.Mvc.NewtonsoftJson” of version 3.1.5
+Because in .NET core 3.1, Microsoft has introduced an in-build faster JSON serializer.
+
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+
+
+Kestrel Web Server
+
+Kestrel is a preferred web server that is implemented on basis of Libuv library (Which is also used in node.js),
+If you are using it in your application, Then update “Microsoft.ServiceFabric.AspNetCore.Kestrel” to version 4.1.417
+
+Note
+If you are using Nagle algorithm (NoDelay) in Kestrel webserver to reduce the number of packets over the TCP network to improve the efficiency, like below (in your kestrel configuration).
+
+    listenOptions.NoDelay = true;
+
+Then, you need to add following Nuget package as it is moved to separate package
+
+“Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv” of version 3.1.5
+
+
+
+Modify ConfigureServices method of Startup.cs
+
+Replace AddMvc with AddControllers, Microsoft replaced AddMVC with two options:
+
+    Web Application (MVC) - We should replace AddMVC with AddControllersWithViews
+    Web API - We should replace AddMVC with AddControllers, The motivation here is to not load the libraries or components which are related to views
+
+From:
+
+    services.AddMvc(options =>
+
+To:
+
+    services.AddControllers(options =>
+
+Replace the .Net Core MVC Compatability version from 2.xto 3.0 in SetCompatibilityVersion
+
+From:
+
+    services.AddControllers(options => {
+        options.Conventions.Add(new AddAuthorizeFiltersControllerConvention());
+        options.OutputFormatters.RemoveType < HttpNoContentOutputFormatter > ();
+    }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+
+To:
+
+    services.AddControllers(options => {
+        options.Conventions.Add(new AddAuthorizeFiltersControllerConvention());
+        options.OutputFormatters.RemoveType < HttpNoContentOutputFormatter > ();
+    }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+
+** from Microsoft:  https://docs.microsoft.com/en-us/aspnet/core/mvc/compatibility-version?view=aspnetcore-5.0
+
+The SetCompatibilityVersion method is a no-op for ASP.NET Core 3.0 apps.
+That is, calling SetCompatibilityVersion with any value of CompatibilityVersion has no impact on the application.
+
+
+Replace AddJsonOptions with AddNewtonsoftJson It is inbuilt faster JSON Serializer as covered in #3.b
+
+From:
+
+    services.AddMvc(options => {
+        options.Conventions.Add(new AddAuthorizeFiltersControllerConvention());
+        options.OutputFormatters.RemoveType < HttpNoContentOutputFormatter > ();
+    }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => {
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+        options.SerializerSettings.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
+    });
+
+To:
+
+    services.AddControllers(options => {
+        options.Conventions.Add(new AddAuthorizeFiltersControllerConvention());
+        options.OutputFormatters.RemoveType < HttpNoContentOutputFormatter > ();
+    }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddNewtonsoftJson(options => {
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+        options.SerializerSettings.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
+    });
+
+If you allow HTTP requests from cross origin or cross domains, then replace WithOrigins("*")with AllowAnyOrigin()
+
+From:
+
+    services.AddCors(options => {
+                options.AddPolicy("CorsPolicy", builder => builder.WithOrigins("*")
+
+To:
+
+    services.AddCors(options => {
+                options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin()
+
+If you are using Swagger for API documentation, then change the below bold text:
+
+From:
+
+    {
+        c.SwaggerDoc("v1", new Info {
+            Title = "Your API Title",
+                Version = "API Version Number",
+                Description = "Description of your API"
+        });
+        c.AddSecurityDefinition("Bearer", new ApiKeyScheme {
+            In = "header",
+                Description = "Please enter JWT with Bearer into field",
+                Name = "Authorization",
+                Type = "apiKey"
+        });
+        c.AddSecurityRequirement(new Dictionary < string, IEnumerable < string >> {
+            {
+                "Bearer",
+                Enumerable.Empty < string > ()
+            },
+        });
+        c.CustomSchemaIds(i => i.FullName);
+        c.OperationFilter < SwaggerParametersFilter > ();
+
+To:
+
+    services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo {
+                    Title = " Your API Title ",
+                        Version = "API Version Number",
+                        Description = "Description of your API "
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+                    Description = "Please enter JWT with Bearer into field”
+                    Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                    {
+                        new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                    Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                },
+                                Scheme = "oauth2",
+                                Name = "Bearer",
+                                In = ParameterLocation.Header,
+                        },
+                        new List < string > ()
+                    }
+                });
+                c.CustomSchemaIds(i => i.FullName);
+                c.OperationFilter < SwaggerParametersFilter > ();
+
+I will cover SwaggerParametersFilter in #6.
+
+In Configure Method of Startup.cs
+
+Replace, IHostingEnvironment with IWebHostEnvironment
+HostingEnviorment is obsolete now and it will be removed from future version of .net core.
+It is injected in controller and gives the information of applications web hosting enviornment.
+
+From:
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
+
+To:
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
+
+Use your CORS Policy name define in #4.d, instead of defining rules here:
+
+From:
+
+    app.UseCors(builder => builder.WithOrigins("*")
+
+To:
+
+    app.UseCors("CorsPolicy");
+
+Here CorsPolicy is the name of cors policy.
+
+Replace app.UseMvc() with EndPoint Routing, as below,
+
+From:
+
+    app.UseMvc();
+
+To:
+
+    app.UseRouting();
+    app.UseEndpoints(endpoints => {
+        endpoints.MapDefaultControllerRoute();
+        endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+    });
+
+In .NET core, The EndPoint routing is the new feature introduced, It provides the routing information in the middleware of your request pipeline.
+
+So, the difference between AddMVC and EndPoint routing is, The AddMVC provides the routing information after the completion of middleware of your request pipeline, So we did not have route information in middleware. In the Endpoint routing, we are configuring it and getting it inside the middleware request pipeline.
+
+If you are using Swagger Operation Filter to apply some logic globally on your all actions method or endpoints, then change the bold text below:
+
+From:
+
+    public class SwaggerParametersFilter: IOperationFilter {
+            public void Apply(Operation operation, OperationFilterContext context) {
+                    if (operation.Parameters == null) operation.Parameters = new List < IParameter > ();
+                    operation.Parameters.Add(new NonBodyParameter {
+                        Name = "HeaderName",
+                            In = "header",
+                            Type = "string",
+                            Required = true
+                    });
+
+To:
+
+    public class SwaggerParametersFilter: IOperationFilter {
+            public void Apply(OpenApiOperation operation, OperationFilterContext context) {
+                    if (operation.Parameters == null) operation.Parameters = new List < OpenApiParameter > ();
+                    operation.Parameters.Add(new OpenApiParameter {
+                        Name = " HeaderName",
+                            In = ParameterLocation.Header,
+                            Required = true
+                    });
+
+If you are usingStatelessService with Kestrel, Then in theCreateServiceInstanceListenersmethod, if you are usinglistenOptions.NoDelay =true; (It is using Nagle which was covered in #3.c section for efficiency)
+
+From:
+
+    return new WebHostBuilder().UseKestrel(opt => {
+                int Httpsport = serviceContext.CodePackageActivationContext.GetEndpoint("1HttpsEndpoint").Port;
+                opt.Listen(IPAddress.IPv6Any, Httpsport, listenOptions => {
+                    listenOptions.UseHttps(GetCertificateFromStore());
+                    listenOptions.NoDelay = true;
+                });
+
+To (Remove the bold blue text and add configuration of "UseLibuv" as below),
+
+    return new WebHostBuilder().UseKestrel(opt => {
+        int Httpsport = serviceContext.CodePackageActivationContext.GetEndpoint("1HttpsEndpoint").Port;
+        opt.Listen(IPAddress.IPv6Any, Httpsport, listenOptions => {
+            listenOptions.UseHttps(GetCertificateFromStore());
+        });
+    }).UseLibuv(opts => {
+        opts.NoDelay = true;
+    })
+
+If you are using Service Fabric to host your API / Microservice, then please update the Service Fabric cluster with the latest version.
+
+Conclusion
+
+I tried to cover almost all the basic things which people generally use in API implementation. The good thing is that .NET Core 3.1 has long term support (until December 3, 2022).
+
+Thanks for reading this article!
+
+    .Net Core 2.1 to 3.1upgrade
+    .Net Core 2.2 to 3.1 upgrade
+    .Net core upgrade
+
+
+Next Recommended Article
+GraphQL In .NET Core Web API With Entity Framework Core - Part Three
+
+Our Books
+
+Rohit Rao
+Rohit Rao
+
+.Net | .Net Core | Azure | Angular | Elastic Search | SQL | MongoDB
+
+    131057.3k
+
+    7
+    3
+
+Ulrich Balb
+Really great, solved a lot of Problems for me! Thank you!
+Feb 23, 2021Ulrich Balb
+1978 6 0
+
+    0 0 Reply
+
+QServices Inc
+Great article! Thanks for sharing such informative article and keep sharing!
+Aug 07, 2020QServices Inc
+1982 2 0
+
+    1 1 Reply
+
+Rohit Rao
+Thank you.
+Aug 23, 2020Rohit Rao
+1310 702 57.3k
+
+    0
+
+FEATURED ARTICLES
+
+    Create A C# Azure Function Using Visual Studio 2019
+    CRUD Operation In ASP.NET Core 5 Web API
+    What is Microsoft Mesh
+    How To Create SQL Server Database Project With Visual Studio
+    Angular 11 New Features
+
+View All
+TRENDING UP
+
+    01
+    How To Set Background Color Of A Selected Row Based On Checking/Unchecking Checkbox In Angular 10
+    02
+    Onion Architecture In .Net 5
+    03
+    Create A C# Azure Function Using Visual Studio 2019
+    04
+    Top 10 Hottest And Tricky T-SQL Questions For Beginners
+    05
+    Happy 155 Years Of Business Intelligence
+    06
+    Upload And Download Multiple Files Using Web API
+    07
+    Getting Started With .NET 6
+    08
+    Simplifying Use Of Static
+    09
+    Get Microsoft Exam With Free Second Shot And Free Practice Test
+    10
+    Pattern Matching In C#
+
+View All
+
+

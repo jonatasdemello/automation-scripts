@@ -1,0 +1,424 @@
+
+Pull Requests:
+	https://www.thedroidsonroids.com/blog/splitting-pull-request
+	https://medium.com/@groksrc/protip-how-to-split-large-branches-into-small-pull-requests-81d607660c05
+
+
+Git strategy 1. New branch with cherry picks
+
+    Checkout source branch
+		git checkout develop
+    Create a new branch
+		git checkout -b new_branch
+    Cherry-pick a subset of commits (eg. regarding some refactoring)
+		git cherry-pick [commit_id_1] [commit_id_2]
+    Create a Pull request
+    Make your reviewers check only this PR
+    After this is merged, update base Pull Requests. There’s less code to check now
+    Repeat 2-5 until there’s little enough code on base Pull Request (or no code at all)
+
+Git strategy 2. New branch with particular files
+Similar to the previous one, but instead of cherry-picking the whole commits do this:
+
+    Cherry-pick changes from commit without committing them yet
+		git cherry-pick -n
+    Unstage everything
+		git reset HEAD
+    Stage the file(s)
+		git add [file_path]
+    remove all untracked files (unpicked in the previous step)
+		git clean -f
+    Commit
+		git commit
+
+Git strategy 3. Sequential PRs of “milestone” commits
+
+
+    Checkout source branch
+		git checkout feature_branch
+    Find milestone commits
+	Check out next earliest milestone commit
+		git checkout
+    Create a new branch
+		git checkout -b milestone_branch
+    Create a Pull Request
+    Annotate it with “do not merge until the previous ones are merged!”
+    Repeat 3-6 until there are no more milestone commits
+
+Git strategy 4. “Milestone” commits to the temporary main branch
+
+This one could be useful if you can’t or don’t want to merge partial PRs into the main branch.
+Remember that in PR, your target branch doesn’t have to be the main branch!
+
+    Check out the main branch
+		git checkout master
+    Create a temporary main branch
+		git checkout -b temp_master
+    Checkout source branch
+		git checkout feature_branch
+    Find milestone commits
+    Check out next earliest milestone commit
+		git checkout [commit_id]
+    Create a new branch
+		git checkout -b milestone_branch
+    Create a Pull Request to the temporary main branch
+    Annotate it with “do not merge until the previous ones are merged!”
+    Repeat 3-6 until there are no more milestone commits
+
+
+Step 1: Create a patch against your base branch
+
+$ git diff master my_large_feature_branch > ../my_pr_patch
+
+Step 2: Checkout a new branch
+
+Create a new branch that will contain a subset of the changes in my_large_feature_branch
+
+$ git checkout master
+$ git checkout -b small_pr_one
+
+Step 3: Apply Changes Selectively
+
+Now apply the patch to your new small_pr_one branch. This will apply all of the changes from my_large_feature_branch to disk and allow you to stage things that can go individually.
+
+$ git apply ../my_pr_patch
+
+Once you’ve staged and committed whatever you want for small_pr_one it’s time to clean up.
+Step 4: Stash the Remaining Changes
+
+To stash everything that isn’t staged, including untracked files, run the following command.
+
+git stash --include-untracked --keep-index
+
+Now small_pr_one is clean and you can open a PR against it. Next move on to small_pr_two through small_pr_n until complete.
+Step 5: Repeat 3 & 4 Until Done
+
+If the next set of changes can be made independently then open small_pr_two against master. If you need what was in small_pr_one to keep going just branch from there.
+
+git checkout master
+git checkout -b small_pr_two
+
+You can use $ git stash show to list the remaining files in your stash. If you want to apply changes from the stash selectively you can use git checkout stash@{0} -- <your filename> to checkout an individual file from the stash. If you need to see a diff between what’s in the stash and your current branch run: git diff stash@{0} -- <your filename>
+
+
+
+
+https://unhashable.com/stacked-pull-requests-keeping-github-diffs-small/
+
+
+1. Create a WIP Pull Request
+
+As with most Git workflows, start your work in a feature branch:
+
+$ git checkout -b somefeature
+$ git commit -am "first change"
+
+Now, before you've gone too far, open a WIP PR. Why?
+
+    Give yourself an opportunity to get organized and come up with a plan
+    Give the team an opportunity to see where you're going
+    Be open; let people progressively review your progress
+
+The following uses GitHub CLI tool hub, although you could just use the site directly:
+
+$ hub pull-request
+
+WIP - Adding somefeature
+
+- [x] Do the thing
+- [ ] Do the other thing
+
+Now hack away, committing early and often. Keep your team updated by pushing and checking off the PR to-dos.
+
+Once the WIP is ready to ship, close the PR, we're ready to start our stacked PRs.
+
+Tip: Don't delete the branch just yet. It's handy to have a remote backup just in case.
+2. Create Stacked Pull Requests
+
+Start by creating a new branch, somefeature1, with all of the changes from somefeature unstaged:
+
+$ git checkout -b somefeature1 somefeature
+$ git reset master
+
+Running git status now shows all the changes we made in somefeature copied over to somefeature1 in an uncommitted state. From here we can start creating the commits that will make up our stacked PR.
+Commit 1
+
+Reach for git add --patch to create our first logical commit in the somefeature1 branch:
+
+$ git add --patch
+
+Once the changes have been staged, stash everything else and verify things still work:
+
+$ git stash --include-untracked --keep-index
+$ make test
+✓
+
+Tests pass. Time to create our first commit and PR in the stack:
+
+$ git commit -m "[somefeature1 - PART1] Make some change to x"
+$ git push origin somefeature1
+$ hub pull-request
+
+[somefeature - PART1] Make some change to x
+
+Commits 2 through N
+
+For the next commit, start by creating a new branch, somefeature2 with our stash popped:
+
+$ git checkout -b somefeature2
+$ git stash pop
+
+Now back to git add --patch to create and test our next commit:
+
+$ git add --patch
+$ git stash --include-untracked --keep-index
+$ make test
+✓
+
+$ git commit -m "[somefeature - PART2] Make change to y"
+$ git push origin somefeature2
+
+When creating the PR, make sure to base it off of the previous branch with the -b flag:
+
+$ hub pull-request -b somefeature1
+
+Repeat this process until you've made it all the way through your stash.
+The Finished Product
+
+The result is a stack of focused, reviewable PRs.
+
+Your Git graph should look a bit like so, with each branch depending on the previous one:
+
+            * somefeature3
+           /
+          * somefeature2
+         /
+        * somefeature1
+       /
+------* master
+       \
+        * somefeature
+
+Your stacked PRs are now ready for review.
+3. Feedback, Beautiful Feedback
+
+Now that you've pinged the team for review, comments should start coming in.
+
+Notice how much feedback stacked PRs provoke:
+
+Compare that with a rather large PR that garnered very little feedback:
+
+~60 comments difference—that's huge.
+
+Now address feedback and push until you have enough stamps to merge.
+Tip: Merge Up, Squash Down
+
+When making additional commits to your branches, be sure to propagate them up the stack via git merge, not git rebase:
+
+$ git co myfeature2
+$ git commit -am "addressing this feedback"
+$ git commit -am "addressing that feedback"
+$ git push origin myfeature2
+
+$ git co myfeature3
+$ git merge myfeature2 # integrate changes from myfeature2
+$ make test
+✓
+
+Rebasing focuses on keeping later branches tipped to the front of earlier branches. This is a noble goal, but it forces you to resolve merge conflicts 1 commit at a time! In the case of stacked PRs, it's just not necessary because we'll be squashing our commits when we merge the stack anyways.
+
+Make your life easier and just use git merge. If multiple commits have conflicts, you'll be able to resolve them in one go.
+
+The same goes for staying up to date with master: consider merging it in instead of rebasing.
+4. Landing the Stack
+
+At this point you've collected a "LGTM" for each PR in the stack, and it's time to merge.
+
+It can be tempting to merge PART1 of the stack in, since that PR will most likely be stamped first. Resist the urge; merging the first PR will cause all following PRs to become unmergeable! This is because GitHub does not support updating the target branch on PRs.
+
+Instead, go through the stack from LAST to FIRST, and merge your stack into master:
+
+The result is a single, well-reviewed commit on master:
+
+5. Measure the Difference
+
+Stacked PRs lead to more thoroughly reviewed code shipping faster.
+
+My experience? Very positive. My last stack -
+
+    ~2000 lines of code, over 60 comments of feedback, 20+ commits addressing feedback
+
+Compare your next stack to a large and long running PR to see the difference.
+
+Cheers.
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+# https://medium.com/@groksrc/protip-how-to-split-large-branches-into-small-pull-requests-81d607660c05
+
+How To Split Large Branches Into Small Pull Requests
+
+Step 1: Create a patch against your base branch
+
+	$ git diff master my_large_feature_branch > ../my_pr_patch
+
+Step 2: Checkout a new branch
+
+Create a new branch that will contain a subset of the changes in my_large_feature_branch
+
+	$ git checkout master
+	$ git checkout -b small_pr_one
+
+Step 3: Apply Changes Selectively
+
+Now apply the patch to your new small_pr_one branch. This will apply all of the changes from my_large_feature_branch to disk and allow you to stage things that can go individually.
+
+	$ git apply ../my_pr_patch
+
+Once you’ve staged and committed whatever you want for small_pr_one it’s time to clean up.
+
+Step 4: Stash the Remaining Changes
+
+To stash everything that isn’t staged, including untracked files, run the following command.
+
+	git stash --include-untracked --keep-index
+
+Now small_pr_one is clean and you can open a PR against it. Next move on to small_pr_two through small_pr_n until complete.
+
+Step 5: Repeat 3 & 4 Until Done
+
+If the next set of changes can be made independently then open small_pr_two against master. If you need what was in small_pr_one to keep going just branch from there.
+
+	git checkout master
+	git checkout -b small_pr_two
+
+You can use $ git stash show to list the remaining files in your stash.
+If you want to apply changes from the stash selectively you can use
+git checkout stash@{0} -- <your filename>
+to checkout an individual file from the stash.
+If you need to see a diff between what’s in the stash and your current branch run:
+git diff stash@{0} -- <your filename>
+
+-------------------------------------------------------------------------------------------------------------------------------
+# https://unhashable.com/stacked-pull-requests-keeping-github-diffs-small/
+
+500 lines of code = "looks fine."
+
+What you'll learn from this post:
+
+    How to split a large PR into smaller PRs
+    How to ship a dependent chain of PRs quickly
+
+1. Create a WIP Pull Request
+
+As with most Git workflows, start your work in a feature branch:
+
+$ git checkout -b somefeature
+$ git commit -am "first change"
+
+2. Create Stacked Pull Requests
+
+Start by creating a new branch, somefeature1, with all of the changes from somefeature unstaged:
+
+$ git checkout -b somefeature1 somefeature
+$ git reset master
+
+Running git status now shows all the changes we made in somefeature copied over to somefeature1 in an uncommitted state.
+From here we can start creating the commits that will make up our stacked PR.
+
+
+Commit 1
+
+Reach for git add --patch to create our first logical commit in the somefeature1 branch:
+
+$ git add --patch
+
+Once the changes have been staged, stash everything else and verify things still work:
+
+$ git stash --include-untracked --keep-index
+$ make test
+✓
+
+Tests pass. Time to create our first commit and PR in the stack:
+
+$ git commit -m "[somefeature1 - PART1] Make some change to x"
+$ git push origin somefeature1
+$ hub pull-request
+
+[somefeature - PART1] Make some change to x
+
+Commits 2 through N
+
+For the next commit, start by creating a new branch, somefeature2 with our stash popped:
+
+$ git checkout -b somefeature2
+$ git stash pop
+
+Now back to git add --patch to create and test our next commit:
+
+$ git add --patch
+$ git stash --include-untracked --keep-index
+$ make test
+✓
+
+$ git commit -m "[somefeature - PART2] Make change to y"
+$ git push origin somefeature2
+
+When creating the PR, make sure to base it off of the previous branch with the -b flag:
+
+$ hub pull-request -b somefeature1
+
+Repeat this process until you've made it all the way through your stash.
+The Finished Product
+
+The result is a stack of focused, reviewable PRs.
+
+Your Git graph should look a bit like so, with each branch depending on the previous one:
+
+            * somefeature3
+           /
+          * somefeature2
+         /
+        * somefeature1
+       /
+------* master
+       \
+        * somefeature
+
+Your stacked PRs are now ready for review.
+
+
+Tip: Merge Up, Squash Down
+
+When making additional commits to your branches, be sure to propagate them up the stack via git merge, not git rebase:
+
+$ git co myfeature2
+$ git commit -am "addressing this feedback"
+$ git commit -am "addressing that feedback"
+$ git push origin myfeature2
+
+$ git co myfeature3
+$ git merge myfeature2 # integrate changes from myfeature2
+$ make test
+✓
+
+Rebasing focuses on keeping later branches tipped to the front of earlier branches. This is a noble goal, but it forces you to resolve merge conflicts 1 commit at a time! In the case of stacked PRs, it's just not necessary because we'll be squashing our commits when we merge the stack anyways.
+
+Make your life easier and just use git merge. If multiple commits have conflicts, you'll be able to resolve them in one go.
+
+The same goes for staying up to date with master: consider merging it in instead of rebasing.
+
+4. Landing the Stack
+
+At this point you've collected a "LGTM" for each PR in the stack, and it's time to merge.
+
+It can be tempting to merge PART1 of the stack in, since that PR will most likely be stamped first. Resist the urge; merging the first PR will cause all following PRs to become unmergeable! This is because GitHub does not support updating the target branch on PRs.
+
+Instead, go through the stack from LAST to FIRST, and merge your stack into master:
+-------------------------------------------------------------------------------------------------------------------------------
+
+

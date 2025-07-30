@@ -1,0 +1,7 @@
+
+git config --system --add safe.directory '*'
+git config --global --add safe.directory '*'
+
+http://192.168.2.21:8800/
+
+

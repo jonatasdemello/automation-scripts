@@ -1,0 +1,12 @@
+Authentication is the process of a user/subject proving its ownership of a presented identity, by providing a password or some other uniquely owned or presented factor.
+Authorization is the process of letting a subject access resources after a successful authentication, oftentimes somewhere else.
+Many people think that OAuth stands for open authentication, but it’s more helpful to understand it by thinking about it as open AUTHorization.
+
+
+certutil -hashfile c:\Users\JDoe\Desktop\abc.exe SHA512
+
+
+Get-FileHash -Path c:\Users\JDoe\Desktop\abc.exe -Algorithm SHA512
+
+-------------------------------------------------------------------------------------------------------------------------------
+

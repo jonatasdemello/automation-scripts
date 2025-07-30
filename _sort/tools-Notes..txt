@@ -1,0 +1,40 @@
+---------------------------------------------------------------------------------------------------
+Note Taking Apps:
+---------------------------------------------------------------------------------------------------
+
+Obsidian
+Joplin
+Zim
+Notion
+Logseq
+Dendron - VS Code extension
+	https://github.com/dendronhq/dendron
+	https://wiki.dendron.so/
+
+Zim
+Joplin
+CherryTree
+TaskCoach
+
+---------------------------------------------------------------------------------------------------
+Collaboration tools
+---------------------------------------------------------------------------------------------------
+todo:
+	https://todoist.com/features
+
+	https://www.notion.so/
+	https://miro.com/
+	https://trello.com/tour
+
+	https://monday.com/features/dashboards
+	https://www.proofhub.com/features
+	https://redbooth.com/features
+	https://milanote.com/product/remote-working
+	https://asana.com/pricing
+
+
+more:
+	https://resources.workable.com/tutorial/collaboration-tools
+
+Cornell Method for notes
+	https://lsc.cornell.edu/how-to-study/taking-notes/cornell-note-taking-system/

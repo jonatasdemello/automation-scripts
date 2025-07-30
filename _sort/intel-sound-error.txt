@@ -1,0 +1,45 @@
+EDIT: I fixed this myself, so the issue was because of "IntcOED.sys" this has to do with Intel's Smart Sound Technology (SST), so what I did to resolve it is simply uninstall the driver, I attempted to uninstall and reinstall, and it did not fix the issue, but I uninstalled it without reinstalling and that seemed to be a more permanent fix and havent had any more blue screens. Hope this helps someone who has this issue in the future.
+
+
+
+The description for Event ID 387 from source IntcOED cannot be found. Either the component that raises this event is not installed on your local computer or the installation is corrupted. You can install or repair the component on the local computer.
+
+If the event originated on another computer, the display information had to be saved with the event.
+
+The following information was included with the event:
+
+
+The message resource is present but the message was not found in the message table
+
+
+intcOED.sys is the device driver on the Intel Smart Sound on your PC,
+to re-install that, go to the support page for your PC on the manufacturers website,
+then from there, download and install the Intel HD/UHD graphics device driver version they recommend.
+
+
+I went on https://www.intel.ca/content/www/ca/en/support/intel-driver-support-assistant.html,
+(It's the Canadian version website, otherwise, here the US version:
+https://www.intel.com/content/www/us/en/download/18002/intel-driver-support-assistant.html)
+and update my drivers with the Intel assistant.
+I think there is something wrong with the driver provided my Microsoft update or directly on the Dell website.
+
+
+
+sfc /scannow
+
+DISM /Online /Cleanup-Image /CheckHealth
+DISM /Online /Cleanup-Image /RestoreHealth
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+The description for Event ID 387 from source IntcOED cannot be found.
+Either the component that raises this event is not installed on your local computer or the installation is corrupted.
+You can install or repair the component on the local computer.
+
+If the event originated on another computer, the display information had to be saved with the event.
+
+The following information was included with the event:
+
+The message resource is present but the message was not found in the message table
+

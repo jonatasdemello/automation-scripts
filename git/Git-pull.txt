@@ -1,0 +1,88 @@
+https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#branching
+
+
+git.exe pull --progress -v --no-rebase "origin"
+
+git.exe pull --progress -v --no-rebase "origin" refactor-repository
+
+git.exe pull --progress -v --no-rebase "origin" develop
+
+git.exe fetch -v --progress "origin"
+
+
+git pull origin develop
+
+and merge the changes which is similar to do (say you are in "reshma_refactor" branch)
+
+git checkout develop
+git pull origin develop
+git checkout reshma_refactor
+git merge develop -m "merge from develop branch"
+
+
+https://www.freecodecamp.org/news/git-fetch-vs-pull/
+git fetch is the command that tells your local git to retrieve the latest meta-data info from the original (yet doesn’t do any file transferring. It’s more like just checking to see if there are any changes available).
+
+git pull on the other hand does that AND brings (copy) those changes from the remote repository.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+https://docs.gitlab.com/ee/topics/git/git_rebase.html
+
+git rebase rewrites the commit history. It can be harmful to do it in shared branches.
+It can cause complex and hard to resolve merge conflicts.
+In these cases, instead of rebasing your branch against the default branch, consider pulling it instead (git pull origin master).
+It has a similar effect without compromising the work of your contributors.
+
+
+Open your feature branch in the terminal:
+
+git checkout my-feature-branch
+
+Checkout a new branch from it:
+
+git checkout -b my-feature-branch-backup
+
+Go back to your original branch:
+
+git checkout my-feature-branch
+
+Now you can safely rebase it. If anything goes wrong, you can recover your changes by resetting my-feature-branch against my-feature-branch-backup:
+Make sure you’re in the correct branch (my-feature-branch):
+
+git checkout my-feature-branch
+
+Reset it against my-feature-branch-backup:
+
+git reset --hard my-feature-branch-backup
+
+Regular rebase
+
+With a regular rebase you can update your feature branch with the default branch (or any other branch). This is an important step for Git-based development strategies. You can ensure that the changes you’re adding to the codebase do not break any existing changes added to the target branch after you created your feature branch.
+
+For example, to update your branch my-feature-branch with master:
+
+    Fetch the latest changes from master:
+
+    git fetch origin master
+
+Checkout your feature branch:
+
+git checkout my-feature-branch
+
+Rebase it against master:
+
+git rebase origin/master
+
+    Force-push to your branch.
+
+When you rebase:
+
+    Git imports all the commits submitted to master after the moment you created your feature branch until the present moment.
+    Git puts the commits you have in your feature branch on top of all the commits imported from master:
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+

@@ -1,0 +1,87 @@
+Powershell Hyper-V VM
+
+# get a list of commands
+Get-Command -Module hyper-v | Out-GridView
+
+Get-VM
+Get-VM | where {$_.State -eq 'Running'}
+Get-VM | where {$_.State -eq 'Off'}
+
+
+Start-VM -Name <virtual machine name>
+
+Get-VM | where {$_.State -eq 'Off'} | Start-VM
+
+
+# Create checkpoint
+Get-VM -Name <VM Name> | Checkpoint-VM -SnapshotName <name for snapshot>
+
+
+# Create new VM
+
+$VMName = "VMNAME"
+
+ $VM = @{
+     Name = $VMName
+     MemoryStartupBytes = 2147483648
+     Generation = 2
+     NewVHDPath = "C:\Virtual Machines\$VMName\$VMName.vhdx"
+     NewVHDSizeBytes = 53687091200
+     BootDevice = "VHD"
+     Path = "C:\Virtual Machines\$VMName"
+     SwitchName = (Get-VMSwitch).Name
+ }
+
+ New-VM @VM
+
+#-------------------------------------------------------------------------------------------------------------------------------
+
+set-vmvideo -vmname ubuntu -horizontalresolution:3840  -verticalresolution:2160 -resolutiontype single
+
+set-vm "Ubuntu" -EnhancedSessionTransportType HVSocket
+
+
+I'm running Ubuntu 22.04 and only needed the following PowerShell command:
+
+set-vmvideo Ubuntu -horizontalresolution:1920 -verticalresolution:1080 -resolutiontype single
+
+set-vmvideo xubuntu -horizontalresolution:1920 -verticalresolution:1080 -resolutiontype single
+
+
+On Ubuntu 22.04 this seems to be sufficient to set the resolution
+
+set-vmvideo Ubuntu -horizontalresolution:3840 -verticalresolution:2400 -resolutiontype single
+
+BUT in my case the scale wasn't being saved after rebooting the VM so I had to set the following in the Ubuntu terminal [xrandr didn't work out for me]:
+
+gsettings set org.gnome.desktop.interface scaling-factor 2
+
+(for scaling 200%)
+
+
+
+Below worked for me. Tested on Ubuntu 20.04 | Host Windows 11.
+
+Open grub file.
+
+sudo nano /etc/default/grub
+
+Change value of GRUB_CMDLINE_LINUX_DEFAULT with below. Replace 3840x2160 with your highest resolution.
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash video=hyperv_fb:3840x2160"
+
+Run below commands
+
+sudo update-grub
+
+sudo apt install linux-image-extra-virtual
+
+Shutdown the VM and open PowerShell as administrator on host machine and run below. Replace "ubuntu" with your vm name. Change "3840" and "2160" with your highest resolution.
+
+set-vmvideo -vmname ubuntu -horizontalresolution:3840  -verticalresolution:2160 -resolutiontype single
+
+This command may not be required. It is something I read on Kali blog.
+
+set-vm "Ubuntu" -EnhancedSessionTransportType HVSocket
+
+Start VM. Open Ubuntu Display settings and choose scale 200.

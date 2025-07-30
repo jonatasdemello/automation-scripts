@@ -1,0 +1,111 @@
+Links: Open in New Window
+What This Does
+
+Open links in a new window and replace single with double quotes.
+Regex
+
+    Search for:
+    <a href='([^']+)'>
+
+    Replace with:
+    <a href="\1" target="_blank" rel="noopener">
+
+Example
+
+    Before:
+    <a href='https://helgeklein.com/blog/category/home-automation/'>
+
+    After:
+    <a href="https://helgeklein.com/blog/category/home-automation/" target="_blank" rel="noopener">
+
+Headings: Remove ID Attributes
+What This Does
+
+Remove ID attributes that some export routines add to every heading.
+Regex
+
+    Search for:
+    <h(\d)\s+id='[^']+'>
+
+    Replace with:
+    <h\1>
+
+Example
+
+    Before:
+    <h2 id='what-are-grafana-loki--promtail'>
+
+    After:
+    <h2>
+
+Code: Remove Duplicate Syntax Highlighting Language Attributes
+What This Does
+
+Some export routines add duplicate language attributes to code blocks. This replaces the two attributes with a single new attribute that I prefer.
+Regex
+
+    Search for:
+    class='language-([^']+)'\s+lang='\1'>
+
+    Replace with:
+    class="lang-\1">
+
+Example
+
+    Before:
+    <code class='language-yaml' lang='yaml'>
+
+    After:
+    <code class="lang-yaml">
+
+Replace Paragraph Tags with Newlines
+What This Does
+
+WordPress doesn’t require authors to enclose paragraphs in <p> </p> tags. Instead, it adds those automatically to the HTML when it identifies a paragraph.
+
+To optimize readability in the backend, I remove HTML paragraph tags that are added by many tools’ export routines.
+Regex
+
+    Search for:
+    </?p>
+
+    Replace with:
+    \n
+
+Example
+
+    Before:
+    <p>Text in a paragraph.</p>
+
+    After:
+    \nText in a paragraph.\n
+
+Replace HTML-Encoded Special Characters With Plain Text
+What This Does
+
+Many tools’ export routines replace special characters with their corresponding HTML entities, aka they HTML-encode such special characters. With WordPress, this type of encoding is not necessary, as WordPress does it automatically. To optimize readability in the backend, I convert HTML entities back to plain text.
+
+The regex presented below uses a syntax that is available in Notepad++ (regex docs) and all other applications that use the boost regex library. The regex makes the following replacements:
+
+    &lt; → <
+    &gt; → >
+    &#39; → '
+    &quot; → "
+    &amp; → &
+
+Regex
+
+    Search for:
+    (&lt;)|(&gt;)|(&#39;)|(&quot;)|(&amp;)
+
+    Replace with:
+    (?1<)(?2>)(?3')(?4")(?5&)
+
+Example
+
+    Before:
+    &lt;a href=&#39;([^']+)&#39;&gt;
+
+    After:
+    <a href='([^']+)'>
+

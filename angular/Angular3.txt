@@ -1,0 +1,87 @@
+https://app.pluralsight.com/library/courses/mvc-angular-journey/table-of-contents
+
+Course Overview
+	Why You Need More Client-side Code
+	Convert MVC Tables to Angular Templates Using Data Binding
+	Convert MVC Drop Down Lists and Perform Searching Using Angular
+	Handle UI State and Exceptions with Angular Data Binding
+	Add, Edit, and Delete with Angular
+	Don't Forget the Validation of Data
+
+
+Course Overview
+	Course Overview
+
+Why You Need More Client-side Code
+	Course Introduction
+	Why Move to Angular?
+	Modules in this Course
+	Architecture of the MVC Application
+	Demo of MVC Application
+	Module Summary
+
+Convert MVC Tables to Angular Templates Using Data Binding
+	Module Introduction
+	Introduction to Modules and Controllers
+	Demo of Creating an Angular Module
+	Demo of Creating an Angular Controller
+	Add Module and Controller to the MVC Page
+	Add a Web API Controller for Product Data
+	Configure MVC for Using the Web API
+	Introduction to the Data Service in Angular
+	Calling the Web API Through the Data Service
+	Introduction to the ng-repeat Directive
+	Demo of the ng-repeat Directive
+	Module Summary
+
+Convert MVC Drop Down Lists and Perform Searching Using Angular
+	Module Introduction
+	Add Web API Controller for Categories
+	Search Input and Categories in Angular Controller
+	Replace Razor Code with HTML and Angular
+	Bind and Reset Search Criteria
+	Demo of Reset Search Function in Angular
+	Overview of Client-side Searching
+	Searching Fields Using Angular Filters
+	Searching Using a Function and Angular Filters
+	Introduction to Server-side Searching
+	Server-side Searching with the Web API
+	Module Summary
+
+Handle UI State and Exceptions with Angular Data Binding
+	Module Introduction
+	Overview of Handling UI State
+	Create pageMode Constant and uiState Object Literal
+	The setUIState and productList Functions
+	Add Click Event Handlers
+	Remove Razor Code and Hook up Event Handlers
+	Overview of Handling Exceptions
+	Demo of Exception Handling
+	Module Summary
+
+Add, Edit, and Delete with Angular
+	Module Introduction
+	Initialize Product Object Demo
+	Replace MVC Helpers with HTML and Load Categories
+	Overview of Getting a Single Product
+	Demo of Getting a Single Product via the Web API
+	Overview of Date Handling and Updating a Product
+	Add PUT Web API Method
+	Create the updateData Function
+	The validateData Function and Fixing up Date Input
+	Updating Data via the Web API
+	Inserting Data
+	Deleting Data
+	Module Summary
+
+Don't Forget the Validation of Data
+	Module Introduction and the Basics of Validation
+	Eliminate Razor Code and Add Validation Attributes
+	Display Validation Messages
+	Introduction to Controller Setup for Validation
+	Check the Validity of the Angular Form
+	Add Custom Validation to Angular
+	The Need for Server-side Validation
+	Validation on the Server-side and BadRequest Method
+	Displaying Server Validation Messages in Angular
+	Module and Course Summary

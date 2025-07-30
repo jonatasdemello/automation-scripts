@@ -1,0 +1,12 @@
+# download
+
+wget -r -c https://cdn.nohesi.gg/cars/
+
+
+# share & copy files usin Midnight Commander
+
+sudo apt-get install mc
+mc
+
+
+

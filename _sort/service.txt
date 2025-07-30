@@ -1,0 +1,78 @@
+
+
+    The Reg.exe utility from the Microsoft Windows NT Resource Kit must be installed on your computer.
+
+    To change the startup value for a service on a local computer by using the command line, type the following at the command prompt and then press ENTER: REG UPDATE HKLM\SYSTEM\CurrentControlSet\Services\servicename\Start=X where servicename is the name of the service as it appears in the registry and X is either a 2, a 3, or a 4 (representing automatic startup, manual startup, or disabled, respectively).
+
+    To change the startup value for a service on a remote computer by using the command line locally, type the following at the command prompt and press ENTER: REG UPDATE HKLM\SYSTEM\CurrentControlSet\Services\servicename\Start=X \servername where servicename is the name of the service as it appears in the registry, X is either a 2, a 3, or a 4 (representing automatic startup, manual startup, or disabled, respectively), and servername is the name of the remote server.
+
+    To see how the service name appears in the registry, view the following registry key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\
+
+
+reg add "HKLM\System\CurrentControlSet\Services\cbdhsvc" /v "Start" /t REG_DWORD /d "4" /f
+
+
+    Start the registry editor (regedit.exe)
+    Move to the HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services key
+    Select the key of the service you want to delete
+    From the Edit menu select Delete
+    You will be prompted "Are you sure you want to delete this Key" click Yes
+    Exit the registry editor
+
+instsrv <service name> remove
+
+Alternatively, also with the resource kit is a utility SRVINSTW.EXE that again installs and removes services, but with a GUI wizard format allowing you to select the service either locally or remotely.
+
+Jonatas de Mello (jonatas.local)
+
+
+sc delete "Apple Mobile Device".
+
+sc config "Name of Service" start= DISABLED
+sc stop "Name of Service"
+
+SC STOP "<nameservice>"
+
+SC CONFIG "<nameservice>" START= ( BOOT, or SYSTEM, or AUTO, or DEMAND, or DISABLED, or DELAYED-AUTO )
+
+wmic service where name='SQLWriter'  call ChangeStartmode Disabled
+wmic service where "caption like 'SQL%' and  Startmode<>'Disabled'" call ChangeStartmode Disabled
+
+wmic service where "caption like 'Malwarebytes%' and  Startmode<>'Disabled'" call ChangeStartmode Disabled
+
+Malwarebytes Service
+Malwarebytes Cloud Endpoint Agent Service
+
+sc config "Malwarebytes Service" start= DISABLED
+
+
+system32\drivers\FlightRecorder.sys
+\SystemRoot\System32\Drivers\MbamChameleon.sys
+\SystemRoot\System32\Drivers\mbamswissarmy.sys
+
+C:\Program Files\Malwarebytes\Anti-Malware\MBAMService.exe
+
+Start
+Value 	Start Type 	Meaning
+0x00 	Boot 	The kernel loaded will load this driver first as its needed to use the boot volume device
+0x01 	System 	This is loaded by the I/O subsystem
+0x02 	Autoload 	The service is always loaded and run
+0x03 	Manual 	This service does not start automatically and must be manually started by the user
+0x04 	Disabled 	The service is disabled and should not be started
+
+Type
+Value 	Meaning
+0x01 	Kernel-mode device driver
+0x02 	Kernel-mode device driver that implements the file system
+0x04 	Information used by the Network Adapter
+0x10 	A Win32 service that should be run as a stand-alone process
+0x20 	A Win32 service that can share address space with other services of the same type
+
+ErrorControl
+This is used if the service fails to startup upon boot.
+Value 	Meaning
+0x00 	If this driver can't be loaded or started ignore the problem and display no error
+0x01 	If the driver fails produce a warning but let bootup continue
+0x02 	Panic. If the current config is last known good continue, if not switch to last known good
+0x03 	Record the current startup as a failure. If this is last known good run diagnostic, if not switch to last known good and reboot
+

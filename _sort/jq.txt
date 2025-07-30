@@ -1,0 +1,9 @@
+/.jq
+
+https://jqlang.org/download/
+
+sudo apt-get install jq
+
+https://jqlang.org/tutorial/
+https://jqlang.org/manual/
+
