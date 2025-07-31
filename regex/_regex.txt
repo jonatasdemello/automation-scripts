@@ -46,8 +46,9 @@ SPACES / EMPTY LINE
  +$			espaços desnecessários
 [ ]{2,}		remove duplicate spaces
 
-[ \t]+$				trim trailing spaces
-^[ \t]+|[ \t]+$		Regex to find trailing and leading whitespaces
+[ \t]+$			find trailing whitespaces
+^[ \t]+$		find leading whitespaces
+^[ \t]+|[ \t]+$		find trailing and leading whitespaces
 
 \r\n\r\n	blank lines
 

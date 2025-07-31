@@ -48,3 +48,29 @@ git gc --aggressive --prune=now
 git push origin --force --all
 git push origin --force --tags
 
+
+git reflog expire --all --expire=now
+git gc --prune=now --aggressive
+
+git maintenance run
+
+
+git fetch --refetch
+git gc --aggressive
+git fsck
+
+
+
+git fsck --unreachable
+git reflog expire --expire=0 --all
+git repack -a -d -l
+git prune
+git gc --aggressive
+git gc --prune=now
+git gc --aggressive --prune=now
+
+
+
+git clean -n
+git clean -f
+

@@ -1,0 +1,9 @@
+s/<YourPassword>/<password>/g
+s/myStronggPwd123/<password>/g
+s/mySronggPwd123/<password>/g
+s/\'P@ssw0rd\'/\'<password>\'/g
+s/\"p@assword\"/\"<password>\"/g
+s/P@ssw0rd.2022/<password>/g
+s/Passw0rd!/<password>/g
+s/\'MyNameIs!bi11\'/\'<password>\'/g
+s/\'Who.sCall1ng?\'/\'<password>\'/g
