@@ -2,7 +2,11 @@ function prompt {"PS [$env:COMPUTERNAME]> "}
 
 function prompt {"PS > "}
 
+function prompt {"$pwd>"}
 
+# show current prompt:
+
+(Get-Command prompt).ScriptBlock
 (Get-Item function:prompt).ScriptBlock
 
 
