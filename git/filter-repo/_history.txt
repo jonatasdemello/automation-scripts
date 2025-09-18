@@ -1,0 +1,95 @@
+# git reset
+
+git reset --hard
+git clean -n
+git clean -f
+
+---------------------------------------------------------------------------------------------------
+# search files
+
+git log <file_path>
+git log -p <file_path>
+git log --follow <file_path>
+git log --oneline <file_path>
+
+# deleted files
+
+git log --diff-filter=D --summary
+git log --diff-filter=D -- <file-path>
+git show <commit-hash>^:<file-path>
+git checkout <commit-hash>^ -- <file-path>
+
+---------------------------------------------------------------------------------------------------
+# search 
+
+grep -i -E -f ip.file -r /path/
+
+grep -i -E -f /c/workspace/git/grep-search.txt -r .
+
+# replace
+
+find . -type f -exec sed -i -E -f /c/workspace/git/sed-rules.sed {} \;
+
+find . -type f -not -path ".git" -exec sed -i -E -f /c/workspace/git/sed-rules.sed {} \;
+
+find . -type f -path "./.git" -prune -o -print
+
+find . -type f -path "./.git" -prune -exec sed -i -E -f /c/workspace/git/sed-rules.sed {} \;
+
+find . -type f -path "./.git" -prune -exec sed -i -E 's/CC3_CMS/DB/g' {} \;
+
+find . \( -path "./dir1" -prune -o -path "./dir2" -prune \) -o -print
+
+ignore:
+./.git
+doc, xls, xlsx, rtf, pdf
+
+---------------------------------------------------------------------------------------------------
+# git-filter-repo
+
+python3 -m pip install --user git-filter-repo
+
+$ python3 git-filter-repo --analyze
+
+README: ".git\filter-repo\analysis\README"
+
+
+# remove file
+
+git-filter-repo --use-base-name --path [FILENAME] --invert-paths
+
+The --use-base-name option tells git-filter-repo that we are specifying a filename, and not a full path to a file. You can leave off this option if you would rather specify the full path explicitly.
+
+Normally, git-filter-repo works by ignoring the filenames specified (they are, as the name suggests, filtered out). But we want the inverse behavior, we want git-filter-repo to ignore everything except the specified file. So we must pass --invert-paths to tell it this. If you leave off the --invert-paths, you’ll excise everything except the specified file, which is the exact opposite of what we want, and would likely be disastrous. Please don’t do that.
+
+# Edit a file without removing it
+
+git-filter-repo --replace-text ../replacements.txt --force
+
+
+And now you have a clean git history! You’ll want to validate your work by compiling your software or running your test suite. Then once you’re satisfied that nothing is broken, move on to the next step to propagate the new history to your remote repository and the rest of the team.
+
+git push --all --force && git push --tags --force
+
+---------------------------------------------------------------------------------------------------
+$env:Path -split ";"
+$env:Path += ";C:\workspace\git\"
+
+$p="C:\workspace\git\"
+
+py git-filter-repo --use-base-name --path [FILENAME] --invert-paths
+
+py $p\git-filter-repo --use-base-name --path constraints\text-tables.sql --invert-paths
+
+# use replacements file
+py $p\git-filter-repo --replace-text $p\git-filter-replacements.txt
+py $p\git-filter-repo --replace-text $p\git-filter-replacements.txt --force
+
+git push --all --force && git push --tags --force
+
+git remote add origin https://github.com/jonatasdemello/SQL-Tools.git
+
+git push --all --force && git push --tags --force
+
+
+

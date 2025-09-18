@@ -1,0 +1,11 @@
+"0a612574-1288-4674-a6da-cb3393cbe373"==>"<XX-XX-XX-XX-XX>'
+'N3bOPJbGjaG1isBn5q9W'==>'<password>'
+<YourPassword>==><password>
+myStronggPwd123==><password>
+mySronggPwd123==><password>
+"p@assword"==>"<password>"
+'P@ssw0rd'==>'<password>'
+Passw0rd!==><password>
+P@ssw0rd.2022==><password>
+'MyNameIs!bi11'==>'<password>'
+'Who.sCall1ng?'==>'<password>'
