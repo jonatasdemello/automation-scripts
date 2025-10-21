@@ -55,3 +55,5 @@ printer-driver-foo2zjs-common         \
 printer-driver-m2300w                 \
 printer-driver-ptouch                 \
 printer-driver-splix
+
+sudo apt-get auto-remove
