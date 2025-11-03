@@ -1,0 +1,31 @@
+Disable Windows Telemetry
+
+https://gist.github.com/FadeMind/9500d49948654b50aa870706a8ac9f04
+
+- WPD Privacy Dashboard
+- O&O ShutUp10
+
+
+from my own investigations, telemetry is gathered by a bunch of components. You can't stop the telemetry from being gathered reliably. However, there is a scheduled task that runs "wsqmcons" (Windows SQM Consolidator, I believe is what it is short for) Which appears to be responsible for taking those gathered telemetry files- SQM files- and consolidating and uploading them to Microsoft.
+
+So, what I do, is I just stub out that program using Image File Execution Options. (HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options)
+
+Basically I added a wsqmcons.exe key in there, and then give it a debugger string value. That value is intended for, well, debugging- basically when Windows loads an executable, it checks the key for settings; if that debugger key is set, it will not run the program, and will instead invoke the specified program in the debugger value with the program being run to "debug" it. We can abuse this- "C:\Windows\System32\systray.exe" is a do-nothing stub program that immediately exits. So if we set it as the debugger, we effectively make it so the program can never run- Windows will run systray instead, and that immediately exits.
+
+(Personally I have it set to a little tool I wrote to log attempts to run programs that I've stubbed out this way).
+
+I do the same for processes like compattelrunner.exe and so on. Those gather certain types of telemetry and add them to the current SQM file set. I don't disable it specifically to disable telemetry but more because those processes use up ridiculous amounts of memory and CPU sometimes and this prevents that from ever being an issue.
+
+Some others that I've added over time:
+
+elevation_service.exe - Used by Edge. For something. I don't use edge and don't need it automatically updating itself or whatever. And look at that apparently it had a massive vulnerability too. I've also disabled edgeupdate.exe and MicrosoftEdgeUpdate.exe
+
+devicecensus.exe - This is a telemetry component that runs as a scheduled task and tosses a bunch of device info into the SQM collection. No thank you, don't need that to run. Being that the upload should be disabled anyway it's a waste of time to add anything to the SQM files since it just expires anyways.
+
+Whole bunch of Flash Player installer executable names. I do not want flash on my system at all but Windows Update insists on "Updating" Flash Player for security updates. So I stubbed out the names of the Flash Player update executables as best I could. Windows Update thinks the update ran fine, I don't get flash player loaded onto my system and have to waste an afternoon removing it, everybody is happy.
+
+gamebarpresencewriter.exe - Some Game Bar Bullshit. Don't need it.
+
+MusNotification.exe, MusNotificationUx.exe, and MusNotifyIcon.exe - I've got Windows Updates configured via Group Policy. Under normal circumstances, Windows will still be a whiney little bitch and constantly show that "Updates are available"; and then eventually upgrade to showing non-dismissable, modal, full-screen take over dialogs saying as much, which force you to go to the Windows Update page in settings. (Which, with my settings, I then close). I stub all these out because fuck that shit.
+
+wwahost.exe - T his is used for hosting of some PWA stuff. Primarily, this is used for those interrupting, full-screen "Let's finish setting up" stuff that windows will sometimes insist upon when you login, with no option to cancel or just use your own fucking computer. I stub it out to prevent that from ever happening. That has side effects like making OneDrive login not work. (Oh no, my heart grieves.)

@@ -1,0 +1,66 @@
+Google Chrome AI crap
+
+C:\Users\jonatasd\AppData\Local\Google\Chrome\User Data\OptGuideOnDeviceModel
+
+OptGuideOnDeviceModel - 4GB
+
+I've searched for & disabled 2 Optimization Guide related entries (shown below) in chrome://flags
+
+and it still gets auto-generated.
+
+    optimization-guide-on-device-model
+    page-image-service-optimization-guide-salient-images
+
+
+You need to delete the “weights.bin” file from the path:
+
+C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\OptGuideOnDeviceModel\2024.9.25.2033
+
+In the same folder, create a text file (.txt) and rename it “weights.bin”, set read-only attribute. 
+
+---------------------------------------------------------------------------------------------------
+this is the officially given solution:
+
+in Chrome address bar input:
+
+chrome://flags
+
+Once there look for this flag
+
+optimization-guide-on-device-model
+
+Set in  Disabled, then restart Chrome. At this point the weights.bin file should already be gone together with the containing folder. If still there, delete the folder, it won't be recreated.
+
+In case you need to run again the process, just restore it by setting Enabled or Default the above described flag
+
+---------------------------------------------------------------------------------------------------
+
+
+
+If anyone still interested in the solution, this is the method documented in the Chrome group policy templates from Google (below is the easy way):
+
+    Run "Regedit.exe"
+
+    Navigate to "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", create new keys if necessary.
+
+    Create a new DWORD (32-bit) Value:
+
+    Value name: GenAILocalFoundationalModelSettings
+
+    Value data: 1
+
+Relaunch Chrome. 
+
+---------------------------------------------------------------------------------------------------
+
+
+
+I've had some success so far by write-protecting the OptGuideOnDeviceModel 
+and optimization_guide_model_store
+
+In Terminal:
+
+% cd ~/Library/Application Support/Google/Chrome
+% chmod -w OptGuideOnDeviceModel optimization_guide_model_store
+
+
