@@ -1,0 +1,5 @@
+VS Code
+
+^\s*$\n		empty line with spaces
+
+^$\n		empty line no spaces

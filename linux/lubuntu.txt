@@ -1,0 +1,13 @@
+Lubuntu
+
+sudo apt-get install lubuntu-software-center
+
+
+If you are using Lubuntu 11.10 or older, the Software Center doesn't comes preinstalled. Use these commands instead to add the PPA:
+
+    sudo add-apt-repository ppa:lubuntu-desktop/ppa
+
+    sudo apt-get update
+
+    sudo apt-get install lubuntu-software-center
+
