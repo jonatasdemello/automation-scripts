@@ -1,0 +1,926 @@
+Sheet
+https://github.com/tiimgreen/github-cheat-sheet
+
+Projects:
+https://github.com/explore
+
+Profile
+https://github.com/settings/profile
+
+Tutorial
+https://try.github.io/levels/1/challenges/1
+
+https://guides.github.com/activities/hello-world/
+
+https://blog.bloc.io/github-best-practices/
+
+
+http://chris.beams.io/posts/git-commit/
+	#The seven rules of a great git commit message
+	Keep in mind: This has all been said before.
+	1. Separate subject from body with a blank line
+	2. Limit the subject line to 50 characters
+	3. Capitalize the subject line
+	4. Do not end the subject line with a period
+	5. Use the imperative mood in the subject line
+	6. Wrap the body at 72 characters
+	7. Use the body to explain what and why vs. how
+
+
+
+Config:
+git config --global core.autocrlf true
+git config --global core.autocrlf input
+git config --global core.autocrlf false
+
+git config --global --edit
+
+
+- ("core.autocrlf" is set to "true")
+Checkout Windows-style, commit Unix-style line endings 
+Git will convert LF to CRLF when checking out text files. 
+When committing text files, CRLF will be converted to LF. 
+For cross-platform projects, this is the recommended setting on Windows ("core.autocrlf" is set to "true")
+
+- ("core.autocrlf" is set to "input")
+Checkout as-is, commit Unix-style line endings 
+Git will not perform any conversion when checking out text files. 
+When committing text files, CRLF will be converted to LF. 
+For cross-platform projects this is the recommended setting on Unix ("core.autocrlf" is set to "input").
+
+- ("core.autocrlf" is set to "false")
+Checkout as-is, commit as-is 
+Git will not perform any conversions when checking out or committing text files. 
+Choosing this option is not recommended for cross-platform projects ("core.autocrlf" is set to "false")
+
+	
+	git diff --ignore-space-at-eol.
+
+Windows and UNIX system don't use same line-ending, to prevent conflict from happening based on these, you should setup you git config this way:
+
+	Windows : git config --global core.autocrlf true
+	Unix : git config --global core.autocrlf input
+
+Next, to make sure we only commit with ideal whitespace rules, you can set this config option:
+
+	git config --global core.whitespace trailing-space,space-before-tab,indent-with-non-tab
+
+
+
+
+TortoiseGit + DiffMerge
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+first
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+second
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Original %mine %base
+merge tool
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+C:\Program Files\SourceGear\Common\DiffMerge\sgdm.exe /t1=Mine /t2=Base /t3=Theirs /r=%merged %mine %base %theirs
+
+
+
+
+
+gitk --all
+
+git diff master..otherbranch > myDiffFile.diff
+git difftool -d master otherbranch
+
+
+git diff --stat --color  master..laureate
+
+
+git diff master..branch
+git log master..branch
+git shortlog master..branch
+
+git diff master..branch | grep "^diff"
+git diff --name-status master..branchName
+git diff --stat --color master..branchName
+git diff --stat --color branchName..master
+
+git checkout ba
+git checkout -b ba-merge
+git merge master
+.... review new code and fix conflicts....
+git commit
+git checkout ba
+git merge ba-merge
+git branch -d ba-merge
+git merge master
+
+
+CodeAcademy:
+
+git init 	creates a new Git repository
+git status 	inspects the contents of the working directory and staging area
+git add 	adds files from the working directory to the staging area
+git diff 	shows the difference between the working directory and the staging area
+git commit 	permanently stores file changes from the staging area in the repository
+git log 	shows a list of all previous commits
+
+
+git add filename
+git commit -m "Complete first line of dialogue"
+git commit -m "Commit message"
+git log
+git show HEAD
+git diff
+git checkout HEAD filename
+git add filename_1 filename_2
+
+add to staging area:
+	git add scene-3.txt scene-7.txt
+
+git reset HEAD filename
+git reset SHA
+git reset 5d69206
+
+
+Branch
+	git branch
+	git branch new_branch
+	git checkout branch_name
+	git merge branch_name
+delete branch
+	git branch -d branch_name
+
+	
+git branch: Lists all a Git project's branches.
+git branch branch_name: Creates a new branch.
+git checkout branch_name: Used to switch from one branch to another.
+git merge branch_name: Used to join file changes from one branch to another.
+git branch -d branch_name: Deletes the branch specified.
+
+git clone remote_location clone_name
+git remote -v
+git fetch
+git merge origin/master
+
+
+	Fetch and merge changes from the remote
+	Create a branch to work on a new project feature
+	Develop the feature on your branch and commit your work
+	Fetch and merge from the remote again (in case new commits were made while you were working)
+	Push your branch up to the remote for review
+
+git push origin your_branch_name
+
+$ git push origin master
+
+git clone: Creates a local copy of a remote.
+git remote -v: Lists a Git project's remotes.
+git fetch: Fetches work from the remote into the local copy.
+git merge origin/master: Merges origin/master into your local branch.
+git push origin <branch_name>: Pushes a local branch to the origin remote.
+
+$ git push origin master
+
+TortoiseGit
+git.exe pull -v --progress "origin"
+git.exe push --progress "origin" master:master
+
+
+
+
+	
+OK. The problem is your previous pull failed to merge automatically and went to conflict state. And the conflict wasn't resolved properly before the next pull.
+
+1) Undo the merge and pull again.To undo a merge:
+
+	git merge --abort [Since git version 1.7.4]
+	git reset --merge [prior git versions]
+
+2) Resolve the conflict.
+3) Don't forget to add and commit the merge.
+4) git pull now should work fine.
+
+
+
+
+OK. The problem is your previous pull failed to merge automatically and went to conflict state. And the conflict wasn't resolved properly before the next pull.
+
+1) Undo the merge and pull again.
+To undo a merge:
+
+git merge --abort [Since git version 1.7.4]
+git reset --merge [prior git versions]
+
+2) Resolve the conflict.
+3) Don't forget to add and commit the merge.
+4) git pull now should work fine.
+
+
+Since Git1.7.4 (January 2011), you have 
+git merge --abort
+git reset --merge
+
+
+
+
+
+$ git config merge.conflictstyle diff3
+After setting this, retry the merge (git reset --hard; git merge master) and examine the conflicting file again:
+
+$ git mergetool
+
+
+CRLF
+git config core.autocrlf true
+
+
+MERGE:
+Step 1: From your project repository, bring in the changes and test.
+	git fetch origin
+	git checkout -b CMS-96 origin/CMS-96
+	git merge master
+
+Step 2: Merge the changes and update on GitHub.
+	git checkout master
+	git merge --no-ff CMS-96
+	git push origin master
+
+
+Compare diff between branches
+git diff master..branch
+git log master..branch
+git shortlog master..branch
+git diff master..branch | grep "^diff"
+
+
+Git: Delete a branch (local or remote)
+
+To delete a local branch
+	git branch -d the_local_branch
+	
+To remove a remote branch (if you know what you are doing!)
+	git push origin :the_remote_branch
+
+
+	
+	
+Do periodic maintenance
+------------------------
+The first two items should be run on your server repositories as well as your user repositories.
+
+Validate your repo is sane (git fsck)
+
+You need not check dangling objects unless you are missing something
+
+Compact your repo (git gc and git gc --aggressive)
+
+This will removed outdated dangling objects (after the two+ week grace period). 
+It will also compress any loose objects git has added since your last gc. 
+git will run a minimal gc automatically after certain commands, 
+but doing a manual gc often (and "--aggressive" every few hundred changesets) 
+will save space and speed git operations.
+
+Prune your remote tracking branches (git remote update --prune)
+
+This will get rid of any branches that were deleted upstream since you cloned/pruned. 
+It normally isn't a major problem one way or another, but it might lead to confusion.
+
+Check your stash for forgotten work (git stash list)
+
+If you don't do it very often, the context for the stashed work will be forgotten when you finally do stumble on it, creating confusion.
+
+Maintenance:
+Validate your repo is sane (git fsck)
+Compact your repo (git gc and git gc --aggressive)
+Prune your remote tracking branches (git remote update --prune)
+Check your stash for forgotten work (git stash list)
+
+
+	git fsck
+	git gc 
+	git gc --aggressive
+	git remote update --prune
+	git stash list
+	
+	git fetch -p (--prune)
+	git fetch -P (--prune-tags)
+	
+	
+# Remove local branches no longer on remote
+	
+	git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d
+		
+	git branch -d $(git branch --merged) 
+		works by removing branches that have been merged. 
+	
+	git remote prune origin 
+		will prune tracking branches not on the remote.
+	
+	
+	git branch -vv
+	#then
+	git fetch -p && for branch in `git branch -vv | grep ': gone]' | gawk '{print $1}'`; do git branch -D $branch; done
+	
+	git gc --prune=now
+	git remote prune origin
+	git remote prune
+
+	git branch -vv | grep ': gone]' | grep -v "\*" | awk '{ print $1; }' | xargs -r git branch -D
+	
+- will list your local branches and show information about the remote branch, saying “gone” if it is not present anymore.
+- will fetch the branches that match the “: gone]” phrase.
+- will fetch only lines that do not contain an asterisk. This will ignore the branch you are currently on and also prevent that the “git branch -d” is executed with a “*” at the end which would result in deleting all your local branches.
+- will fetch the output until the first white space, which will result in the local branch name.
+- will use the output (branch name) and append it to the “git branch -d” command to finally delete the branch. 
+	If you also want to delete branches that are not fully merged, you can use a capital “D” instead of “d” to force delete.
+	Because of the “-r” parameter, the command is not executed if there is no input / branch name.
+	
+
+git remote prune origin 
+	prunes tracking branches not on the remote.
+
+git branch --merged 
+	lists branches that have been merged into the current branch.
+
+xargs git branch -d 
+	deletes branches listed on standard input.
+
+	Be careful deleting branches listed by git branch --merged. The list could include master or other branches you'd prefer not to delete.
+	To give yourself the opportunity to edit the list before deleting branches, you could do the following in one line:
+
+git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
+
+
+
+	
+# Delete a branch (local or remote)
+
+To delete a local branch
+	git branch -d the_local_branch
+	
+To remove a remote branch (if you know what you are doing!)
+	git push origin :the_remote_branch
+
+	
+# To delete a local branch
+
+git branch -d the_local_branch
+
+git branch -D the_local_branch
+
+# To remove a remote branch (if you know what you are doing!)
+
+git push origin :the_remote_branch
+
+# If you get the error error: unable to push to unqualified destination: 
+# the_remote_branch The destination refspec neither matches an existing ref on the remote nor begins with refs/, 
+# and we are unable to guess a prefix based on the source ref. error: failed to push some refs to 'git@repository_name'
+
+# perhaps someone else has already deleted the branch. Try to synchronize your branch list with
+
+git fetch -p 
+
+# The git manual says -p, --prune After fetching, remove any remote-tracking branches 
+# which no longer exist on the remote.
+
+git fetch -p --prune
+
+list remote branches:
+git branch -r 
+
+list all (local and remote)
+git branch -a 
+
+#Remove local directories not in remove:
+
+git clean -fd
+
+
+Git doesn't track directories, so it won't remove ones that become empty as a result of a merge or other change. 
+However, you can use git clean -fd to remove untracked directories 
+(the -fd flag means force removal of untracked files and directories).
+
+
+git remote prune origin
+
+Deletes all stale tracking branches which have already been removed at origin 
+but are still locally available in remotes/origin.
+
+git gc --auto
+
+'G arbage C ollection' - runs housekeeping tasks (compresses revisions, removes loose/inaccessible objects). The --auto flag first determines whether any work is required, and exits without doing anything if not.
+
+
+
+# How to remove local untracked files from the current Git branch 
+
+If you want to see which files will be deleted you can use the -n option before you run the actual command:
+
+git clean -n
+
+Then when you are comfortable (because it will delete the files for real!) use the -f option:
+
+git clean -f
+
+
+To remove directories, run git clean -f -d or git clean -fd
+To remove ignored files, run git clean -f -X or git clean -fX
+To remove ignored and non-ignored files, run git clean -f -x or git clean -fx
+
+
+
+List ignored files
+$ git ls-files . --ignored --exclude-standard --others
+List untracked files
+$ git ls-files . --exclude-standard --others
+
+
+
+
+# List Local branches	
+
+git branch
+git branch -a 
+	shows both remote and local branches.
+
+git branch -r 
+	shows remote branches.
+	
+	
+git remote prune origin 
+	prunes tracking branches not on the remote.
+
+git branch --merged 
+	lists branches that have been merged into the current branch.
+
+xargs git branch -d 
+	deletes branches listed on standard input.
+
+Be careful deleting branches listed by git branch --merged. The list could include master or other branches you'd prefer not to delete.
+
+To give yourself the opportunity to edit the list before deleting branches, you could do the following in one line:
+
+git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branche
+
+
+	
+Tips
+http://nuclearsquid.com/writings/git-tricks-tips-workflows/
+
+
+UPDATE BRANCH
+git checkout dmgr2      # gets you "on branch dmgr2"
+git fetch origin        # gets you up to date with origin
+git merge origin/master
+
+git fetch origin
+git checkout master
+git merge --ff-only origin/master
+git checkout dmgr2
+git merge --no-ff origin/master
+
+
+
+
+
+* Merge origin/master changes into local branch
+http://stackoverflow.com/questions/7200614/how-to-merge-remote-master-to-local-branch
+
+I have a local branch of a project ("configUpdate") that I've forked from somebody else's project and I've done a load of changes on it and would like to merge the changes they've made in to my local branch.
+
+I've tried
+
+git pull --rebase origin configUpdate
+but it hasn't grabbed the latest changes - how can I merge the two? (also for bonus points what did I do with the pull --rebase command?)
+
+
+How about (assuming you're currently on branch configUpdate):
+
+git fetch
+git rebase origin/master
+In a nutshell:
+
+git merge branchname takes new commits from the branch branchname, and adds them to the current branch. If necessary, it automatically adds a "Merge" commit on top.
+git rebase branchname takes new commits from the branch branchname, and inserts them "under" your changes. More precisely, it modifies the history of the current branch such that it is based on the tip of branchname, with any changes you made on top of that.
+git pull is basically the same as git fetch; git merge origin/master.
+git pull --rebase is basically the same as git fetch; git rebase origin/master.
+So why would you want to use git pull --rebase rather than git pull? Here's a simple example:
+
+You start working on a new feature.
+By the time you're ready to push your changes, several commits have been pushed by other developers.
+If you git pull (which uses merge), your changes will be buried by the new commits, in addition to an automatically-created merge commit.
+If you git pull --rebase instead, git will fast forward your master to upstream's, then apply your changes on top.
+
+I found out it was:
+
+$ git fetch upstream
+$ git merge upstream/master
+
+
+
+
+http://ohshitgit.com/
+Oh shit, git!
+
+Git is hard: screwing up is easy, and figuring out how to fix your mistakes is fucking impossible. Git documentation has this chicken and egg problem where you can't search for how to get yourself out of a mess, unless you already know the name of the thing you need to know about in order to fix your problem.
+
+So here are some bad situations I've gotten myself into, and how I eventually got myself out of them in plain english.
+
+Oh shit, I committed and immediately realized I need to make one small change!
+
+# make your change
+git add .
+git commit --amend
+# follow prompts to change or keep the commit message
+# now your last commit contains that change!
+This usually happens to me if I merge to master, then run tests/linters... and FML, I didn't put a space after the equals sign. You could also make the change as a new commit and then do rebase -i in order to squash them both together, but this is about a million times faster.
+
+Oh shit, I need to change the message on my last commit!
+
+git commit --amend
+# follow prompts to change the commit message
+Stupid commit message formatting requirements.
+
+Oh shit, I accidentally committed something to master that should have been on a brand new branch!
+
+# create a new branch from the current state of master
+git checkout -b some-new-branch-name
+# remove the commit from the master branch
+git checkout master
+git reset HEAD~ --hard
+git checkout some-new-branch-name
+# your commit lives in this branch now :)
+Note: this doesn't work if you've already pushed to origin, and if you tried other things first, you might need to git reset HEAD@{number}. Infinite sadness.
+
+Oh shit, I accidentally committed to the wrong branch!
+
+# undo the last commit, but leave the changes available
+git reset HEAD~ --soft
+git add .
+git stash
+# move to the correct branch
+git checkout name-of-the-correct-branch
+git stash pop
+git add .
+git commit -m "your message here"
+# now your changes are on the correct branch
+Oh shit, I tried to run a diff but nothing happened?!
+
+git diff --staged
+Bizarrely, git won't do a dif of files that have been add-ed to your staging area without this flag. File under ¯\_(ツ)_/¯
+
+Fuck this noise, I give up.
+
+cd ..
+sudo rm -r fucking-git-repo-dir
+git clone https://some.github.url/fucking-git-repo-dir.git
+Thanks to @viaz66 for this one.
+
+
+#Forks
+git remote -v
+git remote add upstream https://github.com/kapilratnani/JSON-Viewer.git
+git remote -v
+git fetch upstream
+git checkout master
+git merge upstream/master
+
+	https://help.github.com/articles/configuring-a-remote-for-a-fork/
+	https://help.github.com/articles/syncing-a-fork/
+	https://help.github.com/articles/about-pull-requests/
+	https://help.github.com/articles/creating-a-pull-request-from-a-fork/
+	
+	
+
+#Reset local to match remote	
+	git fetch origin
+	git reset --hard origin/master
+	
+	# If you want to save your current branch's state before doing this (just in case), you can do:
+	git commit -a -m "Saving my work, just in case"
+	git branch my-saved-work
+
+	git clean -f
+
+	git clean -d -x -f
+
+
+
+
+http://www.stegriff.co.uk/upblog/gitattributes-error-is-not-a-valid-attribute-name
+https://stackoverflow.com/questions/21093479/openssl-is-not-a-valid-attribute-name-git-info-attributes5
+
+
+gitattributes error ' is not a valid attribute name'
+Instead of:
+	.htaccess merge = ours
+Consider:
+	.htaccess merge=ours
+
+
+
+https://git-scm.com/docs/gitattributes#_description
+
+End-of-line conversion
+While Git normally leaves file contents alone, it can be configured to normalize line endings to LF in the repository and, optionally, to convert them to CRLF when files are checked out.
+
+If you simply want to have CRLF line endings in your working directory regardless of the repository you are working with, you can set the config variable "core.autocrlf" without using any attributes.
+
+[core]
+	autocrlf = true
+	
+This does not force normalization of text files, but does ensure that text files that you introduce to the repository have their line endings normalized to LF when they are added, and that files that are already normalized in the repository stay normalized.
+
+If you want to ensure that text files that any contributor introduces to the repository have their line endings normalized, you can set the text attribute to "auto" for all files.
+
+*	text=auto
+
+The attributes allow a fine-grained control, how the line endings are converted. Here is an example that will make Git normalize .txt, .vcproj and .sh files, ensure that .vcproj files have CRLF and .sh files have LF in the working directory, and prevent .jpg files from being normalized regardless of their content.
+
+*               text=auto
+*.txt		text
+*.vcproj	text eol=crlf
+*.sh		text eol=lf
+*.jpg		-text
+Note
+When text=auto conversion is enabled in a cross-platform project using push and pull to a central repository the text files containing CRLFs should be normalized.
+
+
+
+
+
+*** https://github.com/git-tips/tips
+
+git config core.ignorecase
+
+git config core.ignorecase true
+git config core.ignorecase false
+
+
+git ls-files | tr '[:upper:]' '[:lower:]' | sort | uniq -cd
+
+https://git-scm.com/docs/git-ls-files
+
+https://git-scm.com/docs/git-rm
+
+git mv filename
+git mv --force myfile MyFile
+ 
+git rm -f filename
+git rm Foobar.java
+
+
+
+# Remove local branches no longer on remote
+
+git fetch -p
+git branch -vv
+git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done
+
+
+git remote prune origin  
+git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d  
+
+
+git remote prune origin 
+#prunes tracking branches not on the remote.
+
+git branch --merged 
+#lists branches that have been merged into the current branch.
+
+xargs git branch -d 
+#deletes branches listed on standard input.
+
+#To give yourself the opportunity to edit the list before deleting branches, you could do the following in one line:
+git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
+
+
+
+
+git.exe pull --progress -v --no-rebase --tags --prune "origin"
+
+
+
+https://linuxhint.com/git-shallow-clone-and-clone-depth/
+
+	$ git clone https://github.com/django/django.git
+	$ du -sh django/
+
+	$ git clone --depth 1 https://github.com/django/django.git
+	$ du -sh django/
+
+	$ git log --oneline
+
+Multiple Branch Option
+When you use the –depth flag with clone command, Git assumes the –single-branch flag by default. 
+But you can use –no-single-branch flag to tell Git to get histories from the specified depth of each branch.
+
+	$ git clone --depth 1 --no-single-branch https://github.com/django/django.git
+	
+	$ git branch -a
+	
+	
+	
+git.exe pull --progress -v --no-rebase "origin" 3to5
+
+git.exe pull "origin" 3to5
+
+git.exe push --progress "origin" 3to5
+
+
+
+
+#-----------------------------	
+https://www.udemy.com/git-advanced-commands/learn/v4/content
+#-----------------------------	
+
+#original file:
+
+[user]
+	name=jonatas
+	email=jonatas.mello@hotmail.com
+[winUpdater]
+	recentlySeenVersion = 2.19.1.windows.1
+[core]
+	autocrlf=true
+[diff]
+	tool = winmerge
+[difftool "winmerge"]
+    cmd = "'C:/Program Files (x86)/WinMerge/WinMergeU.exe'" -e "$LOCAL" "$REMOTE"
+[difftool]
+	prompt = false
+
+#-----------------------------	
+	
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
+	
+
+[diff]
+    tool = winmerge
+[difftool "winmerge"]
+    cmd = "'C:/Program Files (x86)/WinMerge/WinMergeU.exe'" -e "$LOCAL" "$REMOTE"
+	
+[diff]
+    guitool = winmerge
+[difftool "winmerge"]
+    path = c:/Program Files (x86)/winmerge/winmergeu.exe
+    cmd = \"c:/Program Files (x86)/winmerge/winmergeu.exe\" \"$LOCAL\" \"$REMOTE\"
+
+#-----------------------------
+
+git config --get-all
+
+git config --global -e
+
+git config --global core.editor code
+
+git config --global --get diff.tool
+
+git config --global diff.tool default-difftool
+
+git log --oneline
+
+# remove prompt for each file:
+git config --global difftool.prompt false
+git config --global --get difftool.prompt false
+
+
+git difftool --tool-help
+git help config
+
+# open winmerge for file
+git difftool --tool=winmerge
+
+git difftool details.html
+
+git diff HEAD
+git status -s
+
+git difftool HEAD HEAD~1
+
+
+git config --global --list
+
+git config --global merge.tool code
+git config --global mergetool.code.cmd "code --wait \"$MERGED\""
+git config --global mergetool.prompt false
+git config --global mergetool.keepbackup false
+
+git reflog
+git reflog HEAD@{20}
+git reflog HEAD@{3.days.ago}
+
+git diff HEAD@{5} HEAD@{4}
+git diff HEAD@{1.min.ago} HEAD@{1.week.ago}
+	
+git commit --amend -m "new message"
+
+--squash merge multiple commits in one
+
+# Aliases 
+git config --global alias.onelinegraph 'log --oneline --graph --decorate'
+git config --global --list
+
+git onelinegraph
+
+# always prune during fetch
+
+gc --prune=now
+git config --global fetch.prune true
+
+# soft reset - un-stage the files
+git reset head
+
+# hard reset
+git clean -d -x -f
+git clean -d -x -i 		# interactive
+
+git reset {id} --hard
+
+git push -u origin {branch}
+
+git revert {id}
+
+
+git stash
+git stash list
+git stash pop
+git stash show stash@{0}
+git stash apply stash@{2}
+git stash -u save ThisIsMyChange
+git stash show stash@{0}
+git stash drop stash@{0}
+
+
+
+
+# Remove local directories not in remove:
+# Deleting Old Local Branches
+
+git clean -fd
+
+
+git fetch -p
+git remote prune origin  
+git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d  
+
+
+#prunes tracking branches not on the remote.
+git remote prune origin 
+
+#lists branches that have been merged into the current branch.
+git branch --merged 
+
+#deletes branches listed on standard input.
+xargs git branch -d 
+
+#To give yourself the opportunity to edit the list before deleting branches, you could do the following in one line:
+git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
+
+
+
+
+git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d
+	
+git branch -d $(git branch --merged) 
+	works by removing branches that have been merged. 
+
+git remote prune origin 
+	will prune tracking branches not on the remote.
+
+
+git branch -vv
+#then
+git fetch -p && for branch in `git branch -vv | grep ': gone]' | gawk '{print $1}'`; do git branch -D $branch; done
+
+git gc --prune=now
+git remote prune origin
+git remote prune
+
+git branch -vv | grep ': gone]' | grep -v "\*" | awk '{ print $1; }' | xargs -r git branch -D
+	
+- will list your local branches and show information about the remote branch, saying “gone” if it is not present anymore.
+- will fetch the branches that match the “: gone]” phrase.
+- will fetch only lines that do not contain an asterisk. This will ignore the branch you are currently on and also prevent that the “git branch -d” is executed with a “*” at the end which would result in deleting all your local branches.
+- will fetch the output until the first white space, which will result in the local branch name.
+- will use the output (branch name) and append it to the “git branch -d” command to finally delete the branch. 
+	If you also want to delete branches that are not fully merged, you can use a capital “D” instead of “d” to force delete.
+	Because of the “-r” parameter, the command is not executed if there is no input / branch name.
+	
+
+git remote prune origin 
+	prunes tracking branches not on the remote.
+
+git branch --merged 
+	lists branches that have been merged into the current branch.
+
+xargs git branch -d 
+	deletes branches listed on standard input.
+
+	Be careful deleting branches listed by git branch --merged. The list could include master or other branches you'd prefer not to delete.
+	To give yourself the opportunity to edit the list before deleting branches, you could do the following in one line:
+
+git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
+
+

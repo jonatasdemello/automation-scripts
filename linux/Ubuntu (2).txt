@@ -1,0 +1,23 @@
+C:\ProgramData\Microsoft\Windows\Virtual Hard Disks\
+
+
+sudo apt purge thunderbird 
+sudo apt remove thunderbird 
+sudo apt autoremove thunderbird --purge
+
+sudo dpkg -r <package>		(remove)
+sudo dpkg -P <package>		(purge) --force-all
+
+
+sudo snap remove <snap>
+sudo snap remove --purge <snap>
+
+
+snap list
+snap remove --purge chromium
+snap info cups | sed '/^commands:/q'
+
+flatpak uninstall <app>
+flatpak uninstall --unused
+
+make uninstall

@@ -1,0 +1,64 @@
+"0a612574-1288-4674-a6da-cb3393cbe373"	"<XX-XX-XX-XX-XX>'
+'N3bOPJbGjaG1isBn5q9W'	'<password>'
+
+<YourPassword>	<password>
+myStronggPwd123	<password>
+mySronggPwd123	<password>
+
+"p@assword"	"<password>"
+'P@ssw0rd'	'<password>'
+Passw0rd!	<password>
+P@ssw0rd.2022	<password>
+'MyNameIs!bi11'	'<password>'
+'Who.sCall1ng?'	'<password>'
+
+ccwebadmin
+cc3_database
+cms_database
+
+xoca
+xous
+xouk
+
+xots-dev-cc3-db
+xots-test-cc3-db
+xots-uat-cc3-db
+
+xots-hub-sql-mi
+xots-hub-sql-mi.a00b7c186c52.database.windows.net
+
+cc3_	db_
+
+cc3_prod
+cc3_Debug
+CC3_docker
+CC3_powershell
+
+CC3_CMS
+CC3_CMS_test
+CC3_CMS_local
+CC3_CMS_Stage
+
+xoca
+xous
+xouk
+
+jonatas.demello
+jonatasd
+jonatasm
+
+@xello.world
+
+CareerCruising/CC3_Database
+
+CareerCruising
+
+Spark
+
+https://github.com/CareerCruising/CC3_Database/pull/3362
+
+deleted:
+W:\workspace\db\_SQL-Tools\performance\_SQL-Performace-OR-01.sql
+W:\workspace\db\_SQL-Tools\constraints\text-tables.sql
+
+
